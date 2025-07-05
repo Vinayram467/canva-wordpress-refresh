@@ -35,14 +35,15 @@ const StatsSection = () => {
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 relative overflow-hidden">
-      {/* Modern background pattern */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-0 w-full h-full opacity-10">
           <div className="absolute top-20 left-20 w-32 h-32 bg-emerald-400 rounded-full blur-xl animate-pulse"></div>
           <div className="absolute bottom-20 right-20 w-40 h-40 bg-blue-400 rounded-full blur-xl animate-pulse delay-1000"></div>
           <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-red-400 rounded-full blur-xl animate-pulse delay-500"></div>
         </div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.02\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -64,7 +65,6 @@ const StatsSection = () => {
                 className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center hover:bg-white/10 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 animate-fade-in"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                {/* Gradient border effect */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
                 
                 <div className="relative z-10">
@@ -85,7 +85,6 @@ const StatsSection = () => {
                   </div>
                 </div>
 
-                {/* Hover effect overlay */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
             );
