@@ -53,16 +53,16 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* Main heading with new gradient effect */}
+            {/* Main heading with fixed text overlap */}
             <div className="space-y-6">
-              <h1 className="text-6xl lg:text-8xl font-bold leading-tight animate-slide-up">
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight animate-slide-up">
                 <span className="block text-white mb-4 drop-shadow-2xl">
                   Advanced
                 </span>
-                <span className="block bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-text-glow">
+                <span className="block bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-text-glow leading-none">
                   Healthcare
                 </span>
-                <span className="block text-white/90 text-4xl lg:text-5xl mt-4 font-light">
+                <span className="block text-white/90 text-3xl lg:text-4xl mt-6 font-light">
                   Solutions
                 </span>
               </h1>
@@ -73,7 +73,7 @@ const HeroSection = () => {
               </p>
             </div>
 
-            {/* New button design */}
+            {/* Enhanced button design */}
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-in delay-500">
               <Button className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white px-8 py-6 text-lg rounded-2xl shadow-2xl hover:shadow-emerald-500/30 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300">
                 <div className="flex items-center">
@@ -93,11 +93,11 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            {/* Modern stats design */}
+            {/* Enhanced stats design */}
             <div className="grid grid-cols-3 gap-4 pt-8 animate-fade-in delay-700">
               <div className="group text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-110">
                 <div className="relative mb-4">
-                  <div className="text-5xl font-bold text-transparent bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text">
+                  <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text">
                     25+
                   </div>
                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
@@ -108,7 +108,7 @@ const HeroSection = () => {
               
               <div className="group text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-110">
                 <div className="relative mb-4">
-                  <div className="text-5xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text">
+                  <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text">
                     50+
                   </div>
                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-blue-400 rounded-full animate-ping delay-200"></div>
@@ -119,7 +119,7 @@ const HeroSection = () => {
               
               <div className="group text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-110">
                 <div className="relative mb-4">
-                  <div className="text-5xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text">
+                  <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text">
                     10k+
                   </div>
                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-purple-400 rounded-full animate-ping delay-400"></div>
@@ -130,11 +130,10 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Content - Completely new design */}
+          {/* Right Content - Enhanced modern design */}
           <div className="relative animate-fade-in delay-300">
-            {/* Modern card-based layout instead of single image */}
             <div className="relative">
-              {/* Main feature card */}
+              {/* Main feature card with enhanced design */}
               <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-500">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
@@ -168,7 +167,7 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              {/* Floating mini cards */}
+              {/* Enhanced floating mini cards */}
               <div className="absolute -top-6 -left-6 bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl animate-float">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -193,7 +192,7 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              {/* Background decorative elements */}
+              {/* Enhanced background decorative elements */}
               <div className="absolute -z-10 top-8 left-8 w-full h-full bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-3xl blur-sm"></div>
               <div className="absolute -z-20 top-12 left-12 w-full h-full bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl blur-md"></div>
             </div>
@@ -201,7 +200,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Modern scroll indicator */}
+      {/* Enhanced scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <div className="flex flex-col items-center space-y-2 cursor-pointer group">
           <div className="text-white/60 text-xs font-medium group-hover:text-white/80 transition-colors">Scroll</div>
