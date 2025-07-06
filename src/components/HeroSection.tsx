@@ -1,8 +1,43 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play, Shield, Award, Clock, Sparkles, Heart, Zap, Star, Users } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const HeroSection = () => {
+  // Real-time health monitor state
+  const [healthData, setHealthData] = useState({
+    heartRate: 72,
+    bloodPressure: { systolic: 120, diastolic: 80 },
+    isOnline: true
+  });
+
+  // Simulate real-time health data updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHealthData(prev => ({
+        heartRate: Math.floor(Math.random() * (85 - 65) + 65), // 65-85 BPM range
+        bloodPressure: {
+          systolic: Math.floor(Math.random() * (130 - 110) + 110), // 110-130 range
+          diastolic: Math.floor(Math.random() * (90 - 70) + 70)    // 70-90 range
+        },
+        isOnline: Math.random() > 0.1 // 90% chance of being online
+      }));
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Scroll to next section function
+  const scrollToNextSection = () => {
+    const heroSection = document.getElementById('home');
+    const nextSection = heroSection?.nextElementSibling;
+    if (nextSection) {
+      nextSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <section id="home" className="relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950 overflow-hidden">
       {/* Modern animated background */}
@@ -130,10 +165,9 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Content - Enhanced modern design */}
+          {/* Right Content - Real-time Health Monitor */}
           <div className="relative animate-fade-in delay-300">
             <div className="relative">
-              {/* Main feature card with enhanced design */}
               <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-all duration-500">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
@@ -145,24 +179,38 @@ const HeroSection = () => {
                       <p className="text-white/70 text-sm">Real-time tracking</p>
                     </div>
                   </div>
-                  <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                  <div className={`w-3 h-3 rounded-full ${healthData.isOnline ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`}></div>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">Heart Rate</span>
-                    <span className="text-emerald-400 font-semibold">72 BPM</span>
+                    <span className="text-emerald-400 font-semibold">{healthData.heartRate} BPM</span>
                   </div>
                   <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-emerald-400 to-blue-400 h-2 rounded-full w-3/4 animate-pulse"></div>
+                    <div 
+                      className="bg-gradient-to-r from-emerald-400 to-blue-400 h-2 rounded-full transition-all duration-1000 animate-pulse" 
+                      style={{ width: `${(healthData.heartRate / 100) * 100}%` }}
+                    ></div>
                   </div>
                   
                   <div className="flex justify-between items-center">
                     <span className="text-white/80">Blood Pressure</span>
-                    <span className="text-blue-400 font-semibold">120/80</span>
+                    <span className="text-blue-400 font-semibold">{healthData.bloodPressure.systolic}/{healthData.bloodPressure.diastolic}</span>
                   </div>
                   <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-400 to-purple-400 h-2 rounded-full w-4/5 animate-pulse delay-200"></div>
+                    <div 
+                      className="bg-gradient-to-r from-blue-400 to-purple-400 h-2 rounded-full transition-all duration-1000 animate-pulse delay-200" 
+                      style={{ width: `${(healthData.bloodPressure.systolic / 140) * 100}%` }}
+                    ></div>
+                  </div>
+                  
+                  {/* Real-time indicator */}
+                  <div className="flex items-center justify-center pt-4">
+                    <div className="flex items-center space-x-2 text-white/60">
+                      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+                      <span className="text-xs">Live Updates</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -200,9 +248,12 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Enhanced scroll indicator */}
+      {/* Functional scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="flex flex-col items-center space-y-2 cursor-pointer group">
+        <div 
+          className="flex flex-col items-center space-y-2 cursor-pointer group"
+          onClick={scrollToNextSection}
+        >
           <div className="text-white/60 text-xs font-medium group-hover:text-white/80 transition-colors">Scroll</div>
           <div className="w-6 h-10 bg-white/10 backdrop-blur-sm border-2 border-white/30 rounded-full flex justify-center p-1 group-hover:bg-white/20 transition-all duration-300">
             <div className="w-1 h-3 bg-gradient-to-b from-emerald-400 to-blue-400 rounded-full animate-bounce"></div>
