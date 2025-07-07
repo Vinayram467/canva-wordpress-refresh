@@ -208,6 +208,15 @@ All colors MUST be HSL.
   }
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* Enhanced animation classes */
 .animate-fade-in {
   animation: fade-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
