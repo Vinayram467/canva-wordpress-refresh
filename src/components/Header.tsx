@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Phone, Clock, Menu, Shield, Award } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -59,17 +60,23 @@ const Header = () => {
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
-              {['Home', 'About', 'Services', 'Doctors', 'Contact'].map((item, index) => (
-                <a 
-                  key={item}
-                  href={`#${item.toLowerCase()}`} 
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'Services', path: '/services' },
+                { name: 'Specialties', path: '/specialties' },
+                { name: 'Doctors', path: '/doctors' },
+                { name: 'Contact', path: '/contact' }
+              ].map((item, index) => (
+                <Link 
+                  key={item.name}
+                  to={item.path}
                   className="group relative text-white/90 hover:text-white font-medium transition-all duration-300 px-4 py-2 rounded-xl hover:bg-white/10 backdrop-blur-sm transform hover:scale-105"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <span className="relative z-10">{item}</span>
+                  <span className="relative z-10">{item.name}</span>
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-emerald-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 to-blue-500/0 group-hover:from-emerald-500/10 group-hover:to-blue-500/10 rounded-xl transition-all duration-300"></div>
-                </a>
+                </Link>
               ))}
             </div>
 

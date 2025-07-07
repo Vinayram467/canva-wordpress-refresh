@@ -159,7 +159,7 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="absolute -bottom-6 -right-6 bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl animate-float delay-500">
+            <div className="absolute -bottom-16 -right-6 bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl animate-float delay-500">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center">
                   <Clock className="w-4 h-4 text-white" />
