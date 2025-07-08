@@ -16,110 +16,110 @@ interface Doctor {
   visitingDays: string;
   timings: string;
   consultationFee: string;
-  image?: string;
+  image: string;
 }
 
 const doctorsData: Doctor[] = [
-  {
-    id: "1",
-    name: "Dr. Hrishikesh Vemula",
-    specialty: "Cardiology",
-    degrees: "MBBS, MD, DM",
-    experience: "20 Years",
-    visitingDays: "Mon–Sat",
-    timings: "5PM – 7PM",
-    consultationFee: "₹800"
-  },
-  {
-    id: "2",
-    name: "Dr. Lakshmikanth P",
-    specialty: "Cardiology",
-    degrees: "MBBS, MD, DM",
-    experience: "30 Years",
-    visitingDays: "Mon–Sat",
-    timings: "2PM – 4PM",
-    consultationFee: "₹800"
-  },
-  {
-    id: "3",
-    name: "Dr. Raghuveer Karanth",
-    specialty: "General Medicine",
-    degrees: "MBBS, DNB",
-    experience: "20 Years",
-    visitingDays: "Mon–Sat",
-    timings: "12PM – 2PM & 8PM – 10PM",
-    consultationFee: "₹600"
-  },
-  {
-    id: "4",
-    name: "Dr. Ramesh Patel",
-    specialty: "Neurology",
-    degrees: "MBBS, MD, DM",
-    experience: "25 Years",
-    visitingDays: "Mon–Sat",
-    timings: "7PM – 9PM",
-    consultationFee: "₹850"
-  },
-  {
-    id: "5",
-    name: "Dr. Sujay Rao",
-    specialty: "Neurosurgery",
-    degrees: "MBBS, MS, MCH",
-    experience: "35 Years",
-    visitingDays: "Mon–Sat",
-    timings: "6PM – 8PM",
-    consultationFee: "₹1200"
-  },
-  {
-    id: "6",
-    name: "Dr. N T Babu",
-    specialty: "Ophthalmology",
-    degrees: "MBBS, DOMS",
-    experience: "15 Years",
-    visitingDays: "Mon–Sat",
-    timings: "10AM – 12PM",
-    consultationFee: "₹600"
-  },
-  {
-    id: "7",
-    name: "Dr. Sharmila Chennappa",
-    specialty: "Obstetrics & Gynaecology",
-    degrees: "MBBS, MS",
-    experience: "20 Years",
-    visitingDays: "Appointment Only",
-    timings: "Appointment Only",
-    consultationFee: "₹600"
-  },
-  {
-    id: "8",
-    name: "Dr. Ishwarya B",
-    specialty: "Obstetrics & Gynaecology",
-    degrees: "MBBS, MS",
-    experience: "10 Years",
-    visitingDays: "Mon–Sat",
-    timings: "6PM – 8PM",
-    consultationFee: "₹500"
-  },
-  {
-    id: "9",
-    name: "Dr. Sushma B N",
-    specialty: "Obstetrics & Gynaecology",
-    degrees: "MBBS, MS, DGO",
-    experience: "10 Years",
-    visitingDays: "Mon–Sat",
-    timings: "5PM – 7PM",
-    consultationFee: "₹500"
-  }
+  // Anaesthesia
+  { id: "1", name: "Dr. Rajesh Kumar", specialty: "Anaesthesia", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/placeholder-doctor-1.jpg" },
+  { id: "2", name: "Dr. Priya Sharma", specialty: "Anaesthesia", degrees: "MBBS, DA", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/placeholder-doctor-2.jpg" },
+  
+  // Cardiology
+  { id: "3", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/placeholder-doctor-3.jpg" },
+  { id: "4", name: "Dr. Lakshmikanth P", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "30 Years", visitingDays: "Mon–Sat", timings: "2PM – 4PM", consultationFee: "₹800", image: "/placeholder-doctor-4.jpg" },
+  { id: "5", name: "Dr. Arun Nair", specialty: "Cardiology", degrees: "MBBS, MD", experience: "18 Years", visitingDays: "Tue–Sun", timings: "10AM – 2PM", consultationFee: "₹750", image: "/placeholder-doctor-5.jpg" },
+  
+  // Dentistry
+  { id: "6", name: "Dr. Meera Patel", specialty: "Dentistry", degrees: "BDS, MDS", experience: "14 Years", visitingDays: "Mon–Sat", timings: "9AM – 6PM", consultationFee: "₹500", image: "/placeholder-doctor-6.jpg" },
+  { id: "7", name: "Dr. Suresh Reddy", specialty: "Dentistry", degrees: "BDS", experience: "10 Years", visitingDays: "Mon–Fri", timings: "2PM – 8PM", consultationFee: "₹450", image: "/placeholder-doctor-7.jpg" },
+  
+  // Dermatology
+  { id: "8", name: "Dr. Kavitha Rao", specialty: "Dermatology", degrees: "MBBS, MD", experience: "16 Years", visitingDays: "Mon–Sat", timings: "11AM – 7PM", consultationFee: "₹600", image: "/placeholder-doctor-8.jpg" },
+  { id: "9", name: "Dr. Amit Singh", specialty: "Dermatology", degrees: "MBBS, DVD", experience: "13 Years", visitingDays: "Tue–Sun", timings: "3PM – 9PM", consultationFee: "₹550", image: "/placeholder-doctor-9.jpg" },
+  
+  // E.N.T
+  { id: "10", name: "Dr. Sanjay Gupta", specialty: "E.N.T", degrees: "MBBS, MS", experience: "19 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹650", image: "/placeholder-doctor-10.jpg" },
+  { id: "11", name: "Dr. Lakshmi Devi", specialty: "E.N.T", degrees: "MBBS, DLO", experience: "22 Years", visitingDays: "Mon–Fri", timings: "4PM – 8PM", consultationFee: "₹700", image: "/placeholder-doctor-11.jpg" },
+  
+  // General Medicine
+  { id: "12", name: "Dr. Raghuveer Karanth", specialty: "General Medicine", degrees: "MBBS, DNB", experience: "20 Years", visitingDays: "Mon–Sat", timings: "12PM – 2PM & 8PM – 10PM", consultationFee: "₹600", image: "/placeholder-doctor-12.jpg" },
+  { id: "13", name: "Dr. Deepak Joshi", specialty: "General Medicine", degrees: "MBBS, MD", experience: "17 Years", visitingDays: "Daily", timings: "9AM – 1PM", consultationFee: "₹500", image: "/placeholder-doctor-13.jpg" },
+  { id: "14", name: "Dr. Sunita Varma", specialty: "General Medicine", degrees: "MBBS", experience: "14 Years", visitingDays: "Mon–Sat", timings: "6PM – 10PM", consultationFee: "₹450", image: "/placeholder-doctor-14.jpg" },
+  
+  // General Surgery
+  { id: "15", name: "Dr. Vikram Mehta", specialty: "General Surgery", degrees: "MBBS, MS", experience: "25 Years", visitingDays: "Mon–Fri", timings: "7AM – 2PM", consultationFee: "₹800", image: "/placeholder-doctor-15.jpg" },
+  { id: "16", name: "Dr. Ravi Kumar", specialty: "General Surgery", degrees: "MBBS, MS", experience: "21 Years", visitingDays: "Tue–Sat", timings: "3PM – 7PM", consultationFee: "₹750", image: "/placeholder-doctor-16.jpg" },
+  
+  // Nephrology
+  { id: "17", name: "Dr. Ananya Das", specialty: "Nephrology", degrees: "MBBS, MD, DM", experience: "18 Years", visitingDays: "Mon–Fri", timings: "11AM – 5PM", consultationFee: "₹900", image: "/placeholder-doctor-17.jpg" },
+  { id: "18", name: "Dr. Kiran Bhat", specialty: "Nephrology", degrees: "MBBS, MD", experience: "16 Years", visitingDays: "Wed–Sun", timings: "2PM – 6PM", consultationFee: "₹850", image: "/placeholder-doctor-18.jpg" },
+  
+  // Neurology
+  { id: "19", name: "Dr. Ramesh Patel", specialty: "Neurology", degrees: "MBBS, MD, DM", experience: "25 Years", visitingDays: "Mon–Sat", timings: "7PM – 9PM", consultationFee: "₹850", image: "/placeholder-doctor-19.jpg" },
+  { id: "20", name: "Dr. Manish Agarwal", specialty: "Neurology", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Tue–Fri", timings: "4PM – 8PM", consultationFee: "₹800", image: "/placeholder-doctor-20.jpg" },
+  
+  // Neurosurgery
+  { id: "21", name: "Dr. Sujay Rao", specialty: "Neurosurgery", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/placeholder-doctor-21.jpg" },
+  { id: "22", name: "Dr. Ashwin Kulkarni", specialty: "Neurosurgery", degrees: "MBBS, MS", experience: "28 Years", visitingDays: "Mon–Thu", timings: "8AM – 12PM", consultationFee: "₹1100", image: "/placeholder-doctor-22.jpg" },
+  
+  // Obstetrics & Gynaecology
+  { id: "23", name: "Dr. Sharmila Chennappa", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Appointment Only", timings: "Appointment Only", consultationFee: "₹600", image: "/placeholder-doctor-23.jpg" },
+  { id: "24", name: "Dr. Ishwarya B", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "10 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹500", image: "/placeholder-doctor-24.jpg" },
+  { id: "25", name: "Dr. Sushma B N", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS, DGO", experience: "10 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹500", image: "/placeholder-doctor-25.jpg" },
+  { id: "26", name: "Dr. Nandini Rao", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "15 Years", visitingDays: "Tue–Sat", timings: "10AM – 2PM", consultationFee: "₹550", image: "/placeholder-doctor-26.jpg" },
+  
+  // Ophthalmology
+  { id: "27", name: "Dr. N T Babu", specialty: "Ophthalmology", degrees: "MBBS, DOMS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "10AM – 12PM", consultationFee: "₹600", image: "/placeholder-doctor-27.jpg" },
+  { id: "28", name: "Dr. Pooja Hegde", specialty: "Ophthalmology", degrees: "MBBS, MS", experience: "12 Years", visitingDays: "Mon–Fri", timings: "3PM – 7PM", consultationFee: "₹550", image: "/placeholder-doctor-28.jpg" },
+  
+  // Orthopaedics
+  { id: "29", name: "Dr. Sunil Gowda", specialty: "Orthopaedics", degrees: "MBBS, MS", experience: "23 Years", visitingDays: "Mon–Sat", timings: "9AM – 1PM", consultationFee: "₹700", image: "/placeholder-doctor-29.jpg" },
+  { id: "30", name: "Dr. Mahesh Iyer", specialty: "Orthopaedics", degrees: "MBBS, MS", experience: "19 Years", visitingDays: "Tue–Sun", timings: "5PM – 9PM", consultationFee: "₹650", image: "/placeholder-doctor-30.jpg" },
+  
+  // Paediatrics
+  { id: "31", name: "Dr. Rekha Menon", specialty: "Paediatrics", degrees: "MBBS, MD", experience: "18 Years", visitingDays: "Mon–Sat", timings: "11AM – 6PM", consultationFee: "₹500", image: "/placeholder-doctor-31.jpg" },
+  { id: "32", name: "Dr. Sudhir Rao", specialty: "Paediatrics", degrees: "MBBS, DCH", experience: "16 Years", visitingDays: "Daily", timings: "7PM – 10PM", consultationFee: "₹450", image: "/placeholder-doctor-32.jpg" },
+  
+  // Physiotherapy
+  { id: "33", name: "Dr. Arjun Pillai", specialty: "Physiotherapy", degrees: "BPT, MPT", experience: "11 Years", visitingDays: "Mon–Sat", timings: "8AM – 6PM", consultationFee: "₹350", image: "/placeholder-doctor-33.jpg" },
+  { id: "34", name: "Dr. Sneha Jain", specialty: "Physiotherapy", degrees: "BPT", experience: "8 Years", visitingDays: "Mon–Fri", timings: "2PM – 8PM", consultationFee: "₹300", image: "/placeholder-doctor-34.jpg" },
+  
+  // Plastic Surgery
+  { id: "35", name: "Dr. Ramesh Kumar", specialty: "Plastic Surgery", degrees: "MBBS, MS, MCH", experience: "22 Years", visitingDays: "Thu–Sun", timings: "10AM – 4PM", consultationFee: "₹1000", image: "/placeholder-doctor-35.jpg" },
+  { id: "36", name: "Dr. Divya Shetty", specialty: "Plastic Surgery", degrees: "MBBS, MS", experience: "14 Years", visitingDays: "Tue–Fri", timings: "3PM – 7PM", consultationFee: "₹900", image: "/placeholder-doctor-36.jpg" },
+  
+  // Psychiatry
+  { id: "37", name: "Dr. Rohit Malhotra", specialty: "Psychiatry", degrees: "MBBS, MD", experience: "17 Years", visitingDays: "Mon–Fri", timings: "6PM – 9PM", consultationFee: "₹700", image: "/placeholder-doctor-37.jpg" },
+  { id: "38", name: "Dr. Madhuri Devi", specialty: "Psychiatry", degrees: "MBBS, DPM", experience: "13 Years", visitingDays: "Sat–Wed", timings: "11AM – 5PM", consultationFee: "₹650", image: "/placeholder-doctor-38.jpg" },
+  
+  // Pulmonology
+  { id: "39", name: "Dr. Naveen Bhatt", specialty: "Pulmonology", degrees: "MBBS, MD", experience: "21 Years", visitingDays: "Mon–Sat", timings: "9AM – 1PM", consultationFee: "₹750", image: "/placeholder-doctor-39.jpg" },
+  
+  // Radiology
+  { id: "40", name: "Dr. Santosh Reddy", specialty: "Radiology", degrees: "MBBS, MD", experience: "19 Years", visitingDays: "Mon–Fri", timings: "8AM – 5PM", consultationFee: "₹600", image: "/placeholder-doctor-40.jpg" }
 ];
 
 const specialties = [
   "All Specialties",
-  "Cardiology",
+  "Anaesthesia",
+  "Cardiology", 
+  "Dentistry",
+  "Dermatology",
+  "E.N.T",
   "General Medicine",
+  "General Surgery",
+  "Nephrology",
   "Neurology",
   "Neurosurgery",
+  "Obstetrics & Gynaecology",
   "Ophthalmology",
-  "Obstetrics & Gynaecology"
+  "Orthopaedics",
+  "Paediatrics",
+  "Physiotherapy",
+  "Plastic Surgery",
+  "Psychiatry",
+  "Pulmonology",
+  "Radiology"
 ];
 
 const Doctors = () => {
@@ -234,8 +234,20 @@ const Doctors = () => {
               <Card key={doctor.id} className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                 <CardHeader className="text-center pb-4">
                   {/* Doctor Avatar */}
-                  <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-2xl">
-                    {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl border-4 border-white/20">
+                    <img 
+                      src={doctor.image} 
+                      alt={doctor.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.style.display = 'none';
+                        (target.nextElementSibling as HTMLElement).style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-2xl" style={{ display: 'none' }}>
+                      {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    </div>
                   </div>
                   
                   <CardTitle className="text-white text-xl mb-2">{doctor.name}</CardTitle>
@@ -281,12 +293,19 @@ const Doctors = () => {
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-4">
-                    <Button className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-2xl shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition-all duration-300">
+                    <Button 
+                      onClick={() => window.location.href = `/appointment?doctor=${doctor.id}`}
+                      className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-2xl shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition-all duration-300"
+                    >
                       <Calendar className="w-4 h-4 mr-2" />
                       Book Appointment
                     </Button>
                     
-                    <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+                    <Button 
+                      onClick={() => window.location.href = `/doctor/${doctor.id}`}
+                      variant="outline" 
+                      className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
                   </div>

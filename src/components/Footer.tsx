@@ -31,11 +31,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center text-white/80 bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <Phone className="w-4 h-4 mr-3 text-emerald-400" />
-                <span>Emergency: +1 (555) 123-4567</span>
+                <span>Landline: 080-41000980</span>
+              </div>
+              <div className="flex items-center text-white/80 bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                <Phone className="w-4 h-4 mr-3 text-emerald-400" />
+                <span>Reception: 70223 16149 / 74060 07777</span>
               </div>
               <div className="flex items-center text-white/80 bg-white/10 backdrop-blur-sm rounded-lg p-3">
                 <Home className="w-4 h-4 mr-3 text-blue-400" />
-                <span>123 Medical Center Drive, NY 10001</span>
+                <span>34, 10th Main Rd, Jayanagar 1st Block, Bengaluru, Karnataka 560011</span>
               </div>
             </div>
           </div>

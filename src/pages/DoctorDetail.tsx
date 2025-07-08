@@ -1,0 +1,238 @@
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock, Star, MapPin, Phone, Mail, Award, GraduationCap } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+const DoctorDetail = () => {
+  const { id } = useParams();
+
+  // Mock doctor data - in real app, fetch based on ID
+  const doctor = {
+    id: id,
+    name: "Dr. Sample Doctor",
+    specialty: "Cardiology",
+    degrees: "MBBS, MD, DM",
+    experience: "20 Years",
+    visitingDays: "Mon–Sat",
+    timings: "5PM – 7PM",
+    consultationFee: "₹800",
+    image: "/placeholder-doctor-1.jpg",
+    about: "Dr. Sample Doctor is a highly experienced cardiologist with over 20 years of expertise in treating cardiovascular diseases. He has completed his specialization from renowned institutions and has been serving patients with dedication and care.",
+    education: [
+      "MBBS - Medical College, 2004",
+      "MD Internal Medicine - Institute of Medical Sciences, 2008", 
+      "DM Cardiology - National Institute of Cardiology, 2012"
+    ],
+    specializations: [
+      "Interventional Cardiology",
+      "Cardiac Catheterization",
+      "Echocardiography",
+      "Heart Disease Prevention"
+    ],
+    achievements: [
+      "Best Cardiologist Award 2022",
+      "Excellence in Patient Care 2021",
+      "Research Publication in International Journal"
+    ]
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Doctor Profile Header */}
+          <div className="max-w-6xl mx-auto mb-12">
+            <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <CardContent className="p-8">
+                <div className="grid md:grid-cols-3 gap-8 items-center">
+                  {/* Doctor Image */}
+                  <div className="text-center">
+                    <div className="w-48 h-48 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20">
+                      <img 
+                        src={doctor.image} 
+                        alt={doctor.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          target.style.display = 'none';
+                          (target.nextElementSibling as HTMLElement).style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-3xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl" style={{ display: 'none' }}>
+                        {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Doctor Info */}
+                  <div className="md:col-span-2 space-y-4">
+                    <div>
+                      <h1 className="text-4xl font-bold text-white mb-2">{doctor.name}</h1>
+                      <Badge className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-emerald-300 border-emerald-500/30 text-lg px-4 py-2">
+                        {doctor.specialty}
+                      </Badge>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4 text-white/80">
+                      <div className="flex items-center space-x-2">
+                        <GraduationCap className="w-5 h-5 text-blue-400" />
+                        <span>{doctor.degrees}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Star className="w-5 h-5 text-yellow-400" />
+                        <span>{doctor.experience} Experience</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Clock className="w-5 h-5 text-emerald-400" />
+                        <span>{doctor.timings}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="w-5 h-5 text-purple-400" />
+                        <span>{doctor.visitingDays}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-center md:text-left pt-4">
+                      <span className="text-emerald-400 font-bold text-2xl">
+                        {doctor.consultationFee}
+                      </span>
+                      <span className="text-white/60 text-lg ml-2">consultation</span>
+                    </div>
+
+                    <div className="flex gap-4 pt-4">
+                      <Button 
+                        onClick={() => window.location.href = `/appointment?doctor=${doctor.id}`}
+                        className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white px-8 py-3 rounded-2xl"
+                      >
+                        <Calendar className="w-5 h-5 mr-2" />
+                        Book Appointment
+                      </Button>
+                      <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-8 py-3 rounded-2xl">
+                        <Phone className="w-5 h-5 mr-2" />
+                        Call Now
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Detailed Information */}
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+            {/* About & Education */}
+            <div className="space-y-8">
+              {/* About */}
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white">About Dr. {doctor.name.split(' ')[1]}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-white/80 leading-relaxed">{doctor.about}</p>
+                </CardContent>
+              </Card>
+
+              {/* Education */}
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white flex items-center">
+                    <GraduationCap className="w-6 h-6 mr-2 text-blue-400" />
+                    Education
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {doctor.education.map((edu, index) => (
+                      <li key={index} className="text-white/80 flex items-start">
+                        <div className="w-2 h-2 bg-emerald-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                        {edu}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Specializations & Achievements */}
+            <div className="space-y-8">
+              {/* Specializations */}
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white flex items-center">
+                    <Star className="w-6 h-6 mr-2 text-yellow-400" />
+                    Specializations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-3">
+                    {doctor.specializations.map((spec, index) => (
+                      <Badge key={index} variant="outline" className="bg-white/5 text-white/80 border-white/20 px-3 py-1">
+                        {spec}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Achievements */}
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white flex items-center">
+                    <Award className="w-6 h-6 mr-2 text-purple-400" />
+                    Achievements
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    {doctor.achievements.map((achievement, index) => (
+                      <li key={index} className="text-white/80 flex items-start">
+                        <Award className="w-4 h-4 text-yellow-400 mt-1 mr-3 flex-shrink-0" />
+                        {achievement}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Contact Info */}
+              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-white">Contact Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-3 text-white/80">
+                    <Phone className="w-5 h-5 text-emerald-400" />
+                    <span>070223 16149 / 74060 07777</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-white/80">
+                    <Mail className="w-5 h-5 text-blue-400" />
+                    <span>info@maiyahospital.in</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-white/80">
+                    <MapPin className="w-5 h-5 text-purple-400" />
+                    <span>Maiya Hospital, Jayanagar, Bengaluru</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default DoctorDetail;
