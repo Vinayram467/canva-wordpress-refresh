@@ -233,20 +233,24 @@ const Doctors = () => {
             {filteredDoctors.map((doctor) => (
               <Card key={doctor.id} className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:bg-white/15 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                 <CardHeader className="text-center pb-4">
-                  {/* Doctor Avatar */}
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl border-4 border-white/20">
+                  {/* Doctor Image */}
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-gradient-to-r from-slate-600 to-slate-700">
                     <img 
                       src={doctor.image} 
                       alt={doctor.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
                         const target = e.currentTarget as HTMLImageElement;
                         target.style.display = 'none';
                         (target.nextElementSibling as HTMLElement).style.display = 'flex';
                       }}
                     />
-                    <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-2xl" style={{ display: 'none' }}>
-                      {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    {/* Fallback placeholder */}
+                    <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-blue-500 flex flex-col items-center justify-center text-white" style={{ display: 'none' }}>
+                      <div className="text-2xl font-bold mb-1">
+                        {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
+                      <div className="text-xs opacity-75">Photo</div>
                     </div>
                   </div>
                   

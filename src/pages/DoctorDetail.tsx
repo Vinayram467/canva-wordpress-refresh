@@ -58,19 +58,31 @@ const DoctorDetail = () => {
                 <div className="grid md:grid-cols-3 gap-8 items-center">
                   {/* Doctor Image */}
                   <div className="text-center">
-                    <div className="w-48 h-48 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20">
+                    <div className="w-64 h-80 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 bg-gradient-to-br from-slate-600 to-slate-700">
                       <img 
                         src={doctor.image} 
                         alt={doctor.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
                           const target = e.currentTarget as HTMLImageElement;
                           target.style.display = 'none';
                           (target.nextElementSibling as HTMLElement).style.display = 'flex';
                         }}
                       />
-                      <div className="w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-3xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl" style={{ display: 'none' }}>
-                        {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      {/* Enhanced fallback placeholder */}
+                      <div className="w-full h-full bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 flex flex-col items-center justify-center text-white relative" style={{ display: 'none' }}>
+                        <div className="absolute inset-0 bg-black/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-6xl font-bold mb-4">
+                            {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                          </div>
+                          <div className="text-sm opacity-90 bg-white/20 px-4 py-2 rounded-full">
+                            Doctor Photo
+                          </div>
+                          <div className="text-xs opacity-75 mt-2">
+                            Placeholder Image
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
