@@ -67,22 +67,22 @@ const HeroSection = () => {
 
             {/* Main heading with fixed text overlap */}
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight animate-slide-up">
-                <span className="block text-white mb-4 drop-shadow-2xl">
-                  Advanced
-                </span>
-                <span className="block bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-text-glow leading-none">
-                  Healthcare
-                </span>
-                <span className="block text-white/90 text-3xl lg:text-4xl mt-6 font-light">
-                  Solutions
+              <h1 className="text-4xl lg:text-6xl font-bold leading-tight animate-slide-up">
+                <span className="block bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-text-glow leading-none mb-4">
+                  Maiya Multi Speciality Hospital
                 </span>
               </h1>
               
-              <p className="text-xl text-white/90 leading-relaxed max-w-lg animate-fade-in delay-300">
-                Experience the future of healthcare with AI-powered diagnostics, 
-                personalized treatment plans, and world-class medical expertise.
-              </p>
+              <div className="space-y-4 text-lg text-white/90 leading-relaxed max-w-2xl animate-fade-in delay-300">
+                <p>
+                  Maiya Hospital, established in 1979, was founded with the mission and vision of providing
+                  affordable and accessible patient care to the people of South Bangalore.
+                </p>
+                <p>
+                  Today, it stands as a trusted 100-bed facility offering comprehensive healthcare services.
+                  The hospital also provides cashless insurance treatment, ensuring quality care is within reach for every patient.
+                </p>
+              </div>
             </div>
 
             {/* Enhanced button design */}
