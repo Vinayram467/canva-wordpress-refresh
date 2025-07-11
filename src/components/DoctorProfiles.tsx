@@ -5,36 +5,48 @@ import { Star, Award, Clock, Sparkles } from "lucide-react";
 const DoctorProfiles = () => {
   const doctors = [
     {
-      name: "Dr. Sarah Johnson",
-      specialty: "Cardiologist",
-      experience: "15+ Years",
+      name: "Dr. Shantharaja",
+      specialty: "Pediatrics",
+      experience: "35+ Years",
       image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&face=center",
       color: "from-purple-500 to-purple-600",
-      rating: 4.9
+      rating: 4.9,
+      degrees: "MBBS, MD, DCH, FIAP",
+      timings: "10AM - 2PM",
+      fee: "₹600"
     },
     {
-      name: "Dr. Michael Chen",
-      specialty: "Neurologist", 
-      experience: "12+ Years",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&face=center",
-      color: "from-pink-500 to-pink-600",
-      rating: 4.8
-    },
-    {
-      name: "Dr. Emily Rodriguez",
-      specialty: "Pediatrician",
-      experience: "10+ Years", 
+      name: "Dr. Sudhamathy Kannan",
+      specialty: "Obstetrics & Gynecology", 
+      experience: "35+ Years",
       image: "https://images.unsplash.com/photo-1594824804732-ca8db4448119?w=300&h=300&fit=crop&face=center",
-      color: "from-teal-500 to-teal-600",
-      rating: 4.9
+      color: "from-pink-500 to-pink-600",
+      rating: 4.8,
+      degrees: "MBBS, DGO",
+      timings: "11AM - 2PM",
+      fee: "₹600"
     },
     {
-      name: "Dr. James Wilson",
-      specialty: "Orthopedic Surgeon",
-      experience: "18+ Years",
+      name: "Dr. Raghuveer Karanth",
+      specialty: "General Medicine",
+      experience: "20+ Years", 
+      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&face=center",
+      color: "from-teal-500 to-teal-600",
+      rating: 4.9,
+      degrees: "MBBS, DNB",
+      timings: "12PM - 6PM & 8PM - 10PM",
+      fee: "₹400"
+    },
+    {
+      name: "Dr. Akshay Bhanda",
+      specialty: "Orthopedics",
+      experience: "10+ Years",
       image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=300&h=300&fit=crop&face=center",
       color: "from-blue-500 to-blue-600",
-      rating: 5.0
+      rating: 5.0,
+      degrees: "MBBS, MS, DNB(ORTHO), FAOUSS",
+      timings: "7PM - 9PM",
+      fee: "₹400"
     }
   ];
 
@@ -108,10 +120,14 @@ const DoctorProfiles = () => {
                     <Award className="w-4 h-4 mr-1" />
                     {doctor.specialty}
                   </p>
-                  <p className="text-white/70 text-sm mb-4 flex items-center justify-center group-hover:text-white/90 transition-colors duration-300">
+                  <p className="text-white/70 text-sm mb-2 flex items-center justify-center group-hover:text-white/90 transition-colors duration-300">
                     <Clock className="w-4 h-4 mr-1" />
                     {doctor.experience}
                   </p>
+                  <div className="text-center mb-4">
+                    <p className="text-emerald-400 font-bold text-lg">{doctor.fee}</p>
+                    <p className="text-white/60 text-xs">{doctor.timings}</p>
+                  </div>
                   
                   {/* Enhanced interaction button */}
                   <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">

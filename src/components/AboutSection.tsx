@@ -25,12 +25,12 @@ const AboutSection = () => {
             
             <div className="space-y-6 animate-fade-in delay-300">
               <p className="text-lg text-white/80 leading-relaxed">
-                For over 25 years, Maiya Hospital has been at the forefront of medical excellence, 
-                providing compassionate care and innovative treatments to our community.
+                Maiya Hospital, established in 1979, was founded with the mission and vision of providing
+                affordable and accessible patient care to the people of South Bangalore.
               </p>
               <p className="text-lg text-white/80 leading-relaxed">
-                Our mission is to deliver world-class healthcare services with a patient-centered approach, 
-                combining advanced medical technology with the warmth of human care.
+                Today, it stands as a trusted 100-bed facility offering comprehensive healthcare services.
+                The hospital also provides cashless insurance treatment, ensuring quality care is within reach for every patient.
               </p>
             </div>
             
@@ -61,8 +61,8 @@ const AboutSection = () => {
           <div className="relative animate-fade-in delay-300">
             <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop" 
-                alt="Hospital Interior"
+                src="/lovable-uploads/04886a89-4380-4ad3-b37a-fda3e60c23db.png" 
+                alt="Maiya Multi Speciality Hospital Building"
                 className="w-full h-80 object-cover rounded-2xl"
               />
               

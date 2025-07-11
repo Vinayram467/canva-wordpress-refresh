@@ -48,8 +48,12 @@ const Header = () => {
         <div className="container mx-auto px-4 py-6 relative z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4 group">
-              <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                <span className="text-white font-bold text-2xl">M</span>
+              <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 p-2">
+                <img 
+                  src="/lovable-uploads/7554cf5d-a7c8-4cc7-b0e0-ce8ad3e060e3.png" 
+                  alt="Maiya Hospital Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="transform group-hover:translate-x-2 transition-all duration-300">
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent animate-text-glow">
