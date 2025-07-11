@@ -1,39 +1,56 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Doctors from "./pages/Doctors";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
-import MedicalSpecialties from "./pages/MedicalSpecialties";
-import AppointmentBooking from "./pages/AppointmentBooking";
-import DoctorDetail from "./pages/DoctorDetail";
-import NotFound from "./pages/NotFound";
+import React, { useState, useEffect } from 'react';
+import { createClient } from 'contentful';
+import './App.css'; 
 
-const queryClient = new QueryClient();
+// --- Configuration for Your Contentful Space ---
+const contentfulClient = createClient({
+  space: "9yvx4uo492ys", // Your Space ID
+  accessToken: "lk4quy9SpiuVE4N3HAfb6Wd7g_hFBWIo1meYEh5HR4M", // Your Content Delivery API Token
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/specialties" element={<MedicalSpecialties />} />
-          <Route path="/appointment" element={<AppointmentBooking />} />
-          <Route path="/doctor/:id" element={<DoctorDetail />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+
+function App() {
+  const [pageData, setPageData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getPageData = async () => {
+      try {
+        // === THIS IS THE LINE WE JUST FIXED ===
+        const entries = await contentfulClient.getEntries({ content_type: 'pageBlogPost', limit: 1 });
+
+        if (entries.items.length > 0) {
+          setPageData(entries.items[0]); // Save the first entry we find
+        }
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching data from Contentful:", err);
+        setError("Failed to load content from the new CMS.");
+        setIsLoading(false);
+      }
+    };
+
+    getPageData();
+  }, []); 
+
+  if (isLoading) {
+    return <div className="loading-message">Loading Content from Contentful CMS...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
+  // If data is loaded, display the title!
+  // Note: Contentful data is inside the 'fields' object
+  return (
+    <div className="App">
+      <h1>{pageData.fields.title}</h1>
+      
+      {/* We will add the body content in the next step! */}
+    </div>
+  );
+}
 
 export default App;
