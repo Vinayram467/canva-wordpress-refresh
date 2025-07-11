@@ -1,55 +1,22 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Award, Clock, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
+// Import the doctors data
+const doctorsData = [
+  // Cardiology
+  { id: "3", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/doctor-profiles/DR-HRISHIKESH- VEMULA.jpg" },
+  // Neurosurgery
+  { id: "5", name: "Dr. Sujay Rao", specialty: "Neurosurgery", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/doctor-profiles/DR-SUJAY- RAO.png" },
+  // General Medicine
+  { id: "7", name: "Dr. B G Mahesh", specialty: "General Medicine", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png" },
+  // Administration
+  { id: "11", name: "Dr. G L Maiya", specialty: "Administration", degrees: "MBBS, MS", experience: "35 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹1000", image: "/doctor-profiles/DR-G L-MAIYA.png" }
+];
 
 const DoctorProfiles = () => {
-  const doctors = [
-    {
-      name: "Dr. Shantharaja",
-      specialty: "Pediatrics",
-      experience: "35+ Years",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&face=center",
-      color: "from-purple-500 to-purple-600",
-      rating: 4.9,
-      degrees: "MBBS, MD, DCH, FIAP",
-      timings: "10AM - 2PM",
-      fee: "₹600"
-    },
-    {
-      name: "Dr. Sudhamathy Kannan",
-      specialty: "Obstetrics & Gynecology", 
-      experience: "35+ Years",
-      image: "https://images.unsplash.com/photo-1594824804732-ca8db4448119?w=300&h=300&fit=crop&face=center",
-      color: "from-pink-500 to-pink-600",
-      rating: 4.8,
-      degrees: "MBBS, DGO",
-      timings: "11AM - 2PM",
-      fee: "₹600"
-    },
-    {
-      name: "Dr. Raghuveer Karanth",
-      specialty: "General Medicine",
-      experience: "20+ Years", 
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&face=center",
-      color: "from-teal-500 to-teal-600",
-      rating: 4.9,
-      degrees: "MBBS, DNB",
-      timings: "12PM - 6PM & 8PM - 10PM",
-      fee: "₹400"
-    },
-    {
-      name: "Dr. Akshay Bhanda",
-      specialty: "Orthopedics",
-      experience: "10+ Years",
-      image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=300&h=300&fit=crop&face=center",
-      color: "from-blue-500 to-blue-600",
-      rating: 5.0,
-      degrees: "MBBS, MS, DNB(ORTHO), FAOUSS",
-      timings: "7PM - 9PM",
-      fee: "₹400"
-    }
-  ];
-
   return (
     <section id="doctors" className="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 relative overflow-hidden">
       {/* Enhanced background effects */}
@@ -83,66 +50,76 @@ const DoctorProfiles = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {doctors.map((doctor, index) => (
+          {doctorsData.map((doctor, index) => (
             <Card 
-              key={index} 
+              key={doctor.id} 
               className="group bg-white/5 backdrop-blur-xl border border-white/20 hover:bg-white/10 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-3 animate-fade-in cursor-pointer relative"
               style={{ animationDelay: `${index * 150}ms` }}
             >
-              {/* Gradient background */}
-              <div className={`${doctor.color} h-40 relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
-                
-                {/* Floating rating */}
-                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1 transform group-hover:scale-110 transition-all duration-300">
-                  <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  <span className="text-white text-xs font-bold">{doctor.rating}</span>
-                </div>
+              {/* Experience badge */}
+              <div className="absolute top-4 right-4 z-10 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1 transform group-hover:scale-110 transition-all duration-300">
+                <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                <span className="text-white text-xs font-bold">{doctor.experience}</span>
+              </div>
+
+              {/* Doctor image container */}
+              <div className="aspect-square w-full relative overflow-hidden bg-gradient-to-br from-slate-700 to-slate-800">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-[1]"></div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 z-[2]"></div>
                 
                 {/* Doctor image */}
                 <img 
                   src={doctor.image}
                   alt={doctor.name}
-                  className="w-28 h-28 rounded-full border-4 border-white/30 absolute -bottom-14 left-1/2 transform -translate-x-1/2 object-cover group-hover:scale-110 group-hover:border-white/50 transition-all duration-500 shadow-2xl"
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    (target.nextElementSibling as HTMLElement).style.display = 'flex';
+                  }}
                 />
+                {/* Fallback placeholder */}
+                <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-blue-500 flex flex-col items-center justify-center text-white" style={{ display: 'none' }}>
+                  <div className="text-2xl font-bold mb-1">
+                    {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </div>
+                  <div className="text-xs opacity-75">Photo</div>
+                </div>
               </div>
               
-              <CardContent className="pt-20 text-center relative">
-                {/* Background glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <CardContent className="text-center pt-6 pb-4">
+                <h3 className="text-xl font-bold text-white mb-2">{doctor.name}</h3>
+                <p className="text-emerald-400 font-medium mb-4">{doctor.specialty}</p>
                 
-                <div className="relative z-10">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors duration-300">
-                    {doctor.name}
-                  </h3>
-                  <p className="text-emerald-400 font-semibold mb-2 flex items-center justify-center group-hover:text-white transition-colors duration-300">
-                    <Award className="w-4 h-4 mr-1" />
-                    {doctor.specialty}
-                  </p>
-                  <p className="text-white/70 text-sm mb-2 flex items-center justify-center group-hover:text-white/90 transition-colors duration-300">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {doctor.experience}
-                  </p>
-                  <div className="text-center mb-4">
-                    <p className="text-emerald-400 font-bold text-lg">{doctor.fee}</p>
-                    <p className="text-white/60 text-xs">{doctor.timings}</p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center space-x-2 text-white/70">
+                    <Award className="w-4 h-4" />
+                    <span className="text-sm">{doctor.degrees}</span>
                   </div>
-                  
-                  {/* Enhanced interaction button */}
-                  <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-6 py-2 rounded-full text-sm font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-                      View Profile
-                    </button>
+                  <div className="flex items-center justify-center space-x-2 text-white/70">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-sm">{doctor.timings}</span>
                   </div>
                 </div>
 
-                {/* Decorative elements */}
-                <div className="absolute top-4 left-4 w-2 h-2 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping transition-opacity duration-500"></div>
-                <div className="absolute bottom-4 right-4 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping delay-200 transition-opacity duration-500"></div>
+                <div className="mt-6 flex justify-center">
+                  <Link to={`/doctor/${doctor.id}`}>
+                    <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl">
+                      View Profile
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link to="/doctors">
+            <Button className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white px-8 py-3 rounded-xl">
+              View All Doctors
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
