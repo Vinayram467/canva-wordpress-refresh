@@ -1,14 +1,11 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Sparkles } from "lucide-react";
 import { sampleBlogs } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
-const HealthInsights = () => {
+export default function Blogs() {
   return (
-    <section className="py-16 bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950 py-16">
       <div className="container mx-auto px-4">
+        <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">Maiya Blogs</h1>
         <div className="grid md:grid-cols-3 gap-8">
           {sampleBlogs.map(blog => (
             <Link to={`/blog/${blog.id}`} key={blog.id} className="block group">
@@ -38,20 +35,7 @@ const HealthInsights = () => {
             </Link>
           ))}
         </div>
-        <div className="text-center mt-16 animate-fade-in delay-700">
-          <Link to="/blogs">
-            <button className="group bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-12 py-6 text-lg font-bold shadow-2xl hover:shadow-emerald-500/30 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden rounded-2xl">
-              <span className="relative z-10 flex items-center">
-                View All Articles
-                <span className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300">→</span>
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-            </button>
-          </Link>
-        </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default HealthInsights;
+} 

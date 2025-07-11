@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare } from "lucide-react";
+import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare, BookOpen } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
@@ -11,6 +11,7 @@ const Header = () => {
     { name: 'Services', path: '/services', icon: Stethoscope },
     { name: 'Specialties', path: '/specialties', icon: HeartPulse },
     { name: 'Doctors', path: '/doctors', icon: Users },
+    { name: 'Blogs', path: '/blogs', icon: BookOpen },
     { name: 'Contact', path: '/contact', icon: MessageSquare }
   ];
 
@@ -49,51 +50,46 @@ const Header = () => {
       </div>
 
       {/* Logo Section */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-4 relative overflow-hidden">
+      <div className="relative py-10 md:py-16 flex items-center justify-center overflow-visible">
         {/* Enhanced background animations */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse"></div>
-          {/* Floating orbs with new animations */}
-          <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl animate-float-slow"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-purple-400/10 rounded-full blur-2xl animate-float-delay"></div>
-          {/* Additional decorative elements */}
-          <div className="absolute top-1/2 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-ping"></div>
-          <div className="absolute bottom-1/2 right-1/3 w-2 h-2 bg-purple-400 rounded-full animate-ping delay-700"></div>
-          <div className="absolute top-1/3 right-1/2 w-1 h-1 bg-emerald-400 rounded-full animate-ping delay-1000"></div>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-900 via-blue-950 to-emerald-950 opacity-80"></div>
+          {/* Floating orbs with new animations, using theme colors */}
+          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl animate-float-slow"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl animate-float-delay"></div>
+          {/* Decorative blurred orb behind logo/text, using theme color */}
+          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-900/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
         </div>
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 animate-fade-in-up">
-            {/* Animated logo container */}
-            <div className="relative group">
-              {/* Rotating border effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
-              
-              <div className="w-32 h-32 bg-gradient-to-br from-slate-50 to-white backdrop-blur-xl border border-white/20 rounded-2xl p-2 relative transform hover:scale-105 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-400/20 flex items-center justify-center overflow-hidden animate-float-subtle">
-                {/* Shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000"></div>
-                
-                <img 
-                  src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
-                  alt="Maiya Hospital Logo" 
-                  className="w-full h-full object-fill scale-110 group-hover:scale-115 transition-all duration-500 animate-pulse-subtle"
-                />
-              </div>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 animate-fade-in-up relative z-10">
+          {/* Animated logo container */}
+          <div className="relative group shadow-2xl">
+            {/* Rotating border effect with theme colors */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 via-blue-700 to-blue-900 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
+            <div className="w-36 h-36 bg-white backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none"></div>
+              <img 
+                src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
+                alt="Maiya Hospital Logo" 
+                className="w-full h-full object-cover scale-110 transition-all duration-500 animate-pulse-subtle"
+              />
             </div>
-
-            {/* Animated text content */}
-            <div className="text-center md:text-left space-y-2 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-              <h1 className="text-2xl md:text-3xl font-bold relative">
-                <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-gradient-text relative inline-block">
-                  Maiya Multi Speciality Hospital
-                  {/* Floating dots decoration */}
-                  <span className="absolute -top-1 -right-1 w-1 h-1 bg-emerald-400 rounded-full animate-ping-slow"></span>
-                  <span className="absolute -bottom-1 -left-1 w-1 h-1 bg-blue-400 rounded-full animate-ping-slow delay-300"></span>
-                </span>
-              </h1>
-              <p className="text-white/70 text-sm md:text-base mt-1 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                Excellence in Healthcare
-              </p>
-            </div>
+          </div>
+          {/* Animated text content */}
+          <div className="flex flex-col items-start md:items-start gap-2">
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight relative">
+              <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
+                Maiya Multi Speciality Hospital
+                {/* Floating dots decoration */}
+                <span className="absolute -top-2 -right-2 w-2 h-2 bg-emerald-400 rounded-full animate-ping-slow"></span>
+                <span className="absolute -bottom-2 -left-2 w-2 h-2 bg-blue-400 rounded-full animate-ping-slow delay-300"></span>
+              </span>
+              {/* Decorative accent underline */}
+              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-emerald-400 via-blue-400 to-blue-500 rounded-full opacity-60 animate-fade-in-up"></span>
+            </h1>
+            <p className="text-white/80 text-lg md:text-xl mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
+              Excellence in Healthcare
+            </p>
           </div>
         </div>
       </div>
