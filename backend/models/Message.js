@@ -11,7 +11,7 @@ const MessageSchema = new mongoose.Schema({
   },
   subject: {
     type: String,
-    required: true
+    required: false, // make subject optional
   },
   message: {
     type: String,

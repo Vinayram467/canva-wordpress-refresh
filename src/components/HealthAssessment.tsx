@@ -6,7 +6,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Heart, Activity, Brain, ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { assessmentApi } from "@/services/api";
 
 interface PersonalInfo {
   age: string;
@@ -127,6 +129,35 @@ const HealthAssessment = () => {
     setStressEvaluation({ sleepHours: "", sleepQuality: "", workStress: "", relationships: "" });
     setCopingStrategies({ strategies: [] });
   };
+
+  const { toast } = useToast();
+
+  const handleSaveAssessment = async () => {
+    try {
+      await assessmentApi.create({
+        personalInfo,
+        diabetesRisk,
+        stressEvaluation,
+        copingStrategies,
+      });
+      toast({
+        title: "Assessment saved!",
+        description: "Your health assessment has been saved.",
+      });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Could not save assessment. Please try again later.",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (currentStep === totalSteps) {
+      handleSaveAssessment();
+    }
+    // eslint-disable-next-line
+  }, [currentStep]);
 
   return (
     <div className="relative">

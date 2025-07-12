@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header className="relative z-50">
       {/* Modern top bar with enhanced gradient */}
-      <div className="bg-gradient-to-r from-slate-900 via-emerald-900 to-blue-900 text-white py-4 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-emerald-950 text-white py-4 relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-20 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl animate-pulse"></div>
@@ -64,7 +64,7 @@ const Header = () => {
           {/* Animated logo container */}
           <div className="relative group shadow-2xl">
             {/* Rotating border effect with theme colors */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 via-blue-700 to-blue-900 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
+            <div className="absolute -inset-2 bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
             <div className="w-36 h-36 bg-white backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
               {/* Shine effect */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none"></div>
@@ -78,14 +78,14 @@ const Header = () => {
           {/* Animated text content */}
           <div className="flex flex-col items-start md:items-start gap-2">
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight relative">
-              <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
+              <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
                 Maiya Multi Speciality Hospital
                 {/* Floating dots decoration */}
                 <span className="absolute -top-2 -right-2 w-2 h-2 bg-emerald-400 rounded-full animate-ping-slow"></span>
                 <span className="absolute -bottom-2 -left-2 w-2 h-2 bg-blue-400 rounded-full animate-ping-slow delay-300"></span>
               </span>
               {/* Decorative accent underline */}
-              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-emerald-400 via-blue-400 to-blue-500 rounded-full opacity-60 animate-fade-in-up"></span>
+              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 rounded-full opacity-60 animate-fade-in-up"></span>
             </h1>
             <p className="text-white/80 text-lg md:text-xl mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
               Excellence in Healthcare
@@ -95,44 +95,38 @@ const Header = () => {
       </div>
 
       {/* Enhanced main navigation */}
-      <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white relative">
-        {/* Background effects */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-          <div className="absolute -top-10 left-40 w-20 h-20 bg-blue-400/10 rounded-full blur-xl animate-float"></div>
-          <div className="absolute -bottom-10 right-60 w-16 h-16 bg-purple-400/10 rounded-full blur-lg animate-float delay-1000"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 py-4">
+      <nav className="relative z-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-blue-950 to-emerald-950/80 backdrop-blur-xl border-b border-white/20 shadow-2xl rounded-b-3xl" />
+        <div className="container mx-auto px-4 py-4 relative z-10">
           <div className="flex items-center justify-between">
             <div className="hidden md:flex flex-1 justify-center items-center gap-8">
               {navItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
                 return (
-                <Link 
-                  key={item.name}
-                  to={item.path}
-                    className={`group relative flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/10 backdrop-blur-sm transform hover:scale-105 transition-all duration-300 ${
-                      isActive ? 'bg-white/10 text-white' : 'text-white/90 hover:text-white'
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className={`group relative flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300 ${
+                      isActive ? 'bg-gradient-to-r from-emerald-400/20 to-blue-400/20 text-white shadow-lg' : 'text-white/90 hover:text-white'
                     }`}
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
                     <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-white/70 group-hover:text-emerald-400'} transition-colors duration-300`} />
                     <span className="relative z-10 font-medium">{item.name}</span>
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-emerald-400 to-blue-400 group-hover:w-full transition-all duration-500 rounded-full"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 to-blue-500/0 group-hover:from-emerald-500/10 group-hover:to-blue-500/10 rounded-xl transition-all duration-300"></div>
-                </Link>
+                    {isActive && (
+                      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 rounded-full blur-sm animate-gradient-text"></span>
+                    )}
+                  </Link>
                 );
               })}
             </div>
-
             <div className="flex items-center gap-4">
               <Link to="/appointment">
-              <Button className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-red-500/30 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300">
-                <span className="relative z-10 font-semibold">Book Appointment</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-              </Button>
+                <Button className="group relative overflow-hidden bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-8 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-red-500/30 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300">
+                  <span className="relative z-10 font-semibold">Book Appointment</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                </Button>
               </Link>
               <Button variant="ghost" className="md:hidden bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transform hover:scale-105 transition-all duration-300">
                 <Menu className="w-5 h-5 text-white" />

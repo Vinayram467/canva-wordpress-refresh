@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Clock, User, Phone, Mail, MapPin, Users, Heart, Award } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useToast } from "@/hooks/use-toast";
+import { appointmentApi } from "@/services/api";
 
 // Custom hook for counting animation
 const useCountAnimation = (end: number, duration: number = 2000) => {
@@ -75,6 +77,8 @@ const AppointmentBooking = () => {
     reason: ''
   });
 
+  const { toast } = useToast();
+
   const stats = [
     { 
       number: 50, 
@@ -129,10 +133,28 @@ const AppointmentBooking = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle appointment booking logic here
-    alert('Appointment booked successfully!');
+    try {
+      await appointmentApi.create({
+        patientName: formData.patientName,
+        patientEmail: formData.email,
+        patientPhone: formData.phone,
+        appointmentDate: formData.date,
+        appointmentTime: formData.time,
+        reason: formData.reason,
+      });
+      toast({
+        title: "Appointment Booked!",
+        description: "We have received your appointment request.",
+      });
+      setFormData({ patientName: '', phone: '', email: '', date: '', time: '', reason: '' });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to book appointment. Please try again.",
+      });
+    }
   };
 
   return (
@@ -234,17 +256,19 @@ const AppointmentBooking = () => {
                           name="time"
                           value={formData.time}
                           onChange={handleInputChange}
-                          className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white h-12"
+                          className="w-full pl-12 pr-4 py-3 bg-slate-800 border border-white/20 rounded-2xl text-white h-12"
                           required
                         >
-                          <option value="">Select Time</option>
-                          <option value="9:00 AM">9:00 AM</option>
-                          <option value="10:00 AM">10:00 AM</option>
-                          <option value="11:00 AM">11:00 AM</option>
-                          <option value="2:00 PM">2:00 PM</option>
-                          <option value="3:00 PM">3:00 PM</option>
-                          <option value="4:00 PM">4:00 PM</option>
-                          <option value="5:00 PM">5:00 PM</option>
+                          <option className="text-black bg-white" value="">Select Time</option>
+                          <option className="text-black bg-white" value="9:00 AM">9:00 AM</option>
+                          <option className="text-black bg-white" value="10:00 AM">10:00 AM</option>
+                          <option className="text-black bg-white" value="11:00 AM">11:00 AM</option>
+                          <option className="text-black bg-white" value="12:00 PM">12:00 PM</option>
+                          <option className="text-black bg-white" value="1:00 PM">1:00 PM</option>
+                          <option className="text-black bg-white" value="2:00 PM">2:00 PM</option>
+                          <option className="text-black bg-white" value="3:00 PM">3:00 PM</option>
+                          <option className="text-black bg-white" value="4:00 PM">4:00 PM</option>
+                          <option className="text-black bg-white" value="5:00 PM">5:00 PM</option>
                         </select>
                       </div>
 

@@ -19,7 +19,7 @@ const appointmentSchema = new mongoose.Schema({
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Doctor',
-    required: true
+    // required: true // doctorId is now optional
   },
   appointmentDate: {
     type: Date,
@@ -31,7 +31,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   reason: {
     type: String,
-    required: true,
+    required: false, // make it optional
     trim: true
   },
   status: {

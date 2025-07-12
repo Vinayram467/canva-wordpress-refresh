@@ -5,15 +5,35 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar, Clock, Video, Phone, MessageSquare, Shield, Star, Users, Heart, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useToast } from "@/hooks/use-toast";
+import { consultationApi } from "@/services/api";
 
 const VirtualConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', description: '' });
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Add form submission logic here
-    setTimeout(() => setIsSubmitting(false), 2000);
+    try {
+      await consultationApi.create(formData);
+      toast({
+        title: "Consultation Booked!",
+        description: "Your virtual consultation request has been received.",
+      });
+      setFormData({ name: '', email: '', phone: '', description: '' });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to book consultation. Please try again.",
+      });
+    }
+    setIsSubmitting(false);
   };
 
   const benefits = [
@@ -103,20 +123,32 @@ const VirtualConsultation = () => {
                       <Input 
                         type="text" 
                         placeholder="Your Name" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                       />
                       <Input 
                         type="email" 
                         placeholder="Email Address" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                       />
                       <Input 
                         type="tel" 
                         placeholder="Phone Number" 
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                       />
                       <Textarea 
                         placeholder="Brief Description of Your Concern" 
+                        name="description"
+                        value={formData.description}
+                        onChange={handleInputChange}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[100px]"
                       />
                     </div>

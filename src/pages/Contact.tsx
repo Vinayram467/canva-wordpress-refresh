@@ -15,8 +15,34 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useToast } from "@/hooks/use-toast";
+import { messageApi } from "@/services/api";
+import { useState } from "react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
+  const { toast } = useToast();
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await messageApi.create(formData);
+      toast({
+        title: "Message Sent!",
+        description: "Your message has been sent. We'll get back to you soon.",
+      });
+      setFormData({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950">
       <Header />
@@ -130,68 +156,88 @@ const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+                <form onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName" className="text-white/90">First Name</Label>
+                      <Input 
+                        id="firstName"
+                        name="firstName"
+                        placeholder="Your first name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName" className="text-white/90">Last Name</Label>
+                      <Input 
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Your last name"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-white/90">First Name</Label>
+                    <Label htmlFor="email" className="text-white/90">Email Address</Label>
                     <Input 
-                      id="firstName"
-                      placeholder="Your first name"
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="your.email@example.com"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                     />
                   </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-white/90">Last Name</Label>
+                    <Label htmlFor="phone" className="text-white/90">Phone Number</Label>
                     <Input 
-                      id="lastName"
-                      placeholder="Your last name"
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+91 9876543210"
+                      value={formData.phone}
+                      onChange={handleInputChange}
                       className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                     />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white/90">Email Address</Label>
-                  <Input 
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subject" className="text-white/90">Subject</Label>
+                    <Input 
+                      id="subject"
+                      name="subject"
+                      placeholder="How can we help you?"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white/90">Phone Number</Label>
-                  <Input 
-                    id="phone"
-                    type="tel"
-                    placeholder="+91 9876543210"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="message" className="text-white/90">Message</Label>
+                    <Textarea 
+                      id="message"
+                      name="message"
+                      placeholder="Tell us more about your inquiry..."
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-white/90">Subject</Label>
-                  <Input 
-                    id="subject"
-                    placeholder="How can we help you?"
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message" className="text-white/90">Message</Label>
-                  <Textarea 
-                    id="message"
-                    placeholder="Tell us more about your inquiry..."
-                    rows={4}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                  />
-                </div>
-
-                <Button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-2xl py-6 text-lg font-semibold shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition-all duration-300">
-                  <Send className="w-5 h-5 mr-2" />
-                  Send Message
-                </Button>
+                  <Button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-2xl py-6 text-lg font-semibold shadow-lg hover:shadow-emerald-500/30 transform hover:-translate-y-1 transition-all duration-300">
+                    <Send className="w-5 h-5 mr-2" />
+                    Send Message
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>
