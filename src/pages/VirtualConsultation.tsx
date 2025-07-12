@@ -10,7 +10,7 @@ import { consultationApi } from "@/services/api";
 
 const VirtualConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', description: '' });
+  const [formData, setFormData] = useState({ patientName: '', patientEmail: '', phone: '', description: '', date: '' });
   const [successDetails, setSuccessDetails] = useState<null | typeof formData>(null);
   const { toast } = useToast();
 
@@ -28,7 +28,7 @@ const VirtualConsultation = () => {
         title: "Consultation Booked!",
         description: "Your virtual consultation request has been received.",
       });
-      setFormData({ name: '', email: '', phone: '', description: '' });
+      setFormData({ patientName: '', patientEmail: '', phone: '', description: '', date: '' });
     } catch (err) {
       toast({
         title: "Error",
@@ -122,11 +122,12 @@ const VirtualConsultation = () => {
                     <div className="flex flex-col items-center justify-center min-h-[350px]">
                       <CheckCircle className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
                       <h3 className="text-2xl font-bold text-white mb-2">Your Consultation is Scheduled!</h3>
-                      <p className="text-white/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-emerald-300">{successDetails.name}</span>!<br/>Your virtual consultation has been booked. Our team will contact you soon.</p>
+                      <p className="text-white/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-emerald-300">{successDetails.patientName}</span>!<br/>Your virtual consultation has been booked. Our team will contact you soon.</p>
                       <div className="w-full max-w-xs bg-white/20 backdrop-blur-lg rounded-2xl p-4 border border-white/30 shadow-lg mb-4">
-                        <div className="text-white/90 mb-1"><b>Name:</b> {successDetails.name}</div>
-                        <div className="text-white/90 mb-1"><b>Email:</b> {successDetails.email}</div>
+                        <div className="text-white/90 mb-1"><b>Name:</b> {successDetails.patientName}</div>
+                        <div className="text-white/90 mb-1"><b>Email:</b> {successDetails.patientEmail}</div>
                         <div className="text-white/90 mb-1"><b>Phone:</b> {successDetails.phone}</div>
+                        <div className="text-white/90 mb-1"><b>Date:</b> {successDetails.date}</div>
                         <div className="text-white/90"><b>Concern:</b> {successDetails.description}</div>
                       </div>
                       <div className="text-white/60 text-xs">A confirmation will be sent to your email/phone.</div>
@@ -139,16 +140,16 @@ const VirtualConsultation = () => {
                           <Input 
                             type="text" 
                             placeholder="Your Name" 
-                            name="name"
-                            value={formData.name}
+                            name="patientName"
+                            value={formData.patientName}
                             onChange={handleInputChange}
                             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
                           <Input 
                             type="email" 
                             placeholder="Email Address" 
-                            name="email"
-                            value={formData.email}
+                            name="patientEmail"
+                            value={formData.patientEmail}
                             onChange={handleInputChange}
                             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
@@ -157,6 +158,14 @@ const VirtualConsultation = () => {
                             placeholder="Phone Number" 
                             name="phone"
                             value={formData.phone}
+                            onChange={handleInputChange}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                          />
+                          <Input 
+                            type="date" 
+                            placeholder="Preferred Date" 
+                            name="date"
+                            value={formData.date}
                             onChange={handleInputChange}
                             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
                           />
