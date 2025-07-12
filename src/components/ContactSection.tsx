@@ -46,8 +46,8 @@ const ContactSection = () => {
                 icon: Phone,
                 color: "from-red-500 to-red-600",
                 content: [
-                  { label: "Emergency Hotline", value: "+1 (555) 123-4567", highlight: true },
-                  { label: "General Inquiries", value: "+1 (555) 123-4568", highlight: false },
+                  { label: "Landline", value: "080-41000980", highlight: false },
+                  { label: "Reception", value: "70223 16149 / 74060 07777", highlight: true },
                   { label: "Email", value: "info@maiyahospital.com", highlight: false }
                 ]
               },
@@ -66,7 +66,7 @@ const ContactSection = () => {
                 icon: Home,
                 color: "from-emerald-500 to-emerald-600",
                 content: [
-                  { label: "", value: "123 Medical Center Drive\nHealthcare District\nNew York, NY 10001\nUnited States", highlight: false }
+                  { label: "", value: "34, 10th Main Rd\nJayanagar 1st Block\nBengaluru, Karnataka 560011\nIndia", highlight: false }
                 ]
               }
             ].map((section, index) => (

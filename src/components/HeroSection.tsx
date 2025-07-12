@@ -98,14 +98,6 @@ const HeroSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
               </Button>
               </Link>
-              
-              <Button className="group relative overflow-hidden bg-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-2xl shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300">
-                <div className="flex items-center">
-                  <Play className="mr-3 w-5 h-5" />
-                  <span>Watch Demo</span>
-                  <Zap className="ml-3 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                </div>
-              </Button>
             </div>
 
             {/* Enhanced stats design */}

@@ -1,6 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Brain, Baby, Bone, Ambulance, Stethoscope, ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ServicesGrid = () => {
   const services = [
@@ -132,13 +133,15 @@ const ServicesGrid = () => {
 
         {/* Enhanced call to action */}
         <div className="text-center mt-20 animate-fade-in delay-700">
-          <button className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-12 py-6 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-emerald-500/30 transform hover:-translate-y-2 hover:scale-105 transition-all duration-300">
-            <span className="relative z-10 flex items-center">
-              View All Services
-              <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-          </button>
+          <Link to="/services">
+            <button className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-12 py-6 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-emerald-500/30 transform hover:-translate-y-2 hover:scale-105 transition-all duration-300">
+              <span className="relative z-10 flex items-center">
+                View All Services
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            </button>
+          </Link>
         </div>
       </div>
     </section>
