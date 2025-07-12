@@ -58,7 +58,7 @@ const specialties = [
   "All Specialties",
   "Administration",
   "Anaesthesia",
-  "Cardiology",
+  "Cardiology", 
   "Dermatology",
   "ENT",
   "General Medicine",

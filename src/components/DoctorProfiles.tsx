@@ -58,9 +58,9 @@ const DoctorProfiles = () => {
             >
               {/* Experience badge */}
               <div className="absolute top-4 right-4 z-10 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1 transform group-hover:scale-110 transition-all duration-300">
-                <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                  <Star className="w-3 h-3 text-yellow-400 fill-current" />
                 <span className="text-white text-xs font-bold">{doctor.experience}</span>
-              </div>
+                </div>
 
               {/* Doctor image container */}
               <div className="aspect-square w-full relative overflow-hidden bg-gradient-to-br from-slate-700 to-slate-800">

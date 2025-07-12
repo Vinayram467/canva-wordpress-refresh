@@ -35,10 +35,10 @@ export default function NewsEvents() {
         <div className="text-center mt-16 animate-fade-in delay-700">
           <Link to="/events">
             <button className="group bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-12 py-6 text-lg font-bold shadow-2xl hover:shadow-red-500/30 transform hover:scale-105 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden rounded-2xl">
-              <span className="relative z-10 flex items-center">
-                View All Events
+            <span className="relative z-10 flex items-center">
+              View All Events
                 <span className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300">→</span>
-              </span>
+            </span>
               <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
             </button>
           </Link>
