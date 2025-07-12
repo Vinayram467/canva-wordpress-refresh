@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'https://canva-wordpress-refresh.onrender.com/api';
 
 export interface Blog {
   _id: string;
@@ -162,4 +162,4 @@ export const messageApi = {
     method: 'POST',
     body: JSON.stringify(data),
   }),
-}; 
+};
