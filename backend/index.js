@@ -31,6 +31,7 @@ const updatesRouter = require('./routes/updates');
 const testimonialsRouter = require('./routes/testimonials');
 const faqsRouter = require('./routes/faqs');
 const usersRouter = require('./routes/users');
+const healthNewsRouter = require('./routes/healthNews');
 
 // Use routes
 app.use('/api/blogs', blogsRouter);
@@ -44,6 +45,7 @@ app.use('/api/updates', updatesRouter);
 app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/faqs', faqsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/health-news', healthNewsRouter);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
