@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, User, Phone, Mail, MapPin, Users, Heart, Award } from "lucide-react";
+import { Calendar, Clock, User, Phone, Mail, MapPin, Users, Heart, Award, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -76,7 +76,7 @@ const AppointmentBooking = () => {
     time: '',
     reason: ''
   });
-
+  const [successDetails, setSuccessDetails] = useState<null | typeof formData>(null);
   const { toast } = useToast();
 
   const stats = [
@@ -144,6 +144,7 @@ const AppointmentBooking = () => {
         appointmentTime: formData.time,
         reason: formData.reason,
       });
+      setSuccessDetails(formData); // Show success card
       toast({
         title: "Appointment Booked!",
         description: "We have received your appointment request.",
@@ -190,6 +191,22 @@ const AppointmentBooking = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {successDetails ? (
+                  <div className="flex flex-col items-center justify-center min-h-[350px]">
+                    <CheckCircle className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
+                    <h3 className="text-2xl font-bold text-white mb-2">Your Appointment is Scheduled!</h3>
+                    <p className="text-white/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-emerald-300">{successDetails.patientName}</span>!<br/>Your appointment has been booked. Our team will contact you soon.</p>
+                    <div className="w-full max-w-xs bg-white/20 backdrop-blur-lg rounded-2xl p-4 border border-white/30 shadow-lg mb-4">
+                      <div className="text-white/90 mb-1"><b>Name:</b> {successDetails.patientName}</div>
+                      <div className="text-white/90 mb-1"><b>Email:</b> {successDetails.email}</div>
+                      <div className="text-white/90 mb-1"><b>Phone:</b> {successDetails.phone}</div>
+                      <div className="text-white/90 mb-1"><b>Date:</b> {successDetails.date}</div>
+                      <div className="text-white/90 mb-1"><b>Time:</b> {successDetails.time}</div>
+                      {successDetails.reason && <div className="text-white/90"><b>Reason:</b> {successDetails.reason}</div>}
+                    </div>
+                    <div className="text-white/60 text-xs">A confirmation will be sent to your email/phone.</div>
+                  </div>
+                ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Patient Information */}
@@ -295,6 +312,7 @@ const AppointmentBooking = () => {
                     </Button>
                   </div>
                 </form>
+                )}
               </CardContent>
             </Card>
           </div>

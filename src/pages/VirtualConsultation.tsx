@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar, Clock, Video, Phone, MessageSquare, Shield, Star, Users, Heart, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Video, Phone, MessageSquare, Shield, Star, Users, Heart, ArrowRight, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +11,7 @@ import { consultationApi } from "@/services/api";
 const VirtualConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', description: '' });
+  const [successDetails, setSuccessDetails] = useState<null | typeof formData>(null);
   const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,6 +23,7 @@ const VirtualConsultation = () => {
     setIsSubmitting(true);
     try {
       await consultationApi.create(formData);
+      setSuccessDetails(formData); // Show success card
       toast({
         title: "Consultation Booked!",
         description: "Your virtual consultation request has been received.",
@@ -112,65 +114,80 @@ const VirtualConsultation = () => {
                 </div>
               </div>
 
-              {/* Right Content - Consultation Form */}
+              {/* Right Content - Consultation Form or Success Card */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 rounded-3xl blur-xl animate-pulse"></div>
                 <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 animate-fade-in-up">
-                  <h3 className="text-2xl font-bold text-white mb-6">Book Your Virtual Consultation</h3>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-4">
-                      <Input 
-                        type="text" 
-                        placeholder="Your Name" 
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                      />
-                      <Input 
-                        type="email" 
-                        placeholder="Email Address" 
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                      />
-                      <Input 
-                        type="tel" 
-                        placeholder="Phone Number" 
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                      />
-                      <Textarea 
-                        placeholder="Brief Description of Your Concern" 
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[100px]"
-                      />
+                  {successDetails ? (
+                    <div className="flex flex-col items-center justify-center min-h-[350px]">
+                      <CheckCircle className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
+                      <h3 className="text-2xl font-bold text-white mb-2">Your Consultation is Scheduled!</h3>
+                      <p className="text-white/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-emerald-300">{successDetails.name}</span>!<br/>Your virtual consultation has been booked. Our team will contact you soon.</p>
+                      <div className="w-full max-w-xs bg-white/20 backdrop-blur-lg rounded-2xl p-4 border border-white/30 shadow-lg mb-4">
+                        <div className="text-white/90 mb-1"><b>Name:</b> {successDetails.name}</div>
+                        <div className="text-white/90 mb-1"><b>Email:</b> {successDetails.email}</div>
+                        <div className="text-white/90 mb-1"><b>Phone:</b> {successDetails.phone}</div>
+                        <div className="text-white/90"><b>Concern:</b> {successDetails.description}</div>
+                      </div>
+                      <div className="text-white/60 text-xs">A confirmation will be sent to your email/phone.</div>
                     </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center">
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                          Processing...
+                  ) : (
+                    <>
+                      <h3 className="text-2xl font-bold text-white mb-6">Book Your Virtual Consultation</h3>
+                      <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-4">
+                          <Input 
+                            type="text" 
+                            placeholder="Your Name" 
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                          />
+                          <Input 
+                            type="email" 
+                            placeholder="Email Address" 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                          />
+                          <Input 
+                            type="tel" 
+                            placeholder="Phone Number" 
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                          />
+                          <Textarea 
+                            placeholder="Brief Description of Your Concern" 
+                            name="description"
+                            value={formData.description}
+                            onChange={handleInputChange}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[100px]"
+                          />
                         </div>
-                      ) : (
-                        <div className="flex items-center">
-                          <Video className="w-5 h-5 mr-2" />
-                          Schedule Consultation
-                        </div>
-                      )}
-                    </Button>
-                  </form>
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white"
+                          disabled={isSubmitting}
+                        >
+                          {isSubmitting ? (
+                            <div className="flex items-center">
+                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                              Processing...
+                            </div>
+                          ) : (
+                            <div className="flex items-center">
+                              <Video className="w-5 h-5 mr-2" />
+                              Schedule Consultation
+                            </div>
+                          )}
+                        </Button>
+                      </form>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
