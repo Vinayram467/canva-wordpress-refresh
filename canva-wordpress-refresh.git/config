@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/Vinayram467/canva-wordpress-refresh
+	tagOpt = --no-tags
+	fetch = +refs/*:refs/*
+	mirror = true
