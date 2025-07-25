@@ -80,7 +80,7 @@ const DoctorDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
       <Header />
       
       {/* Hero Section */}
@@ -93,12 +93,12 @@ const DoctorDetail = () => {
         <div className="container mx-auto px-4 relative z-10">
           {/* Doctor Profile Header */}
           <div className="max-w-6xl mx-auto mb-12">
-            <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+            <Card className="glass shadow-2xl border border-white/80">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-3 gap-8 items-center">
                   {/* Doctor Image */}
                   <div className="text-center">
-                    <div className="w-64 h-80 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 bg-gradient-to-br from-slate-600 to-slate-700">
+                    <div className="w-64 h-80 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 bg-gradient-to-br from-green-700/10 to-blue-400/10">
                       <img 
                         src={doctor.image} 
                         alt={doctor.name}
@@ -110,7 +110,7 @@ const DoctorDetail = () => {
                         }}
                       />
                       {/* Enhanced fallback placeholder */}
-                      <div className="w-full h-full bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-500 flex flex-col items-center justify-center text-white relative" style={{ display: 'none' }}>
+                      <div className="w-full h-full bg-gradient-to-br from-green-700 via-blue-400 to-red-500 flex flex-col items-center justify-center text-white relative" style={{ display: 'none' }}>
                         <div className="absolute inset-0 bg-black/20"></div>
                         <div className="relative z-10 text-center">
                           <div className="text-6xl font-bold mb-4">
@@ -126,17 +126,15 @@ const DoctorDetail = () => {
                       </div>
                     </div>
                   </div>
-
                   {/* Doctor Info */}
                   <div className="md:col-span-2 space-y-4">
                     <div>
-                      <h1 className="text-4xl font-bold text-white mb-2">{doctor.name}</h1>
-                      <Badge className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 text-emerald-300 border-emerald-500/30 text-lg px-4 py-2">
+                      <h1 className="text-4xl font-bold text-foreground mb-2">{doctor.name}</h1>
+                      <Badge className="bg-gradient-to-r from-green-700/10 to-blue-400/10 text-green-700 border-green-700/30 text-lg px-4 py-2">
                         {doctor.specialty}
                       </Badge>
                     </div>
-
-                    <div className="grid md:grid-cols-2 gap-4 text-white/80">
+                    <div className="grid md:grid-cols-2 gap-4 text-muted-foreground">
                       <div className="flex items-center space-x-2">
                         <GraduationCap className="w-5 h-5 text-blue-400" />
                         <span>{doctor.degrees}</span>
@@ -146,7 +144,7 @@ const DoctorDetail = () => {
                         <span>{doctor.experience} Experience</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Clock className="w-5 h-5 text-emerald-400" />
+                        <Clock className="w-5 h-5 text-green-700" />
                         <span>{doctor.timings}</span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -154,24 +152,22 @@ const DoctorDetail = () => {
                         <span>{doctor.visitingDays}</span>
                       </div>
                     </div>
-
                     <div className="text-center md:text-left pt-4">
-                      <span className="text-emerald-400 font-bold text-2xl">
+                      <span className="text-green-700 font-bold text-2xl">
                         {doctor.consultationFee}
                       </span>
-                      <span className="text-white/60 text-lg ml-2">consultation</span>
+                      <span className="text-muted-foreground text-lg ml-2">consultation</span>
                     </div>
-
                     <div className="flex gap-4 pt-4">
                       <Button 
                         onClick={() => window.location.href = `/appointment?doctor=${doctor.id}`}
-                        className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white px-8 py-3 rounded-2xl"
+                        className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-red-500 text-white px-8 py-3 rounded-2xl"
                       >
                         <Calendar className="w-5 h-5 mr-2" />
                         Book Appointment
                       </Button>
-                      <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 px-8 py-3 rounded-2xl">
-                        <Phone className="w-5 h-5 mr-2" />
+                      <Button variant="outline" className="glass text-green-700 hover:bg-white/80 px-8 py-3 rounded-2xl border border-green-700/30">
+                        <Phone className="w-5 h-5 mr-2 text-blue-400" />
                         Call Now
                       </Button>
                     </div>
@@ -186,19 +182,18 @@ const DoctorDetail = () => {
             {/* About & Education */}
             <div className="space-y-8">
               {/* About */}
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <Card className="glass shadow-2xl border border-white/80">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-white">About Dr. {doctor.name.split(' ')[1]}</CardTitle>
+                  <CardTitle className="text-2xl text-foreground">About Dr. {doctor.name.split(' ')[1]}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-white/80 leading-relaxed">{doctorDetails.about}</p>
+                  <p className="text-muted-foreground leading-relaxed">{doctorDetails.about}</p>
                 </CardContent>
               </Card>
-
               {/* Education */}
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <Card className="glass shadow-2xl border border-white/80">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-white flex items-center">
+                  <CardTitle className="text-2xl text-foreground flex items-center">
                     <GraduationCap className="w-6 h-6 mr-2 text-blue-400" />
                     Education
                   </CardTitle>
@@ -206,8 +201,8 @@ const DoctorDetail = () => {
                 <CardContent>
                   <ul className="space-y-3">
                     {doctorDetails.education.map((edu, index) => (
-                      <li key={index} className="text-white/80 flex items-start">
-                        <div className="w-2 h-2 bg-emerald-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <li key={index} className="text-muted-foreground flex items-start">
+                        <div className="w-2 h-2 bg-green-700 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                         {edu}
                       </li>
                     ))}
@@ -215,13 +210,12 @@ const DoctorDetail = () => {
                 </CardContent>
               </Card>
             </div>
-
             {/* Specializations & Achievements */}
             <div className="space-y-8">
               {/* Specializations */}
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <Card className="glass shadow-2xl border border-white/80">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-white flex items-center">
+                  <CardTitle className="text-2xl text-foreground flex items-center">
                     <Star className="w-6 h-6 mr-2 text-yellow-400" />
                     Specializations
                   </CardTitle>
@@ -229,18 +223,17 @@ const DoctorDetail = () => {
                 <CardContent>
                   <div className="flex flex-wrap gap-3">
                     {doctorDetails.specializations.map((spec, index) => (
-                      <Badge key={index} variant="outline" className="bg-white/5 text-white/80 border-white/20 px-3 py-1">
+                      <Badge key={index} variant="outline" className="bg-white/60 text-green-700 border-green-700/30 px-3 py-1">
                         {spec}
                       </Badge>
                     ))}
                   </div>
                 </CardContent>
               </Card>
-
               {/* Achievements */}
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <Card className="glass shadow-2xl border border-white/80">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-white flex items-center">
+                  <CardTitle className="text-2xl text-foreground flex items-center">
                     <Award className="w-6 h-6 mr-2 text-purple-400" />
                     Achievements
                   </CardTitle>
@@ -248,7 +241,7 @@ const DoctorDetail = () => {
                 <CardContent>
                   <ul className="space-y-3">
                     {doctorDetails.achievements.map((achievement, index) => (
-                      <li key={index} className="text-white/80 flex items-start">
+                      <li key={index} className="text-muted-foreground flex items-start">
                         <Award className="w-4 h-4 text-yellow-400 mt-1 mr-3 flex-shrink-0" />
                         {achievement}
                       </li>
@@ -256,22 +249,21 @@ const DoctorDetail = () => {
                   </ul>
                 </CardContent>
               </Card>
-
               {/* Contact Info */}
-              <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+              <Card className="glass shadow-2xl border border-white/80">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-white">Contact Information</CardTitle>
+                  <CardTitle className="text-2xl text-foreground">Contact Information</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center space-x-3 text-white/80">
-                    <Phone className="w-5 h-5 text-emerald-400" />
+                  <div className="flex items-center space-x-3 text-muted-foreground">
+                    <Phone className="w-5 h-5 text-green-700" />
                     <span>070223 16149 / 74060 07777</span>
                   </div>
-                  <div className="flex items-center space-x-3 text-white/80">
+                  <div className="flex items-center space-x-3 text-muted-foreground">
                     <Mail className="w-5 h-5 text-blue-400" />
                     <span>info@maiyahospital.in</span>
                   </div>
-                  <div className="flex items-center space-x-3 text-white/80">
+                  <div className="flex items-center space-x-3 text-muted-foreground">
                     <MapPin className="w-5 h-5 text-purple-400" />
                     <span>Maiya Hospital, Jayanagar, Bengaluru</span>
                   </div>

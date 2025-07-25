@@ -161,18 +161,17 @@ const HealthAssessment = () => {
 
   return (
     <div className="relative">
-      <Card className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+      <Card className="glass border border-white/80 shadow-2xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-green-700 to-blue-400 rounded-xl flex items-center justify-center">
               <Heart className="w-6 h-6 text-white" />
             </div>
-            <CardTitle className="text-white text-xl">Health Assessment</CardTitle>
+            <CardTitle className="text-foreground text-xl">Health Assessment</CardTitle>
           </div>
-          
           {currentStep < totalSteps && (
             <div className="space-y-2">
-              <div className="flex justify-between text-sm text-white/70">
+              <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Step {currentStep} of {totalSteps}</span>
                 <span>{Math.round(progress)}% Complete</span>
               </div>
@@ -180,186 +179,173 @@ const HealthAssessment = () => {
             </div>
           )}
         </CardHeader>
-
         <CardContent className="space-y-6">
           {/* Step 1: Personal Info */}
           {currentStep === 1 && (
             <div className="space-y-4">
-              <h3 className="text-white font-semibold text-lg flex items-center">
-                <Heart className="w-5 h-5 mr-2 text-emerald-400" />
+              <h3 className="text-foreground font-semibold text-lg flex items-center">
+                <Heart className="w-5 h-5 mr-2 text-green-700" />
                 Personal Information
               </h3>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-white/80">Age</Label>
+                  <Label className="text-muted-foreground">Age</Label>
                   <Input 
                     placeholder="25"
                     value={personalInfo.age}
                     onChange={(e) => setPersonalInfo({...personalInfo, age: e.target.value})}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
                   />
                 </div>
                 <div>
-                  <Label className="text-white/80">Height (cm)</Label>
+                  <Label className="text-muted-foreground">Height (cm)</Label>
                   <Input 
                     placeholder="170"
                     value={personalInfo.height}
                     onChange={(e) => setPersonalInfo({...personalInfo, height: e.target.value})}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
                   />
                 </div>
               </div>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-white/80">Weight (kg)</Label>
+                  <Label className="text-muted-foreground">Weight (kg)</Label>
                   <Input 
                     placeholder="70"
                     value={personalInfo.weight}
                     onChange={(e) => setPersonalInfo({...personalInfo, weight: e.target.value})}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
                   />
                 </div>
                 <div>
-                  <Label className="text-white/80">Gender</Label>
+                  <Label className="text-muted-foreground">Gender</Label>
                   <RadioGroup value={personalInfo.gender} onValueChange={(value) => setPersonalInfo({...personalInfo, gender: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="male" id="male" />
-                      <Label htmlFor="male" className="text-white/80">Male</Label>
+                      <Label htmlFor="male" className="text-muted-foreground">Male</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="female" id="female" />
-                      <Label htmlFor="female" className="text-white/80">Female</Label>
+                      <Label htmlFor="female" className="text-muted-foreground">Female</Label>
                     </div>
                   </RadioGroup>
                 </div>
               </div>
             </div>
           )}
-
           {/* Step 2: Diabetes Risk */}
           {currentStep === 2 && (
             <div className="space-y-4">
-              <h3 className="text-white font-semibold text-lg flex items-center">
+              <h3 className="text-foreground font-semibold text-lg flex items-center">
                 <Activity className="w-5 h-5 mr-2 text-blue-400" />
                 Diabetes Risk Assessment
               </h3>
-              
               <div className="space-y-4">
                 <div>
-                  <Label className="text-white/80">Family history of diabetes?</Label>
+                  <Label className="text-muted-foreground">Family history of diabetes?</Label>
                   <RadioGroup value={diabetesRisk.familyHistory} onValueChange={(value) => setDiabetesRisk({...diabetesRisk, familyHistory: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="yes" id="fh-yes" />
-                      <Label htmlFor="fh-yes" className="text-white/80">Yes</Label>
+                      <Label htmlFor="fh-yes" className="text-muted-foreground">Yes</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="fh-no" />
-                      <Label htmlFor="fh-no" className="text-white/80">No</Label>
+                      <Label htmlFor="fh-no" className="text-muted-foreground">No</Label>
                     </div>
                   </RadioGroup>
                 </div>
-                
                 <div>
-                  <Label className="text-white/80">Blood pressure level</Label>
+                  <Label className="text-muted-foreground">Blood pressure level</Label>
                   <RadioGroup value={diabetesRisk.bloodPressure} onValueChange={(value) => setDiabetesRisk({...diabetesRisk, bloodPressure: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="normal" id="bp-normal" />
-                      <Label htmlFor="bp-normal" className="text-white/80">Normal</Label>
+                      <Label htmlFor="bp-normal" className="text-muted-foreground">Normal</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="high" id="bp-high" />
-                      <Label htmlFor="bp-high" className="text-white/80">High</Label>
+                      <Label htmlFor="bp-high" className="text-muted-foreground">High</Label>
                     </div>
                   </RadioGroup>
                 </div>
-                
                 <div>
-                  <Label className="text-white/80">Physical activity level</Label>
+                  <Label className="text-muted-foreground">Physical activity level</Label>
                   <RadioGroup value={diabetesRisk.activityLevel} onValueChange={(value) => setDiabetesRisk({...diabetesRisk, activityLevel: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="high" id="act-high" />
-                      <Label htmlFor="act-high" className="text-white/80">High (5+ days/week)</Label>
+                      <Label htmlFor="act-high" className="text-muted-foreground">High (5+ days/week)</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="moderate" id="act-mod" />
-                      <Label htmlFor="act-mod" className="text-white/80">Moderate (2-4 days/week)</Label>
+                      <Label htmlFor="act-mod" className="text-muted-foreground">Moderate (2-4 days/week)</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="low" id="act-low" />
-                      <Label htmlFor="act-low" className="text-white/80">Low (0-1 days/week)</Label>
+                      <Label htmlFor="act-low" className="text-muted-foreground">Low (0-1 days/week)</Label>
                     </div>
                   </RadioGroup>
                 </div>
               </div>
             </div>
           )}
-
           {/* Step 3: Stress Evaluation */}
           {currentStep === 3 && (
             <div className="space-y-4">
-              <h3 className="text-white font-semibold text-lg flex items-center">
+              <h3 className="text-foreground font-semibold text-lg flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-purple-400" />
                 Sleep & Stress Evaluation
               </h3>
-              
               <div className="space-y-4">
                 <div>
-                  <Label className="text-white/80">Average sleep hours per night</Label>
+                  <Label className="text-muted-foreground">Average sleep hours per night</Label>
                   <Input 
                     placeholder="7"
                     value={stressEvaluation.sleepHours}
                     onChange={(e) => setStressEvaluation({...stressEvaluation, sleepHours: e.target.value})}
-                    className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
                   />
                 </div>
-                
                 <div>
-                  <Label className="text-white/80">Sleep quality</Label>
+                  <Label className="text-muted-foreground">Sleep quality</Label>
                   <RadioGroup value={stressEvaluation.sleepQuality} onValueChange={(value) => setStressEvaluation({...stressEvaluation, sleepQuality: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="excellent" id="sq-exc" />
-                      <Label htmlFor="sq-exc" className="text-white/80">Excellent</Label>
+                      <Label htmlFor="sq-exc" className="text-muted-foreground">Excellent</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="good" id="sq-good" />
-                      <Label htmlFor="sq-good" className="text-white/80">Good</Label>
+                      <Label htmlFor="sq-good" className="text-muted-foreground">Good</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="poor" id="sq-poor" />
-                      <Label htmlFor="sq-poor" className="text-white/80">Poor</Label>
+                      <Label htmlFor="sq-poor" className="text-muted-foreground">Poor</Label>
                     </div>
                   </RadioGroup>
                 </div>
-                
                 <div>
-                  <Label className="text-white/80">Work stress level</Label>
+                  <Label className="text-muted-foreground">Work stress level</Label>
                   <RadioGroup value={stressEvaluation.workStress} onValueChange={(value) => setStressEvaluation({...stressEvaluation, workStress: value})}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="low" id="ws-low" />
-                      <Label htmlFor="ws-low" className="text-white/80">Low</Label>
+                      <Label htmlFor="ws-low" className="text-muted-foreground">Low</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="moderate" id="ws-mod" />
-                      <Label htmlFor="ws-mod" className="text-white/80">Moderate</Label>
+                      <Label htmlFor="ws-mod" className="text-muted-foreground">Moderate</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="high" id="ws-high" />
-                      <Label htmlFor="ws-high" className="text-white/80">High</Label>
+                      <Label htmlFor="ws-high" className="text-muted-foreground">High</Label>
                     </div>
                   </RadioGroup>
                 </div>
               </div>
             </div>
           )}
-
           {/* Step 4: Coping Strategies */}
           {currentStep === 4 && (
             <div className="space-y-4">
-              <h3 className="text-white font-semibold text-lg">Coping Strategies</h3>
-              <p className="text-white/70">Select all that apply to you:</p>
-              
+              <h3 className="text-foreground font-semibold text-lg">Coping Strategies</h3>
+              <p className="text-muted-foreground">Select all that apply to you:</p>
               <div className="space-y-3">
                 {[
                   "Regular exercise", "Meditation/Mindfulness", "Healthy diet", 
@@ -372,56 +358,50 @@ const HealthAssessment = () => {
                       checked={copingStrategies.strategies.includes(strategy)}
                       onCheckedChange={(checked) => handleStrategyChange(strategy, checked as boolean)}
                     />
-                    <Label htmlFor={strategy} className="text-white/80">{strategy}</Label>
+                    <Label htmlFor={strategy} className="text-muted-foreground">{strategy}</Label>
                   </div>
                 ))}
               </div>
             </div>
           )}
-
           {/* Step 5: Results */}
           {currentStep === 5 && (
             <div className="space-y-6">
-              <h3 className="text-white font-semibold text-lg text-center">Your Health Assessment Results</h3>
-              
+              <h3 className="text-foreground font-semibold text-lg text-center">Your Health Assessment Results</h3>
               <div className="grid gap-4">
                 {/* Overall Risk */}
-                <div className="bg-white/5 rounded-2xl p-4 text-center">
-                  <h4 className="text-2xl font-bold text-white mb-2">Overall Health Risk</h4>
+                <div className="glass p-4 text-center border border-white/80">
+                  <h4 className="text-2xl font-bold text-foreground mb-2">Overall Health Risk</h4>
                   <div className={`text-3xl font-bold ${
-                    getOverallRisk() === "High Risk" ? "text-red-400" :
-                    getOverallRisk() === "Moderate Risk" ? "text-yellow-400" : "text-emerald-400"
+                    getOverallRisk() === "High Risk" ? "text-red-500" :
+                    getOverallRisk() === "Moderate Risk" ? "text-yellow-500" : "text-green-700"
                   }`}>
                     {getOverallRisk()}
                   </div>
                 </div>
-                
                 {/* Individual Scores */}
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-white/5 rounded-xl p-4 text-center">
-                    <Heart className="w-6 h-6 mx-auto mb-2 text-emerald-400" />
-                    <div className="text-sm text-white/70">BMI</div>
-                    <div className="font-semibold text-white">{calculateBMI().toFixed(1)}</div>
-                    <div className="text-xs text-white/60">{getBMICategory(calculateBMI()).category}</div>
+                  <div className="glass p-4 text-center border border-white/80">
+                    <Heart className="w-6 h-6 mx-auto mb-2 text-green-700" />
+                    <div className="text-sm text-muted-foreground">BMI</div>
+                    <div className="font-semibold text-foreground">{calculateBMI().toFixed(1)}</div>
+                    <div className="text-xs text-muted-foreground">{getBMICategory(calculateBMI()).category}</div>
                   </div>
-                  
-                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                  <div className="glass p-4 text-center border border-white/80">
                     <Activity className="w-6 h-6 mx-auto mb-2 text-blue-400" />
-                    <div className="text-sm text-white/70">Diabetes</div>
-                    <div className="font-semibold text-white">{calculateDiabetesRisk().level}</div>
+                    <div className="text-sm text-muted-foreground">Diabetes</div>
+                    <div className="font-semibold text-foreground">{calculateDiabetesRisk().level}</div>
                   </div>
-                  
-                  <div className="bg-white/5 rounded-xl p-4 text-center">
+                  <div className="glass p-4 text-center border border-white/80">
                     <Brain className="w-6 h-6 mx-auto mb-2 text-purple-400" />
-                    <div className="text-sm text-white/70">Stress</div>
-                    <div className="font-semibold text-white">{calculateStressLevel().level}</div>
+                    <div className="text-sm text-muted-foreground">Stress</div>
+                    <div className="font-semibold text-foreground">{calculateStressLevel().level}</div>
                   </div>
                 </div>
-                
                 {/* Recommendations */}
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <h4 className="text-white font-semibold mb-3">Recommendations</h4>
-                  <ul className="text-white/80 text-sm space-y-2">
+                <div className="glass p-4 border border-white/80">
+                  <h4 className="text-foreground font-semibold mb-3">Recommendations</h4>
+                  <ul className="text-muted-foreground text-sm space-y-2">
                     <li>• Maintain regular exercise routine (150 min/week)</li>
                     <li>• Follow a balanced diet with proper portions</li>
                     <li>• Prioritize 7-9 hours of quality sleep</li>
@@ -430,17 +410,15 @@ const HealthAssessment = () => {
                   </ul>
                 </div>
               </div>
-              
               <Button 
                 onClick={resetAssessment}
-                className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white rounded-2xl py-6"
+                className="w-full bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-purple-400 text-white rounded-2xl py-6"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Take Assessment Again
               </Button>
             </div>
           )}
-
           {/* Navigation Buttons */}
           {currentStep < totalSteps && (
             <div className="flex justify-between pt-4">
@@ -448,15 +426,14 @@ const HealthAssessment = () => {
                 onClick={handlePrevious}
                 disabled={currentStep === 1}
                 variant="outline"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                className="bg-white/80 border border-white/80 text-foreground hover:bg-green-700/10"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Previous
               </Button>
-              
               <Button 
                 onClick={handleNext}
-                className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white"
+                className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-purple-400 text-white"
               >
                 Next
                 <ArrowRight className="w-4 h-4 ml-2" />

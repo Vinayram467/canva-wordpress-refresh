@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./components/ThemeProvider";
 import Index from "./pages/Index";
 import Doctors from "./pages/Doctors";
 import Services from "./pages/Services";
@@ -16,34 +17,38 @@ import BlogDetail from "./pages/BlogDetail";
 import EventDetail from "./pages/EventDetail";
 import Blogs from "./pages/Blogs";
 import Events from "./pages/Events";
+import ServiceDetail from "./pages/ServiceDetail";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/specialties" element={<MedicalSpecialties />} />
-          <Route path="/appointment" element={<AppointmentBooking />} />
-          <Route path="/doctor/:id" element={<DoctorDetail />} />
-          <Route path="/virtual-consultation" element={<VirtualConsultation />} />
-          <Route path="/blog/:id" element={<BlogDetail />} />
-          <Route path="/event/:id" element={<EventDetail />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/events" element={<Events />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/doctors" element={<Doctors />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/specialties" element={<MedicalSpecialties />} />
+            <Route path="/appointment" element={<AppointmentBooking />} />
+            <Route path="/doctor/:id" element={<DoctorDetail />} />
+            <Route path="/virtual-consultation" element={<VirtualConsultation />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
+            <Route path="/event/:id" element={<EventDetail />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/service/:id" element={<ServiceDetail />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

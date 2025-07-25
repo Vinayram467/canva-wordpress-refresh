@@ -66,7 +66,7 @@ const VirtualConsultation = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
       <Header />
       
       <main className="relative overflow-hidden">

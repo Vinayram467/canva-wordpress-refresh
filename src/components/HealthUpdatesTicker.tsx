@@ -21,15 +21,15 @@ const HealthUpdatesTicker = () => {
   }, []);
 
   return (
-    <div className="w-full bg-gradient-to-r from-slate-900 via-blue-950 to-emerald-950 border-y border-white/10 overflow-hidden">
+    <div className="w-full bg-gradient-to-r from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] border-y border-blue-100/30 overflow-hidden">
       <div className="container mx-auto px-4 py-4">
         {/* Stack vertically and center */}
         <div className="flex flex-col space-y-2 items-center">
           {/* Centered Button/Label */}
           <div className="flex items-center justify-center space-x-3 flex-shrink-0 z-10 w-full">
-            <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full relative z-10 mx-auto">
-              <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-              <span className="text-sm text-white font-medium whitespace-nowrap">Live Health Updates</span>
+            <div className="flex items-center space-x-2 glass px-4 py-2 rounded-full relative z-10 mx-auto">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-foreground font-medium whitespace-nowrap">Live Health Updates</span>
             </div>
           </div>
           {/* Ticker below the button */}
@@ -45,7 +45,7 @@ const HealthUpdatesTicker = () => {
               {updates.map((update, index) => (
                 <div
                   key={`first-${index}`}
-                  className="text-white/90 text-sm whitespace-nowrap bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent font-medium"
+                  className="text-blue-700 text-sm whitespace-nowrap bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent font-medium"
                 >
                   {update}
                 </div>
@@ -53,7 +53,7 @@ const HealthUpdatesTicker = () => {
               {updates.map((update, index) => (
                 <div
                   key={`second-${index}`}
-                  className="text-white/90 text-sm whitespace-nowrap bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent font-medium"
+                  className="text-blue-700 text-sm whitespace-nowrap bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent font-medium"
                 >
                   {update}
                 </div>

@@ -13,9 +13,9 @@ import NewsEvents from "@/components/NewsEvents";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-const Index = () => {
+export default function Index() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
       <Header />
       <HeroSection />
       <HealthUpdatesTicker />
@@ -31,6 +31,4 @@ const Index = () => {
       <Footer />
     </div>
   );
-};
-
-export default Index;
+}
