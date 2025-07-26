@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare, BookOpen } from "lucide-react";
+import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare, BookOpen, Activity } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
@@ -9,6 +9,7 @@ const Header = () => {
   const navItems = [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Services', path: '/services', icon: Stethoscope },
+    { name: 'Deluxe Surgeries', path: '/deluxe-surgeries', icon: null }, // Custom icon
     { name: 'Specialties', path: '/specialties', icon: HeartPulse },
     { name: 'Doctors', path: '/doctors', icon: Users },
     { name: 'Blogs', path: '/blogs', icon: BookOpen },
@@ -112,7 +113,11 @@ const Header = () => {
                     }`}
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-foreground/70 group-hover:text-blue-400'} transition-colors duration-300`} />
+                    {item.name === 'Deluxe Surgeries' ? (
+                      <Activity className={`w-5 h-5 ${isActive ? 'text-blue-400' : 'text-foreground/70 group-hover:text-blue-400'} transition-colors duration-300`} />
+                    ) : (
+                      <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-foreground/70 group-hover:text-blue-400'} transition-colors duration-300`} />
+                    )}
                     <span className="relative z-10 font-medium">{item.name}</span>
                     {isActive && (
                       <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-blue-400 via-pink-400 to-purple-400 rounded-full blur-sm animate-gradient-text"></span>
