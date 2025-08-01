@@ -164,7 +164,7 @@ const HealthAssessment = () => {
       <Card className="glass border border-white/80 shadow-2xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-green-700 to-blue-400 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-red-500 rounded-xl flex items-center justify-center">
               <Heart className="w-6 h-6 text-white" />
             </div>
             <CardTitle className="text-foreground text-xl">Health Assessment</CardTitle>
@@ -184,7 +184,7 @@ const HealthAssessment = () => {
           {currentStep === 1 && (
             <div className="space-y-4">
               <h3 className="text-foreground font-semibold text-lg flex items-center">
-                <Heart className="w-5 h-5 mr-2 text-green-700" />
+                <Heart className="w-5 h-5 mr-2 text-green-600" />
                 Personal Information
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -194,7 +194,7 @@ const HealthAssessment = () => {
                     placeholder="25"
                     value={personalInfo.age}
                     onChange={(e) => setPersonalInfo({...personalInfo, age: e.target.value})}
-                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-600 focus:ring-green-600"
                   />
                 </div>
                 <div>
@@ -203,7 +203,7 @@ const HealthAssessment = () => {
                     placeholder="170"
                     value={personalInfo.height}
                     onChange={(e) => setPersonalInfo({...personalInfo, height: e.target.value})}
-                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-600 focus:ring-green-600"
                   />
                 </div>
               </div>
@@ -214,7 +214,7 @@ const HealthAssessment = () => {
                     placeholder="70"
                     value={personalInfo.weight}
                     onChange={(e) => setPersonalInfo({...personalInfo, weight: e.target.value})}
-                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-600 focus:ring-green-600"
                   />
                 </div>
                 <div>
@@ -237,7 +237,7 @@ const HealthAssessment = () => {
           {currentStep === 2 && (
             <div className="space-y-4">
               <h3 className="text-foreground font-semibold text-lg flex items-center">
-                <Activity className="w-5 h-5 mr-2 text-blue-400" />
+                <Activity className="w-5 h-5 mr-2 text-red-500" />
                 Diabetes Risk Assessment
               </h3>
               <div className="space-y-4">
@@ -301,7 +301,7 @@ const HealthAssessment = () => {
                     placeholder="7"
                     value={stressEvaluation.sleepHours}
                     onChange={(e) => setStressEvaluation({...stressEvaluation, sleepHours: e.target.value})}
-                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-700 focus:ring-green-700"
+                    className="bg-white/80 border border-gray-300 text-foreground placeholder:text-muted-foreground focus:border-green-600 focus:ring-green-600"
                   />
                 </div>
                 <div>
@@ -374,7 +374,7 @@ const HealthAssessment = () => {
                   <h4 className="text-2xl font-bold text-foreground mb-2">Overall Health Risk</h4>
                   <div className={`text-3xl font-bold ${
                     getOverallRisk() === "High Risk" ? "text-red-500" :
-                    getOverallRisk() === "Moderate Risk" ? "text-yellow-500" : "text-green-700"
+                    getOverallRisk() === "Moderate Risk" ? "text-yellow-500" : "text-green-600"
                   }`}>
                     {getOverallRisk()}
                   </div>
@@ -382,13 +382,13 @@ const HealthAssessment = () => {
                 {/* Individual Scores */}
                 <div className="grid grid-cols-3 gap-4">
                   <div className="glass p-4 text-center border border-white/80">
-                    <Heart className="w-6 h-6 mx-auto mb-2 text-green-700" />
+                    <Heart className="w-6 h-6 mx-auto mb-2 text-green-600" />
                     <div className="text-sm text-muted-foreground">BMI</div>
                     <div className="font-semibold text-foreground">{calculateBMI().toFixed(1)}</div>
                     <div className="text-xs text-muted-foreground">{getBMICategory(calculateBMI()).category}</div>
                   </div>
                   <div className="glass p-4 text-center border border-white/80">
-                    <Activity className="w-6 h-6 mx-auto mb-2 text-blue-400" />
+                    <Activity className="w-6 h-6 mx-auto mb-2 text-red-500" />
                     <div className="text-sm text-muted-foreground">Diabetes</div>
                     <div className="font-semibold text-foreground">{calculateDiabetesRisk().level}</div>
                   </div>
@@ -412,7 +412,7 @@ const HealthAssessment = () => {
               </div>
               <Button 
                 onClick={resetAssessment}
-                className="w-full bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-purple-400 text-white rounded-2xl py-6"
+                className="w-full bg-gradient-to-r from-green-600 to-red-500 hover:from-blue-400 hover:to-purple-400 text-white rounded-2xl py-6"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Take Assessment Again
@@ -433,7 +433,7 @@ const HealthAssessment = () => {
               </Button>
               <Button 
                 onClick={handleNext}
-                className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-purple-400 text-white"
+                className="bg-gradient-to-r from-green-600 to-red-500 hover:from-blue-400 hover:to-purple-400 text-white"
               >
                 Next
                 <ArrowRight className="w-4 h-4 ml-2" />

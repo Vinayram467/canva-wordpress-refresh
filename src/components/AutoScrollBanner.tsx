@@ -39,14 +39,14 @@ const AutoScrollBanner = () => {
         onClick={() => goTo("left")}
         aria-label="Previous Banner"
       >
-        <ChevronLeft className="w-7 h-7 text-blue-500" />
+        <ChevronLeft className="w-7 h-7 text-green-600" />
       </button>
-      <div className="w-full flex items-center justify-center">
-        <div className="w-full max-w-7xl h-auto min-h-[300px] md:min-h-[500px] rounded-3xl overflow-hidden shadow-lg flex items-center justify-center">
+      <div className="w-full flex items-center justify-center px-4">
+        <div className="w-full max-w-none h-auto min-h-[300px] md:min-h-[500px] rounded-3xl overflow-hidden shadow-lg flex items-center justify-center">
           <img
             src={images[current]}
             alt={`Banner ${current + 1}`}
-            className="w-full h-auto max-h-[600px] object-contain object-center transition-all duration-700"
+            className="w-full h-full object-cover transition-all duration-700"
             draggable={false}
           />
         </div>
@@ -56,7 +56,7 @@ const AutoScrollBanner = () => {
         onClick={() => goTo("right")}
         aria-label="Next Banner"
       >
-        <ChevronRight className="w-7 h-7 text-blue-500" />
+        <ChevronRight className="w-7 h-7 text-green-600" />
       </button>
     </div>
   );
