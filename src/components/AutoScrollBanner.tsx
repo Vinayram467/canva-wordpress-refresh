@@ -33,7 +33,7 @@ const AutoScrollBanner = () => {
   };
 
   return (
-    <div className="relative w-screen max-w-none flex items-center justify-center py-4 bg-transparent overflow-x-hidden">
+    <div className="relative w-full flex items-center justify-center py-4 bg-transparent overflow-hidden">
       <button
         className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg"
         onClick={() => goTo("left")}
@@ -42,11 +42,11 @@ const AutoScrollBanner = () => {
         <ChevronLeft className="w-7 h-7 text-blue-500" />
       </button>
       <div className="w-full flex items-center justify-center">
-        <div className="w-screen max-w-none h-[220px] md:h-[400px] rounded-3xl overflow-hidden shadow-lg flex items-center justify-center">
+        <div className="w-full max-w-7xl h-auto min-h-[300px] md:min-h-[500px] rounded-3xl overflow-hidden shadow-lg flex items-center justify-center">
           <img
             src={images[current]}
             alt={`Banner ${current + 1}`}
-            className="w-full h-full object-cover object-center transition-all duration-700"
+            className="w-full h-auto max-h-[600px] object-contain object-center transition-all duration-700"
             draggable={false}
           />
         </div>

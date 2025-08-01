@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare, BookOpen, Activity } from "lucide-react";
+import { Phone, Clock, Menu, Shield, Award, Home, Stethoscope, HeartPulse, Users, MessageSquare, BookOpen, Activity, Search } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
@@ -9,7 +9,7 @@ const Header = () => {
   const navItems = [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Services', path: '/services', icon: Stethoscope },
-    { name: 'Deluxe Surgeries', path: '/deluxe-surgeries', icon: null }, // Custom icon
+    { name: 'Deluxe Surgeries', path: '/deluxe-surgeries', icon: Activity },
     { name: 'Specialties', path: '/specialties', icon: HeartPulse },
     { name: 'Doctors', path: '/doctors', icon: Users },
     { name: 'Blogs', path: '/blogs', icon: BookOpen },
@@ -66,7 +66,7 @@ const Header = () => {
           <div className="relative group shadow-2xl">
             {/* Rotating border effect with theme colors */}
             <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 via-pink-400 to-purple-400 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
-            <div className="w-36 h-36 bg-white/80 backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
+            <div className="w-48 h-48 bg-white/80 backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
               {/* Shine effect */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none"></div>
               <img 
@@ -95,48 +95,99 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Enhanced main navigation */}
-      <nav className="relative z-20">
-        <div className="absolute inset-0 glass border-b border-border shadow-2xl rounded-b-3xl" />
-        <div className="container mx-auto px-4 py-4 relative z-10">
-          <div className="flex items-center justify-between">
-            <div className="hidden md:flex flex-1 justify-center items-center gap-8">
-              {navItems.map((item, index) => {
+      {/* CloudNine Style Navigation */}
+      <nav className="relative z-20 bg-white/90 backdrop-blur-md border-b border-gray-200/50 shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center h-32">
+            {/* Logo Section - Left - 90px logo size */}
+            <div className="flex items-center mr-8">
+              <Link to="/" className="flex items-center group">
+                <img 
+                  src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
+                  alt="Maiya Hospital Logo" 
+                  className="h-full w-auto py-1 object-contain transition-all duration-300 group-hover:scale-110"
+                />
+              </Link>
+            </div>
+
+            {/* Navigation Items - Center */}
+            <div className="hidden lg:flex items-center space-x-1 flex-1 justify-center">
+              {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
                 return (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`group relative flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/60 backdrop-blur-sm transform hover:scale-105 transition-all duration-300 ${
-                      isActive ? 'bg-gradient-to-r from-blue-400/20 to-pink-400/20 text-foreground shadow-lg' : 'text-foreground/90 hover:text-foreground'
+                    className={`group relative flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-gradient-to-r from-blue-500/20 to-pink-500/20 text-blue-600 shadow-md' 
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50/80'
                     }`}
-                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {item.name === 'Deluxe Surgeries' ? (
-                      <Activity className={`w-5 h-5 ${isActive ? 'text-blue-400' : 'text-foreground/70 group-hover:text-blue-400'} transition-colors duration-300`} />
-                    ) : (
-                      <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : 'text-foreground/70 group-hover:text-blue-400'} transition-colors duration-300`} />
+                    <Icon className={`w-4 h-4 transition-colors duration-300 ${
+                      isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-blue-600'
+                    }`} />
+                    <span className="relative z-10">{item.name}</span>
+                    {item.name === 'Deluxe Surgeries' && (
+                      <span className="ml-1 px-2 py-0.5 text-xs bg-pink-500 text-white rounded-full">New</span>
                     )}
-                    <span className="relative z-10 font-medium">{item.name}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-blue-400 via-pink-400 to-purple-400 rounded-full blur-sm animate-gradient-text"></span>
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-blue-500 to-pink-500 rounded-full"></div>
                     )}
                   </Link>
                 );
               })}
             </div>
-            <div className="flex items-center gap-4">
+
+            {/* Right Side - Search and Buttons */}
+            <div className="flex items-center space-x-4 ml-8">
+              {/* Search Icon */}
+              <button className="p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 rounded-lg hover:bg-gray-100/80">
+                <Search className="w-5 h-5" />
+              </button>
+
+              {/* Appointment Button */}
               <Link to="/appointment">
-                <Button className="group relative overflow-hidden bg-gradient-to-r from-pink-400 to-blue-400 hover:from-pink-500 hover:to-blue-500 text-white px-8 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:shadow-blue-200/30 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300">
-                  <span className="relative z-10 font-semibold">Book Appointment</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <Button className="bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-700 hover:to-pink-700 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                  Book Appointment
                 </Button>
               </Link>
-              <Button variant="ghost" className="md:hidden glass hover:bg-white/80 transform hover:scale-105 transition-all duration-300">
-                <Menu className="w-5 h-5 text-foreground" />
+
+              {/* Mobile Menu Button */}
+              <Button variant="ghost" className="lg:hidden p-2 hover:bg-gray-100/80 rounded-lg">
+                <Menu className="w-5 h-5 text-gray-600" />
               </Button>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="lg:hidden border-t border-gray-200/50">
+          <div className="px-4 py-3 space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-base font-medium transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-gradient-to-r from-blue-500/20 to-pink-500/20 text-blue-600' 
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50/80'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${
+                    isActive ? 'text-blue-600' : 'text-gray-500'
+                  }`} />
+                  <span>{item.name}</span>
+                  {item.name === 'Deluxe Surgeries' && (
+                    <span className="ml-auto px-2 py-0.5 text-xs bg-pink-500 text-white rounded-full">New</span>
+                  )}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </nav>
