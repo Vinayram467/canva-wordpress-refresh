@@ -1,55 +1,90 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-// First, define all constants and configurations
-const ICONS = {
-  // ... keep existing icons ...
-};
+// Keep all the existing ICONS, SECURITY_CONFIG, and emailStyles...
 
-const SECURITY_CONFIG = {
-  // ... keep existing config ...
-};
-
-const emailStyles = `
-  // ... keep existing styles ...
-`;
-
-// Then define all utility functions
+// Update the validation functions
 const sanitizeInput = (input) => {
-  // ... keep existing function ...
+  if (typeof input !== 'string') return '';
+  let sanitized = input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/eval\s*\(/gi, '')
+    .replace(/expression\s*\(/gi, '')
+    .trim();
+  
+  if (sanitized.length > 1000) {
+    sanitized = sanitized.substring(0, 1000) + '...';
+  }
+  return sanitized;
 };
 
 const validateEmail = (email) => {
-  // ... keep existing function ...
+  try {
+    console.log('Validating email:', email);
+    
+    if (!email || typeof email !== 'string') {
+      console.log('Email validation failed: empty or not a string');
+      return false;
+    }
+    
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.log('Email validation failed: invalid format');
+      return false;
+    }
+
+    // Always return true - we're removing domain restrictions
+    console.log('Email validation passed:', email);
+    return true;
+
+  } catch (error) {
+    console.error('Error in validateEmail:', error);
+    return false;
+  }
 };
 
 const createSecureTransport = () => {
-  // ... keep existing function ...
+  try {
+    console.log('Creating email transport with config:', {
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port: process.env.EMAIL_PORT || 587,
+      user: process.env.EMAIL_USER
+    });
+
+    return nodemailer.createTransport({
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.EMAIL_PORT || '587'),
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      },
+      tls: {
+        rejectUnauthorized: true
+      }
+    });
+  } catch (error) {
+    console.error('Error creating transport:', error);
+    throw error;
+  }
 };
 
-// Then define template generation functions
-const generateSecureAppointmentConfirmationEmail = (data) => {
-  // ... keep existing function ...
-};
+// Keep all the existing template generation functions...
 
-const generateSecureAdminNotification = (data, formType) => {
-  // ... keep existing function ...
-};
-
-// Finally, define and export the main email sending functions
-/**
- * Sends confirmation email to user
- * @param {Object} data - The form data
- * @param {string} formType - The type of form submitted
- * @returns {Promise} - The email sending result
- */
 async function sendUserConfirmation(data, formType) {
   try {
-    console.log('Starting sendUserConfirmation with:', { formType });
+    console.log('Starting sendUserConfirmation with:', { formType, data });
     const userEmail = data.email || data.patientEmail;
     
+    if (!userEmail) {
+      throw new Error('No email address provided');
+    }
+    
     if (!validateEmail(userEmail)) {
-      throw new Error(`Invalid user email address: ${userEmail}`);
+      throw new Error(`Invalid email format: ${userEmail}`);
     }
     
     let emailHtml;
@@ -77,8 +112,9 @@ async function sendUserConfirmation(data, formType) {
         subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Confirmation - Maiya Hospital`;
     }
     
-    console.log('Creating transport...');
+    console.log('Creating transport for user email...');
     const transporter = createSecureTransport();
+    
     console.log('Verifying transport...');
     await transporter.verify();
     
@@ -97,7 +133,7 @@ async function sendUserConfirmation(data, formType) {
     };
     
     const result = await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully:', result.messageId);
+    console.log('User confirmation email sent successfully:', result.messageId);
     return result;
   } catch (error) {
     console.error('Error in sendUserConfirmation:', error);
@@ -105,15 +141,9 @@ async function sendUserConfirmation(data, formType) {
   }
 }
 
-/**
- * Sends notification email to admin
- * @param {Object} data - The form data
- * @param {string} formType - The type of form submitted
- * @returns {Promise} - The email sending result
- */
 async function sendAdminNotification(data, formType) {
   try {
-    console.log('Starting sendAdminNotification with:', { formType });
+    console.log('Starting sendAdminNotification with:', { formType, data });
     const adminEmail = process.env.ADMIN_EMAIL;
     
     if (!adminEmail) {
@@ -121,14 +151,15 @@ async function sendAdminNotification(data, formType) {
     }
     
     if (!validateEmail(adminEmail)) {
-      throw new Error(`Invalid admin email address: ${adminEmail}`);
+      throw new Error(`Invalid admin email format: ${adminEmail}`);
     }
     
     const emailHtml = generateSecureAdminNotification(data, formType);
     const subject = `New ${formType} Submission - Maiya Hospital`;
     
-    console.log('Creating transport...');
+    console.log('Creating transport for admin email...');
     const transporter = createSecureTransport();
+    
     console.log('Verifying transport...');
     await transporter.verify();
     
@@ -157,8 +188,8 @@ async function sendAdminNotification(data, formType) {
 
 // Export the functions
 module.exports = {
-  sendUserConfirmation: sendUserConfirmation,
-  sendAdminNotification: sendAdminNotification,
-  validateEmail: validateEmail,
-  sanitizeInput: sanitizeInput
+  sendUserConfirmation,
+  sendAdminNotification,
+  validateEmail,
+  sanitizeInput
 };
