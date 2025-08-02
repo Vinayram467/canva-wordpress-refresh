@@ -2,22 +2,226 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 // Load environment variables
 dotenv.config();
 
+// Load production configuration
+const isProduction = process.env.NODE_ENV === 'production';
+const config = isProduction ? require('./config/production') : null;
+
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"]
+    }
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  },
+  noSniff: true,
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
+}));
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/miaya-hospital';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// CORS configuration
+const allowedOrigins = isProduction 
+  ? config.security.allowedOrigins
+  : [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'https://maiyahospital.com',
+      'https://www.maiyahospital.com',
+      'https://your-frontend-domain.com',
+      'https://your-app-name.onrender.com'
+    ];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: isProduction ? config.security.apiRateLimit.windowMs : 15 * 60 * 1000,
+  max: isProduction ? config.security.apiRateLimit.max : 100,
+  message: {
+    error: isProduction ? config.security.apiRateLimit.message : 'Too many requests from this IP',
+    retryAfter: 900
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use('/api/', limiter);
+
+// Email-specific rate limiting
+const emailLimiter = rateLimit({
+  windowMs: isProduction ? config.security.emailRateLimit.windowMs : 15 * 60 * 1000,
+  max: isProduction ? config.security.emailRateLimit.max : 10,
+  message: {
+    error: isProduction ? config.security.emailRateLimit.message : 'Too many email requests from this IP',
+    retryAfter: 900
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use('/api/appointments', emailLimiter);
+app.use('/api/messages', emailLimiter);
+app.use('/api/consultations', emailLimiter);
+app.use('/api/assessments', emailLimiter);
+
+// Request size limiting
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+
+// Request logging
+app.use((req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const logData = {
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.url,
+      status: res.statusCode,
+      duration: `${duration}ms`,
+      userAgent: req.get('User-Agent'),
+      ip: req.ip || req.connection.remoteAddress
+    };
+    
+    console.log('Request:', JSON.stringify(logData));
+  });
+  
+  next();
+});
+
+// Input validation middleware
+const validateFormInput = (req, res, next) => {
+  try {
+    // Check request size
+    if (req.headers['content-length'] && 
+        parseInt(req.headers['content-length']) > 1024 * 1024) {
+      return res.status(413).json({ error: 'Request too large' });
+    }
+    
+    // Check number of fields
+    const fieldCount = Object.keys(req.body).length;
+    if (fieldCount > 50) {
+      return res.status(400).json({ error: 'Too many form fields' });
+    }
+    
+    // Sanitize all input fields
+    const sanitizedBody = {};
+    for (const [key, value] of Object.entries(req.body)) {
+      if (typeof value === 'string') {
+        // Remove potentially dangerous content
+        let sanitized = value
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/javascript:/gi, '')
+          .replace(/vbscript:/gi, '')
+          .replace(/data:/gi, '')
+          .replace(/on\w+\s*=/gi, '')
+          .replace(/eval\s*\(/gi, '')
+          .replace(/expression\s*\(/gi, '')
+          .replace(/<iframe/gi, '')
+          .replace(/<object/gi, '')
+          .replace(/<embed/gi, '')
+          .trim();
+        
+        // Limit length
+        if (sanitized.length > 1000) {
+          sanitized = sanitized.substring(0, 1000) + '...';
+        }
+        
+        sanitizedBody[key] = sanitized;
+        
+        // Check for blocked content
+        const blockedWords = ['script', 'javascript:', 'onload', 'onerror', 'eval', 'expression', 'vbscript:', 'data:'];
+        const lowerValue = value.toLowerCase();
+        if (blockedWords.some(word => lowerValue.includes(word))) {
+          return res.status(400).json({ error: 'Input contains blocked content' });
+        }
+      } else {
+        sanitizedBody[key] = value;
+      }
+    }
+    
+    // Validate email fields
+    const emailFields = ['email', 'patientEmail', 'userEmail'];
+    const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
+    
+    for (const field of emailFields) {
+      if (sanitizedBody[field]) {
+        const email = sanitizedBody[field];
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailRegex.test(email)) {
+          return res.status(400).json({ error: `Invalid email format in ${field}` });
+        }
+        
+        const domain = email.split('@')[1];
+        if (!allowedDomains.includes(domain)) {
+          return res.status(400).json({ error: `Email domain not allowed in ${field}` });
+        }
+      }
+    }
+    
+    // Replace request body with sanitized data
+    req.body = sanitizedBody;
+    next();
+    
+  } catch (error) {
+    console.error('Input validation error:', error);
+    return res.status(400).json({ error: 'Invalid input data' });
+  }
+};
+
+// Apply input validation to form routes
+app.use('/api/appointments', validateFormInput);
+app.use('/api/messages', validateFormInput);
+app.use('/api/consultations', validateFormInput);
+app.use('/api/assessments', validateFormInput);
+
+// MongoDB Connection with security
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/maiya-hospital';
+const dbOptions = isProduction ? config.database.options : {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  bufferMaxEntries: 0,
+  bufferCommands: false
+};
+
+mongoose.connect(MONGODB_URI, dbOptions)
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // Import routes
 const blogsRouter = require('./routes/blogs');
@@ -32,6 +236,7 @@ const testimonialsRouter = require('./routes/testimonials');
 const faqsRouter = require('./routes/faqs');
 const usersRouter = require('./routes/users');
 const healthNewsRouter = require('./routes/healthNews');
+const testEmailRouter = require('./routes/test-email');
 
 // Use routes
 app.use('/api/blogs', blogsRouter);
@@ -46,27 +251,68 @@ app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/faqs', faqsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
+app.use('/api/test-email', testEmailRouter);
 
-// Health check endpoint
+// Security monitoring
+const securityMonitor = {
+  blockedRequests: 0,
+  rateLimitedRequests: 0,
+  suspiciousActivities: [],
+  
+  logSuspiciousActivity: (activity) => {
+    securityMonitor.suspiciousActivities.push({
+      timestamp: new Date().toISOString(),
+      activity,
+      ip: activity.ip || 'unknown'
+    });
+    
+    if (securityMonitor.suspiciousActivities.length > 1000) {
+      securityMonitor.suspiciousActivities = securityMonitor.suspiciousActivities.slice(-1000);
+    }
+  }
+};
+
+// Health check endpoint with security info
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Miaya Hospital API is running',
-    timestamp: new Date().toISOString()
+    message: 'Maiya Hospital API is running securely',
+    timestamp: new Date().toISOString(),
+    security: {
+      blockedRequests: securityMonitor.blockedRequests,
+      rateLimitedRequests: securityMonitor.rateLimitedRequests,
+      suspiciousActivities: securityMonitor.suspiciousActivities.length
+    }
+  });
+});
+
+// Security stats endpoint (admin only)
+app.get('/api/security/stats', (req, res) => {
+  // In production, add authentication here
+  res.json({
+    stats: securityMonitor.getStats ? securityMonitor.getStats() : {
+      blockedRequests: securityMonitor.blockedRequests,
+      rateLimitedRequests: securityMonitor.rateLimitedRequests,
+      suspiciousActivities: securityMonitor.suspiciousActivities.length
+    }
   });
 });
 
 // Test endpoint
 app.get('/test', (req, res) => {
-  res.json({ message: 'Test working' });
+  res.json({ message: 'Test working securely' });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: err.message 
+  console.error('Error:', err);
+  
+  // Don't leak error details in production
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  res.status(err.status || 500).json({
+    error: isDevelopment ? err.message : 'Internal server error',
+    ...(isDevelopment && { stack: err.stack })
   });
 });
 
@@ -77,7 +323,18 @@ app.use('*', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
+const HOST = isProduction ? config.server.host : 'localhost';
+
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running securely on ${HOST}:${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔒 Security features enabled:`);
+  console.log(`   - Rate limiting`);
+  console.log(`   - Input validation`);
+  console.log(`   - XSS protection`);
+  console.log(`   - CORS protection`);
+  console.log(`   - Security headers`);
+  console.log(`   - Request logging`);
+  console.log(`📊 Health check: http://${HOST}:${PORT}/api/health`);
+  console.log(`🔍 Security stats: http://${HOST}:${PORT}/api/security/stats`);
 }); 

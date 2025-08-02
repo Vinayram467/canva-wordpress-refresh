@@ -32,7 +32,7 @@ const Contact = () => {
       await messageApi.create(formData);
       toast({
         title: "Message Sent!",
-        description: "Your message has been sent. We'll get back to you soon.",
+        description: "Your message has been sent. A confirmation email has been sent to your email address.",
       });
       setFormData({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {

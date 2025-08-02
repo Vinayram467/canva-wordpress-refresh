@@ -147,7 +147,7 @@ const AppointmentBooking = () => {
       setSuccessDetails(formData); // Show success card
       toast({
         title: "Appointment Booked!",
-        description: "We have received your appointment request.",
+        description: "We have received your appointment request. A confirmation email has been sent to your email address.",
       });
       setFormData({ patientName: '', phone: '', email: '', date: '', time: '', reason: '' });
     } catch (err) {

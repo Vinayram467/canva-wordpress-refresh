@@ -1,5 +1,6 @@
 const express = require('express');
 const Message = require('../models/Message');
+const emailService = require('../services/emailService');
 const router = express.Router();
 
 // GET all messages
@@ -32,6 +33,23 @@ router.post('/', async (req, res) => {
   try {
     const message = new Message(req.body);
     const newMessage = await message.save();
+    
+    // Send confirmation email to user
+    try {
+      await emailService.sendUserConfirmation(req.body, 'contact');
+      console.log('User confirmation email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending user confirmation email:', emailError);
+    }
+    
+    // Send notification email to admin
+    try {
+      await emailService.sendAdminNotification(req.body, 'contact');
+      console.log('Admin notification email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending admin notification email:', emailError);
+    }
+    
     res.status(201).json(newMessage);
   } catch (error) {
     console.error('Error creating message:', error);

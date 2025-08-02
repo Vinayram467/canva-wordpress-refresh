@@ -1,5 +1,6 @@
 const express = require('express');
 const Assessment = require('../models/Assessment');
+const emailService = require('../services/emailService');
 const router = express.Router();
 
 // GET all assessments
@@ -32,6 +33,23 @@ router.post('/', async (req, res) => {
   try {
     const assessment = new Assessment(req.body);
     const newAssessment = await assessment.save();
+    
+    // Send confirmation email to user
+    try {
+      await emailService.sendUserConfirmation(req.body, 'assessment');
+      console.log('User confirmation email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending user confirmation email:', emailError);
+    }
+    
+    // Send notification email to admin
+    try {
+      await emailService.sendAdminNotification(req.body, 'assessment');
+      console.log('Admin notification email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending admin notification email:', emailError);
+    }
+    
     res.status(201).json(newAssessment);
   } catch (error) {
     console.error('Error creating assessment:', error);
