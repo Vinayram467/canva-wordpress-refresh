@@ -8,9 +8,16 @@ const SECURITY_CONFIG = {
   MAX_EMAILS_PER_DAY: 200,
   EMAIL_SIZE_LIMIT: 1024 * 1024, // 1MB
   ALLOWED_EMAIL_DOMAINS: ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'],
-  BLOCKED_WORDS: ['script', 'javascript:', 'onload', 'onerror', 'eval', 'expression'],
+  BLOCKED_WORDS: [
+    'script', 'javascript:', 'onload', 'onerror', 'eval', 'expression',
+    'vbscript:', 'data:', 'iframe', 'object', 'embed', 'base64',
+    'document.cookie', 'window.location', 'alert(', 'confirm(',
+    'prompt(', 'setTimeout', 'setInterval', 'Function('
+  ],
   MAX_RECIPIENTS: 2,
   EMAIL_TIMEOUT: 30000, // 30 seconds
+  MAX_EMAIL_LENGTH: 50000, // 50KB
+  ALLOWED_HTML_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 };
 
 // Rate limiting storage (in production, use Redis)

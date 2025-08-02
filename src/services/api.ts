@@ -1,6 +1,36 @@
 import API_CONFIG from '@/config/api';
+import { sanitizeInput, validateEmail, containsBlockedContent } from '@/utils/security';
 
 const API_BASE_URL = API_CONFIG.BASE_URL;
+
+// Security rate limiter
+class ApiRateLimiter {
+  private requests = new Map<string, number[]>();
+  private maxRequests = 10;
+  private windowMs = 60000; // 1 minute
+
+  isAllowed(key: string): boolean {
+    const now = Date.now();
+    const windowStart = now - this.windowMs;
+    
+    if (!this.requests.has(key)) {
+      this.requests.set(key, []);
+    }
+    
+    const userRequests = this.requests.get(key)!;
+    const validRequests = userRequests.filter(timestamp => timestamp > windowStart);
+    
+    if (validRequests.length >= this.maxRequests) {
+      return false;
+    }
+    
+    validRequests.push(now);
+    this.requests.set(key, validRequests);
+    return true;
+  }
+}
+
+const rateLimiter = new ApiRateLimiter();
 
 export interface Blog {
   _id: string;
@@ -60,33 +90,57 @@ export interface Appointment {
 const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
   
-  console.log(`🌐 Making API call to: ${url}`);
-  console.log(`📤 Request data:`, options.body);
+  // Rate limiting check
+  const clientId = 'browser'; // In production, use user session ID
+  if (!rateLimiter.isAllowed(clientId)) {
+    throw new Error('Rate limit exceeded. Please try again later.');
+  }
+  
+  console.log(`Making API call to: ${url}`);
   
   try {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
         ...options.headers,
       },
+      credentials: 'include',
       ...options,
     });
 
-    console.log(`📥 Response status: ${response.status} ${response.statusText}`);
+    console.log(`Response status: ${response.status} ${response.statusText}`);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`❌ API Error: ${response.status} ${response.statusText}`, errorText);
+      console.error(`API Error: ${response.status} ${response.statusText}`, errorText);
       throw new Error(`API call failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log(`✅ API call successful:`, data);
+    console.log(`API call successful:`, data);
     return data;
   } catch (error) {
-    console.error(`💥 API call error:`, error);
+    console.error(`API call error:`, error);
     throw error;
   }
+};
+
+// Secure data sanitization
+const sanitizeApiData = (data: any): any => {
+  if (typeof data === 'string') {
+    return sanitizeInput(data);
+  }
+  
+  if (typeof data === 'object' && data !== null) {
+    const sanitized: any = Array.isArray(data) ? [] : {};
+    for (const [key, value] of Object.entries(data)) {
+      sanitized[key] = sanitizeApiData(value);
+    }
+    return sanitized;
+  }
+  
+  return data;
 };
 
 // Blog API functions

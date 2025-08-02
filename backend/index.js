@@ -4,6 +4,20 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const crypto = require('crypto');
+
+// Import security middleware
+const {
+  SECURITY_CONFIG,
+  apiRateLimiter,
+  emailRateLimiter,
+  validateFormInput,
+  corsOptions,
+  securityHeaders,
+  requestLogger,
+  errorHandler,
+  securityMonitor
+} = require('./security/securityMiddleware');
 
 // Load environment variables
 dotenv.config();
