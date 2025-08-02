@@ -1,180 +1,29 @@
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
-const crypto = require('crypto');
 
-// Security configuration
+// Security configurations
 const SECURITY_CONFIG = {
-  // Rate limiting
-  apiRateLimit: {
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, // limit each IP to 50 requests per windowMs
-    message: 'Too many requests from this IP'
-  },
-  emailRateLimit: {
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // limit each IP to 5 email requests per windowMs
-    message: 'Too many email requests from this IP'
-  },
-  
-  // Input validation
-  maxFieldLength: 1000,
-  maxFields: 50,
-  maxRequestSize: 1024 * 1024, // 1MB
-  
-  // Content filtering
-  blockedWords: [
-    'script', 'javascript:', 'onload', 'onerror', 'eval', 'expression',
-    'vbscript:', 'data:', 'iframe', 'object', 'embed', 'base64',
-    'document.cookie', 'window.location', 'alert(', 'confirm(',
-    'prompt(', 'setTimeout', 'setInterval', 'Function('
-  ],
-  
-  // Email validation
-  allowedEmailDomains: ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'],
-  
-  // CORS origins
-  allowedOrigins: [
+  ALLOWED_ORIGINS: [
+    'http://localhost:3000',
+    'http://localhost:5173',
     'https://maiyahospital.com',
     'https://www.maiyahospital.com',
-    'https://canva-wordpress-refresh.onrender.com',
-    'https://canva-wordpress-refresh-1.onrender.com',
-    'http://localhost:3000',
-    'http://localhost:5173'
-  ]
-};
-
-// Input sanitization
-const sanitizeInput = (input) => {
-  if (typeof input !== 'string') return '';
-  
-  let sanitized = input
-    // Remove HTML tags
-    .replace(/<[^>]*>/g, '')
-    // Remove script content
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Remove dangerous protocols
-    .replace(/javascript:/gi, '')
-    .replace(/vbscript:/gi, '')
-    .replace(/data:/gi, '')
-    // Remove event handlers
-    .replace(/on\w+\s*=/gi, '')
-    // Remove dangerous functions
-    .replace(/eval\s*\(/gi, '')
-    .replace(/expression\s*\(/gi, '')
-    .replace(/Function\s*\(/gi, '')
-    // Remove iframe, object, embed
-    .replace(/<iframe/gi, '')
-    .replace(/<object/gi, '')
-    .replace(/<embed/gi, '')
-    // Remove base64
-    .replace(/base64/gi, '')
-    // Trim whitespace
-    .trim();
-  
-  // Limit length
-  if (sanitized.length > SECURITY_CONFIG.maxFieldLength) {
-    sanitized = sanitized.substring(0, SECURITY_CONFIG.maxFieldLength) + '...';
-  }
-  
-  return sanitized;
-};
-
-// Validate email
-const validateEmail = (email) => {
-  if (!email || typeof email !== 'string') return false;
-  
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) return false;
-  
-  const domain = email.split('@')[1];
-  return SECURITY_CONFIG.allowedEmailDomains.includes(domain);
-};
-
-// Check for blocked content
-const containsBlockedContent = (text) => {
-  const lowerText = text.toLowerCase();
-  return SECURITY_CONFIG.blockedWords.some(word => lowerText.includes(word));
-};
-
-// Create rate limiters
-const createRateLimiter = (windowMs, max, message) => {
-  return rateLimit({
-    windowMs,
-    max,
-    message: { error: message },
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      res.status(429).json({
-        error: message,
-        retryAfter: Math.ceil(windowMs / 1000)
-      });
-    }
-  });
-};
-
-// API rate limiter
-const apiRateLimiter = createRateLimiter(
-  SECURITY_CONFIG.apiRateLimit.windowMs,
-  SECURITY_CONFIG.apiRateLimit.max,
-  SECURITY_CONFIG.apiRateLimit.message
-);
-
-// Email rate limiter
-const emailRateLimiter = createRateLimiter(
-  SECURITY_CONFIG.emailRateLimit.windowMs,
-  SECURITY_CONFIG.emailRateLimit.max,
-  SECURITY_CONFIG.emailRateLimit.message
-);
-
-// Input validation middleware
-const validateFormInput = (req, res, next) => {
-  try {
-    // Check request size
-    if (req.headers['content-length'] && 
-        parseInt(req.headers['content-length']) > SECURITY_CONFIG.maxRequestSize) {
-      return res.status(413).json({ error: 'Request too large' });
-    }
-    
-    // Check number of fields
-    const fieldCount = Object.keys(req.body).length;
-    if (fieldCount > SECURITY_CONFIG.maxFields) {
-      return res.status(400).json({ error: 'Too many form fields' });
-    }
-    
-    // Sanitize all input fields
-    const sanitizedBody = {};
-    for (const [key, value] of Object.entries(req.body)) {
-      if (typeof value === 'string') {
-        const sanitized = sanitizeInput(value);
-        
-        // Check for blocked content
-        if (containsBlockedContent(value)) {
-          return res.status(400).json({ error: 'Input contains blocked content' });
-        }
-        
-        sanitizedBody[key] = sanitized;
-      } else {
-        sanitizedBody[key] = value;
-      }
-    }
-    
-    // Validate email fields
-    const emailFields = ['email', 'patientEmail', 'userEmail'];
-    for (const field of emailFields) {
-      if (sanitizedBody[field] && !validateEmail(sanitizedBody[field])) {
-        return res.status(400).json({ error: `Invalid email format in ${field}` });
-      }
-    }
-    
-    // Replace request body with sanitized data
-    req.body = sanitizedBody;
-    next();
-    
-  } catch (error) {
-    console.error('Input validation error:', error);
-    return res.status(400).json({ error: 'Invalid input data' });
+    'https://maiyahospital.in',
+    'https://www.maiyahospital.in',
+    'https://canva-wordpress-refresh.onrender.com'
+  ],
+  RATE_LIMIT: {
+    WINDOW_MS: 15 * 60 * 1000, // 15 minutes
+    MAX_REQUESTS: 100, // limit each IP to 100 requests per windowMs
+    MESSAGE: 'Too many requests from this IP, please try again later.',
+    STANDARDIZE_HEADERS: true,
+    LEGACY_HEADERS: false
+  },
+  EMAIL_RATE_LIMIT: {
+    WINDOW_MS: 60 * 60 * 1000, // 1 hour
+    MAX_REQUESTS: 5, // limit each IP to 5 email requests per hour
+    MESSAGE: 'Too many email requests from this IP, please try again later.'
   }
 };
 
@@ -183,78 +32,90 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
-    // Check against allowed origins
-    if (SECURITY_CONFIG.allowedOrigins.indexOf(origin) !== -1) {
+
+    if (process.env.NODE_ENV === 'development') {
+      return callback(null, true);
+    }
+
+    if (SECURITY_CONFIG.ALLOWED_ORIGINS.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.log('CORS: Blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
-  optionsSuccessStatus: 200
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 600 // 10 minutes
 };
 
-// Security headers
-const securityHeaders = helmet({
+// Rate limiting configuration
+const apiLimiter = rateLimit({
+  windowMs: SECURITY_CONFIG.RATE_LIMIT.WINDOW_MS,
+  max: SECURITY_CONFIG.RATE_LIMIT.MAX_REQUESTS,
+  message: { error: SECURITY_CONFIG.RATE_LIMIT.MESSAGE },
+  standardHeaders: SECURITY_CONFIG.RATE_LIMIT.STANDARDIZE_HEADERS,
+  legacyHeaders: SECURITY_CONFIG.RATE_LIMIT.LEGACY_HEADERS,
+  trustProxy: true // Enable trust proxy
+});
+
+const emailLimiter = rateLimit({
+  windowMs: SECURITY_CONFIG.EMAIL_RATE_LIMIT.WINDOW_MS,
+  max: SECURITY_CONFIG.EMAIL_RATE_LIMIT.MAX_REQUESTS,
+  message: { error: SECURITY_CONFIG.EMAIL_RATE_LIMIT.MESSAGE },
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true, // Enable trust proxy
+  keyGenerator: function (req) {
+    // Use X-Forwarded-For header if available, otherwise use IP
+    return req.headers['x-forwarded-for'] || req.ip;
+  }
+});
+
+// Helmet configuration for security headers
+const helmetConfig = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
+      connectSrc: ["'self'", ...SECURITY_CONFIG.ALLOWED_ORIGINS],
+      fontSrc: ["'self'", "https:", "data:"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
       frameSrc: ["'none'"]
     }
   },
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  dnsPrefetchControl: { allow: true },
+  frameguard: { action: 'deny' },
+  hidePoweredBy: true,
   hsts: {
     maxAge: 31536000,
     includeSubDomains: true,
     preload: true
   },
+  ieNoOpen: true,
   noSniff: true,
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-  xssFilter: true,
-  frameguard: { action: 'deny' }
-});
+  xssFilter: true
+};
 
-// Request logging
+// Request logging middleware
 const requestLogger = (req, res, next) => {
-  const start = Date.now();
-  
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    const logData = {
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      url: req.url,
-      status: res.statusCode,
-      duration: `${duration}ms`,
-      userAgent: req.get('User-Agent'),
-      ip: req.ip || req.connection.remoteAddress,
-      contentLength: req.headers['content-length'] || 0
-    };
-    
-    console.log('Request:', JSON.stringify(logData));
-  });
-  
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
   next();
 };
 
 // Error handling middleware
 const errorHandler = (err, req, res, next) => {
   console.error('Error:', err);
-  
-  // Don't leak error details in production
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  
   res.status(err.status || 500).json({
-    error: isDevelopment ? err.message : 'Internal server error',
-    ...(isDevelopment && { stack: err.stack })
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
   });
 };
 
@@ -263,37 +124,47 @@ const securityMonitor = {
   blockedRequests: 0,
   rateLimitedRequests: 0,
   suspiciousActivities: [],
-  
-  logSuspiciousActivity: (activity) => {
-    securityMonitor.suspiciousActivities.push({
+  lastReset: Date.now(),
+
+  logBlockedRequest: function(req, reason) {
+    this.blockedRequests++;
+    this.suspiciousActivities.push({
       timestamp: new Date().toISOString(),
-      activity,
-      ip: activity.ip || 'unknown'
+      ip: req.ip,
+      url: req.url,
+      reason: reason
     });
-    
-    if (securityMonitor.suspiciousActivities.length > 1000) {
-      securityMonitor.suspiciousActivities = securityMonitor.suspiciousActivities.slice(-1000);
-    }
   },
-  
-  getStats: () => ({
-    blockedRequests: securityMonitor.blockedRequests,
-    rateLimitedRequests: securityMonitor.rateLimitedRequests,
-    suspiciousActivities: securityMonitor.suspiciousActivities.length
-  })
+
+  logRateLimitedRequest: function(req) {
+    this.rateLimitedRequests++;
+  },
+
+  getStats: function() {
+    return {
+      blockedRequests: this.blockedRequests,
+      rateLimitedRequests: this.rateLimitedRequests,
+      suspiciousActivities: this.suspiciousActivities.slice(-100), // Keep last 100 activities
+      uptime: Date.now() - this.lastReset
+    };
+  },
+
+  resetStats: function() {
+    this.blockedRequests = 0;
+    this.rateLimitedRequests = 0;
+    this.suspiciousActivities = [];
+    this.lastReset = Date.now();
+  }
 };
 
+// Export middleware and configurations
 module.exports = {
-  SECURITY_CONFIG,
-  sanitizeInput,
-  validateEmail,
-  containsBlockedContent,
-  apiRateLimiter,
-  emailRateLimiter,
-  validateFormInput,
   corsOptions,
-  securityHeaders,
+  apiLimiter,
+  emailLimiter,
+  helmetConfig,
   requestLogger,
   errorHandler,
-  securityMonitor
-}; 
+  securityMonitor,
+  SECURITY_CONFIG
+};

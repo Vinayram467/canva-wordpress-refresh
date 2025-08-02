@@ -1,160 +1,63 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const crypto = require('crypto');
-
-// Import security middleware
-const {
-  SECURITY_CONFIG,
-  apiRateLimiter,
-  emailRateLimiter,
-  validateFormInput,
-  corsOptions,
-  securityHeaders,
-  requestLogger,
-  errorHandler,
-  securityMonitor
-} = require('./security/securityMiddleware');
 
 // Load environment variables
 dotenv.config();
 
-// Load production configuration
-const isProduction = process.env.NODE_ENV === 'production';
-const config = isProduction ? require('./config/production') : null;
+// Import security middleware
+const {
+  corsOptions,
+  apiLimiter,
+  emailLimiter,
+  helmetConfig,
+  requestLogger,
+  errorHandler,
+  securityMonitor,
+  SECURITY_CONFIG
+} = require('./security/securityMiddleware');
 
 const app = express();
 
-// Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'none'"]
-    }
-  },
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  },
-  noSniff: true,
-  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
-}));
+// Trust proxy - required for rate limiting behind reverse proxies
+app.set('trust proxy', 1);
 
-// CORS configuration
-const allowedOrigins = isProduction 
-  ? config.security.allowedOrigins
-  : [
-      'http://localhost:3000',
-      'http://localhost:5173',
-      'http://localhost:4173', // Vite preview
-      'https://maiyahospital.com',
-      'https://www.maiyahospital.com',
-      'https://your-frontend-domain.com',
-      'https://your-app-name.onrender.com',
-      'https://canva-wordpress-refresh.onrender.com',
-      'https://canva-wordpress-refresh-1.onrender.com'
-    ];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // In development, be more permissive
-    if (!isProduction) {
-      console.log('🌐 CORS: Allowing origin:', origin);
-      return callback(null, true);
-    }
-    
-    // In production, check against allowed origins
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      console.log('✅ CORS: Allowing origin:', origin);
-      callback(null, true);
-    } else {
-      console.log('🚫 CORS: Blocked origin:', origin);
-      console.log('📋 Allowed origins:', allowedOrigins);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: isProduction ? config.security.apiRateLimit.windowMs : 15 * 60 * 1000,
-  max: isProduction ? config.security.apiRateLimit.max : 100,
-  message: {
-    error: isProduction ? config.security.apiRateLimit.message : 'Too many requests from this IP',
-    retryAfter: 900
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-app.use('/api/', limiter);
-
-// Email-specific rate limiting
-const emailLimiter = rateLimit({
-  windowMs: isProduction ? config.security.emailRateLimit.windowMs : 15 * 60 * 1000,
-  max: isProduction ? config.security.emailRateLimit.max : 10,
-  message: {
-    error: isProduction ? config.security.emailRateLimit.message : 'Too many email requests from this IP',
-    retryAfter: 900
-  },
-  standardHeaders: true,
-  legacyHeaders: false
-});
-
-app.use('/api/appointments', emailLimiter);
-app.use('/api/messages', emailLimiter);
-app.use('/api/consultations', emailLimiter);
-app.use('/api/assessments', emailLimiter);
-
-// Request size limiting
+// Basic middleware
+app.use(helmet(helmetConfig));
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-
-// Request logging
 app.use(requestLogger);
 
-// Apply input validation to form routes
-app.use('/api/appointments', validateFormInput);
-app.use('/api/messages', validateFormInput);
-app.use('/api/consultations', validateFormInput);
-app.use('/api/assessments', validateFormInput);
+// Apply rate limiting
+app.use('/api/', apiLimiter);
+app.use(['/api/appointments', '/api/messages', '/api/consultations', '/api/assessments'], emailLimiter);
 
-// MongoDB Connection with security
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/maiya-hospital';
-const dbOptions = isProduction ? config.database.options : {
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000
-};
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  console.error('❌ MONGODB_URI is not defined in environment variables');
+  process.exit(1);
+}
 
 console.log('🔗 Connecting to MongoDB...');
 console.log('📊 Environment:', process.env.NODE_ENV || 'development');
-console.log('🌐 MongoDB URI:', MONGODB_URI ? 'Set' : 'Not set');
 
-mongoose.connect(MONGODB_URI, dbOptions)
+mongoose.connect(MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  family: 4 // Force IPv4
+})
 .then(() => {
   console.log('✅ Connected to MongoDB successfully');
   console.log('📊 Database:', mongoose.connection.name);
 })
 .catch(err => {
   console.error('❌ MongoDB connection error:', err);
-  console.error('🔧 Please check your MONGODB_URI environment variable');
+  process.exit(1);
 });
 
 // Import routes
@@ -187,12 +90,11 @@ app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
 console.log('✅ All API routes configured');
 
-// Health check endpoint with security info
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  console.log('🏥 Health check requested');
-  res.json({ 
-    status: 'OK', 
-    message: 'Maiya Hospital API is running securely',
+  res.json({
+    status: 'OK',
+    message: 'Maiya Hospital API is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
     security: {
@@ -203,59 +105,35 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Security stats endpoint (admin only)
-app.get('/api/security/stats', (req, res) => {
-  // In production, add authentication here
-  res.json({
-    stats: securityMonitor.getStats()
-  });
-});
-
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Maiya Hospital API is running',
-    status: 'OK',
+  res.json({
+    message: 'Maiya Hospital API',
+    status: 'Running',
     timestamp: new Date().toISOString(),
-    endpoints: {
-      health: '/api/health',
-      test: '/test',
-      appointments: '/api/appointments',
-      messages: '/api/messages',
-      consultations: '/api/consultations',
-      assessments: '/api/assessments'
-    }
+    docs: '/api/docs'
   });
 });
 
-// Test endpoint
-app.get('/test', (req, res) => {
-  res.json({ message: 'Test working securely' });
-});
-
-// Error handling middleware
+// Error handling
 app.use(errorHandler);
-
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
 
 // Start server
 const PORT = process.env.PORT || 3001;
+const HOST = '0.0.0.0';
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running securely on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔒 Security features enabled:`);
-  console.log(`   - Rate limiting`);
-  console.log(`   - Input validation`);
-  console.log(`   - XSS protection`);
-  console.log(`   - CORS protection`);
-  console.log(`   - Security headers`);
-  console.log(`   - Request logging`);
-  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`🔍 Security stats: http://localhost:${PORT}/api/security/stats`);
-  console.log(`🌐 Root endpoint: http://localhost:${PORT}/`);
-  console.log(`✅ Server ready to accept requests`);
+app.listen(PORT, HOST, () => {
+  console.log(`
+🚀 Server running on port ${PORT}
+🌍 Environment: ${process.env.NODE_ENV || 'development'}
+🔒 Security features enabled:
+   - Rate limiting
+   - CORS protection
+   - Helmet security headers
+   - Request logging
+   - Error handling
+   - Security monitoring
+📊 Health check: http://localhost:${PORT}/api/health
+🌐 Root endpoint: http://localhost:${PORT}/
+  `);
 });
