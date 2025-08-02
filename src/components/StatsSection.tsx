@@ -59,18 +59,18 @@ const useCountAnimation = (end: number, duration: number = 2000) => {
 
 const StatsSection = () => {
   const stats = [
-    { 
-      number: 25, 
+        { 
+      number: 46,
       suffix: "+",
       label: "Years Experience", 
       icon: TrendingUp,
-      description: "Trusted healthcare since 1999",
+      description: "Trusted healthcare since 1979",
       color: "from-emerald-500 to-emerald-600"
     },
     { 
-      number: 45, 
+      number: 50, 
       suffix: "+",
-      label: "Specialist Doctors", 
+      label: "Doctors", 
       icon: Users,
       description: "Highly qualified medical experts",
       color: "from-blue-500 to-blue-600"

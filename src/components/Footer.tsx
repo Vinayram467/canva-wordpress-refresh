@@ -26,12 +26,12 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Providing world-class healthcare services with compassion and excellence for over 25 years.
+              Providing world-class healthcare services with compassion and excellence for over 46 years.
             </p>
             <div className="space-y-3">
               <div className="flex items-center text-muted-foreground glass rounded-lg p-3">
                 <Phone className="w-4 h-4 mr-3 text-green-700" />
-                <span>Landline: 080-41000980</span>
+                <span>Emergency: +91 98450 12345</span>
               </div>
               <div className="flex items-center text-muted-foreground glass rounded-lg p-3">
                 <Phone className="w-4 h-4 mr-3 text-green-700" />
@@ -106,12 +106,12 @@ const Footer = () => {
             </h4>
             <div className="space-y-4">
               <div className="glass rounded-lg p-4">
-                <div className="font-semibold text-foreground">Monday - Friday</div>
-                <div className="text-muted-foreground">8:00 AM - 8:00 PM</div>
+                <div className="font-semibold text-foreground">24/7, 365 Days</div>
+                <div className="text-muted-foreground">Always Open</div>
               </div>
               <div className="glass rounded-lg p-4">
-                <div className="font-semibold text-foreground">Saturday - Sunday</div>
-                <div className="text-muted-foreground">9:00 AM - 6:00 PM</div>
+                <div className="font-semibold text-foreground">Emergency Services</div>
+                <div className="text-muted-foreground">Available Round the Clock</div>
               </div>
               <div className="bg-gradient-to-r from-red-500/20 to-blue-400/20 glass rounded-lg p-4 border border-red-500/30">
                 <div className="font-semibold text-red-500 flex items-center">

@@ -31,11 +31,11 @@ const Header = () => {
           <div className="flex items-center space-x-6">
             <div className="group flex items-center space-x-2 glass rounded-full px-4 py-2 hover:bg-white/80 transition-all duration-300 transform hover:scale-105">
               <Phone className="w-4 h-4 text-green-600 group-hover:animate-pulse" />
-              <span className="font-medium">Emergency: +1 (555) 123-4567</span>
+              <span className="font-medium">Emergency: +91 98450 12345</span>
             </div>
             <div className="group flex items-center space-x-2 glass rounded-full px-4 py-2 hover:bg-white/80 transition-all duration-300 transform hover:scale-105">
               <Clock className="w-4 h-4 text-red-500 group-hover:animate-pulse" />
-              <span className="font-medium">Mon-Fri: 8AM-8PM | Sat-Sun: 9AM-6PM</span>
+              <span className="font-medium">24/7, 365 Days Open</span>
             </div>
           </div>
           <div className="flex items-center space-x-3">

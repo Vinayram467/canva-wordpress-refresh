@@ -61,9 +61,9 @@ const AboutSection = () => {
           <div className="relative animate-fade-in delay-300">
             <div className="relative glass rounded-3xl p-8 shadow-2xl">
               <img 
-                src="/lovable-uploads/04886a89-4380-4ad3-b37a-fda3e60c23db.png" 
+                src="/WhatsApp Image 2025-08-02 at 13.56.25_72778400.jpg" 
                 alt="Maiya Multi Speciality Hospital Building"
-                className="w-full h-80 object-cover rounded-2xl"
+                className="w-full h-auto max-h-[600px] object-contain rounded-2xl"
               />
               
               {/* Floating elements */}

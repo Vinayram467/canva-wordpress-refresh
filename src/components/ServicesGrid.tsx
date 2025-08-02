@@ -1,51 +1,51 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Brain, Baby, Bone, Ambulance, Stethoscope, ArrowRight, Sparkles } from "lucide-react";
+import { Heart, Shield, Microscope, Zap, Activity, Baby, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ServicesGrid = () => {
   const services = [
     {
-      title: "Cardiology",
-      description: "Advanced heart care with state-of-the-art cardiac treatments and diagnostics",
+      title: "ICU",
+      description: "Intensive Care Unit with advanced life support systems and 24/7 monitoring",
       icon: Heart,
       color: "from-red-500 to-red-600",
       glowColor: "red-500/30"
     },
     {
-      title: "Neurology", 
-      description: "Comprehensive brain and nervous system care by expert neurologists",
-      icon: Brain,
-      color: "from-blue-500 to-blue-600",
-      glowColor: "blue-500/30"
-    },
-    {
-      title: "Pediatrics",
-      description: "Specialized healthcare for children with compassionate pediatric experts",
-      icon: Baby,
-      color: "from-emerald-500 to-emerald-600",
-      glowColor: "emerald-500/30"
-    },
-    {
-      title: "Orthopedics",
-      description: "Advanced bone, joint and muscle treatments with modern surgical techniques",
-      icon: Bone,
-      color: "from-purple-500 to-purple-600",
-      glowColor: "purple-500/30"
-    },
-    {
-      title: "Emergency Care",
+      title: "Emergency",
       description: "24/7 emergency medical services with rapid response capabilities",
-      icon: Ambulance,
+      icon: Shield,
       color: "from-orange-500 to-orange-600",
       glowColor: "orange-500/30"
     },
     {
-      title: "General Medicine",
-      description: "Comprehensive primary healthcare and preventive medical services",
-      icon: Stethoscope,
-      color: "from-teal-500 to-teal-600",
-      glowColor: "teal-500/30"
+      title: "Laboratory",
+      description: "State-of-the-art diagnostic laboratory with comprehensive testing facilities",
+      icon: Microscope,
+      color: "from-blue-500 to-blue-600",
+      glowColor: "blue-500/30"
+    },
+    {
+      title: "Digital X-Ray",
+      description: "Advanced digital radiography for precise and quick diagnostic imaging",
+      icon: Zap,
+      color: "from-purple-500 to-purple-600",
+      glowColor: "purple-500/30"
+    },
+    {
+      title: "Modular OT",
+      description: "Modern modular operation theaters with advanced surgical equipment",
+      icon: Activity,
+      color: "from-green-500 to-green-600",
+      glowColor: "green-500/30"
+    },
+    {
+      title: "Gynaec OT",
+      description: "Specialized operation theater for gynecological and obstetric procedures",
+      icon: Baby,
+      color: "from-pink-500 to-pink-600",
+      glowColor: "pink-500/30"
     }
   ];
 

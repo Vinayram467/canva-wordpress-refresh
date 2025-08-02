@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
+  "/Black and Green Bold Gym Landscape Banner (19).png",
   "/Banner1.png",
   "/Banner2.png",
-  "/Banner3.png",
+  "/Black and Green Bold Gym Landscape Banner (20).png",
   "/Banner4.png",
   "/Banenr5.png",
+  "/Elegant Red Black Curtain Coming Soon Banner.png",
 ];
 
 const AutoScrollBanner = () => {

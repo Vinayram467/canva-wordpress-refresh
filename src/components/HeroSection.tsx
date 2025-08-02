@@ -105,7 +105,7 @@ const HeroSection = () => {
               <div className="group text-center glass p-6 hover:bg-white/80 transition-all duration-300 transform hover:scale-110">
                 <div className="relative mb-4">
                   <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-green-600 to-red-500 bg-clip-text">
-                    25+
+                    46+
                   </div>
                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-green-600 rounded-full animate-ping"></div>
                 </div>
@@ -120,20 +120,20 @@ const HeroSection = () => {
                   </div>
                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-red-500 rounded-full animate-ping delay-200"></div>
                 </div>
-                <div className="text-sm text-foreground font-medium">Expert Doctors</div>
+                <div className="text-sm text-foreground font-medium">Doctors</div>
                 <Users className="w-4 h-4 mx-auto mt-2 text-red-500 animate-pulse delay-200" />
               </div>
               
-              <div className="group text-center glass p-6 hover:bg-white/80 transition-all duration-300 transform hover:scale-110">
-                <div className="relative mb-4">
-                  <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-green-600 to-red-500 bg-clip-text">
-                    10k+
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-purple-400 rounded-full animate-ping delay-400"></div>
-                </div>
-                <div className="text-sm text-foreground font-medium">Happy Patients</div>
-                <Heart className="w-4 h-4 mx-auto mt-2 text-purple-400 animate-pulse delay-400" />
-              </div>
+                             <div className="group text-center glass p-6 hover:bg-white/80 transition-all duration-300 transform hover:scale-110">
+                 <div className="relative mb-4">
+                   <div className="text-4xl font-bold text-transparent bg-gradient-to-r from-green-600 to-red-500 bg-clip-text">
+                     10M+
+                   </div>
+                   <div className="absolute -top-2 -right-2 w-3 h-3 bg-purple-400 rounded-full animate-ping delay-400"></div>
+                 </div>
+                 <div className="text-sm text-foreground font-medium">Happy Patients</div>
+                 <Heart className="w-4 h-4 mx-auto mt-2 text-purple-400 animate-pulse delay-400" />
+               </div>
             </div>
           </div>
 
