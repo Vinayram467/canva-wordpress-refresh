@@ -44,19 +44,33 @@ const allowedOrigins = isProduction
   : [
       'http://localhost:3000',
       'http://localhost:5173',
+      'http://localhost:4173', // Vite preview
       'https://maiyahospital.com',
       'https://www.maiyahospital.com',
       'https://your-frontend-domain.com',
-      'https://your-app-name.onrender.com'
+      'https://your-app-name.onrender.com',
+      'https://canva-wordpress-refresh.onrender.com',
+      'https://canva-wordpress-refresh-1.onrender.com'
     ];
 
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
+    // In development, be more permissive
+    if (!isProduction) {
+      console.log('🌐 CORS: Allowing origin:', origin);
+      return callback(null, true);
+    }
+    
+    // In production, check against allowed origins
     if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log('✅ CORS: Allowing origin:', origin);
       callback(null, true);
     } else {
+      console.log('🚫 CORS: Blocked origin:', origin);
+      console.log('📋 Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
