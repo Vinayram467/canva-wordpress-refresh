@@ -128,26 +128,7 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Request logging
-app.use((req, res, next) => {
-  const start = Date.now();
-  
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    const logData = {
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      url: req.url,
-      status: res.statusCode,
-      duration: `${duration}ms`,
-      userAgent: req.get('User-Agent'),
-      ip: req.ip || req.connection.remoteAddress
-    };
-    
-    console.log('Request:', JSON.stringify(logData));
-  });
-  
-  next();
-});
+app.use(requestLogger);
 
 // Apply input validation to form routes
 app.use('/api/appointments', validateFormInput);
@@ -206,25 +187,6 @@ app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
 console.log('✅ All API routes configured');
 
-// Security monitoring
-const securityMonitor = {
-  blockedRequests: 0,
-  rateLimitedRequests: 0,
-  suspiciousActivities: [],
-  
-  logSuspiciousActivity: (activity) => {
-    securityMonitor.suspiciousActivities.push({
-      timestamp: new Date().toISOString(),
-      activity,
-      ip: activity.ip || 'unknown'
-    });
-    
-    if (securityMonitor.suspiciousActivities.length > 1000) {
-      securityMonitor.suspiciousActivities = securityMonitor.suspiciousActivities.slice(-1000);
-    }
-  }
-};
-
 // Health check endpoint with security info
 app.get('/api/health', (req, res) => {
   console.log('🏥 Health check requested');
@@ -245,11 +207,7 @@ app.get('/api/health', (req, res) => {
 app.get('/api/security/stats', (req, res) => {
   // In production, add authentication here
   res.json({
-    stats: securityMonitor.getStats ? securityMonitor.getStats() : {
-      blockedRequests: securityMonitor.blockedRequests,
-      rateLimitedRequests: securityMonitor.rateLimitedRequests,
-      suspiciousActivities: securityMonitor.suspiciousActivities.length
-    }
+    stats: securityMonitor.getStats()
   });
 });
 
@@ -276,17 +234,7 @@ app.get('/test', (req, res) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  
-  // Don't leak error details in production
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  
-  res.status(err.status || 500).json({
-    error: isDevelopment ? err.message : 'Internal server error',
-    ...(isDevelopment && { stack: err.stack })
-  });
-});
+app.use(errorHandler);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -310,4 +258,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🔍 Security stats: http://localhost:${PORT}/api/security/stats`);
   console.log(`🌐 Root endpoint: http://localhost:${PORT}/`);
   console.log(`✅ Server ready to accept requests`);
-}); 
+});
