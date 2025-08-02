@@ -8,16 +8,23 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "express": "4.17.1",
-    "mongoose": "^7.5.0",
-    "cors": "^2.8.5",
     "axios": "^1.5.0",
-    "dotenv": "^16.3.1"
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.0.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^7.5.0",
+    "nodemailer": "^7.0.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "keywords": ["api", "healthcare", "hospital"],
+  "keywords": [
+    "api",
+    "healthcare",
+    "hospital"
+  ],
   "author": "Your Name",
   "license": "MIT"
-} 
+}

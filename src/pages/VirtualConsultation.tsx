@@ -26,7 +26,7 @@ const VirtualConsultation = () => {
       setSuccessDetails(formData); // Show success card
       toast({
         title: "Consultation Booked!",
-        description: "Your virtual consultation request has been received.",
+        description: "Your virtual consultation request has been received. A confirmation email has been sent to your email address.",
       });
       setFormData({ patientName: '', patientEmail: '', phone: '', description: '', date: '' });
     } catch (err) {

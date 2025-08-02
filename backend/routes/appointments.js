@@ -1,5 +1,6 @@
 const express = require('express');
 const Appointment = require('../models/Appointment');
+const emailService = require('../services/emailService');
 const router = express.Router();
 
 // GET all appointments
@@ -32,6 +33,23 @@ router.post('/', async (req, res) => {
   try {
     const appointment = new Appointment(req.body);
     const newAppointment = await appointment.save();
+    
+    // Send confirmation email to user
+    try {
+      await emailService.sendUserConfirmation(req.body, 'appointment');
+      console.log('User confirmation email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending user confirmation email:', emailError);
+    }
+    
+    // Send notification email to admin
+    try {
+      await emailService.sendAdminNotification(req.body, 'appointment');
+      console.log('Admin notification email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending admin notification email:', emailError);
+    }
+    
     res.status(201).json(newAppointment);
   } catch (error) {
     console.error('Error creating appointment:', error);
