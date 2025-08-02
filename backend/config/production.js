@@ -4,12 +4,8 @@ module.exports = {
   database: {
     uri: process.env.MONGODB_URI,
     options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
-      bufferMaxEntries: 0,
-      bufferCommands: false,
       // Production optimizations
       maxPoolSize: 10,
       minPoolSize: 2,
