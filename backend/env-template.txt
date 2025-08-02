@@ -1,21 +1,56 @@
 # Environment Variables Template
-# Copy this file to .env and fill in your actual values
-# NEVER commit the .env file to Git!
+# SECURITY NOTICE:
+# 1. NEVER commit the actual .env file to Git
+# 2. ALWAYS use strong, unique passwords
+# 3. Use encryption for sensitive data
+# 4. Regularly rotate credentials
+# 5. Monitor for unauthorized access
 
 # Database Configuration
+# Format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database-name
 
 # Email Configuration
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your-email@gmail.com
+# Use an App Password for Gmail, never your actual password
 EMAIL_PASS=your-app-password
 ADMIN_EMAIL=admin@example.com
+HOSPITAL_NAME=Your Hospital Name
 
 # Application Configuration
 NODE_ENV=production
 PORT=3001
 
 # Security Configuration
-JWT_SECRET=your-jwt-secret-key
-SESSION_SECRET=your-session-secret-key 
+# Generate these using: require('crypto').randomBytes(64).toString('hex')
+JWT_SECRET=generate-a-secure-random-string
+SESSION_SECRET=generate-another-secure-random-string
+
+# Rate Limiting
+MAX_REQUESTS_PER_IP=100
+RATE_LIMIT_WINDOW_MS=900000
+
+# Logging Configuration
+LOG_LEVEL=info
+ENABLE_REQUEST_LOGGING=true
+ENABLE_ERROR_LOGGING=true
+
+# Monitoring Configuration
+ENABLE_SECURITY_MONITORING=true
+ALERT_EMAIL=security-alerts@yourdomain.com
+
+# CORS Configuration
+ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+
+# Content Security
+MAX_UPLOAD_SIZE=5242880
+ALLOWED_FILE_TYPES=jpg,jpeg,png,pdf
+
+# Remember:
+# 1. Replace all placeholder values with actual secure values
+# 2. Use different values for development and production
+# 3. Keep your .env file secure and encrypted when not in use
+# 4. Regularly audit your security settings
+# 5. Monitor your logs for suspicious activity

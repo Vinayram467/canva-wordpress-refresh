@@ -1,0 +1,45 @@
+<!-- Security Headers Configuration -->
+<!-- This file contains security headers that should be configured on your web server -->
+
+<!-- Content Security Policy -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data: https:;
+  connect-src 'self' https://api.maiyahospital.com;
+  frame-src 'none';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+">
+
+<!-- X-Frame-Options -->
+<meta http-equiv="X-Frame-Options" content="DENY">
+
+<!-- X-Content-Type-Options -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+<!-- Referrer Policy -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- Permissions Policy -->
+<meta http-equiv="Permissions-Policy" content="
+  geolocation=(),
+  microphone=(),
+  camera=(),
+  payment=(),
+  usb=()
+">
+
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{csrf_token}}">
+
+<!-- Security Notes:
+1. Configure these headers on your web server (Apache/Nginx)
+2. Update CSP directives based on your specific needs
+3. Regularly audit and update security policies
+4. Test thoroughly in staging environment
+5. Monitor for CSP violations and adjust accordingly
+--> 
