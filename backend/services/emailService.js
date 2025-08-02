@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const SECURITY_CONFIG = {
   MAX_EMAILS_PER_HOUR: 50,
   MAX_EMAILS_PER_DAY: 200,
-  EMAIL_SIZE_LIMIT: 1024 * 1024, // 1MB
+  EMAIL_SIZE_LIMIT: 1024 * 1024,
   ALLOWED_EMAIL_DOMAINS: ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'],
   BLOCKED_WORDS: [
     'script', 'javascript:', 'onload', 'onerror', 'eval', 'expression',
@@ -15,19 +15,14 @@ const SECURITY_CONFIG = {
     'prompt(', 'setTimeout', 'setInterval', 'Function('
   ],
   MAX_RECIPIENTS: 2,
-  EMAIL_TIMEOUT: 30000, // 30 seconds
-  MAX_EMAIL_LENGTH: 50000, // 50KB
+  EMAIL_TIMEOUT: 30000,
+  MAX_EMAIL_LENGTH: 50000,
   ALLOWED_HTML_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
 };
 
-// Rate limiting storage (in production, use Redis)
-const emailCounts = new Map();
-
-// Input validation and sanitization
+// Input validation and sanitization functions remain the same...
 const sanitizeInput = (input) => {
   if (typeof input !== 'string') return '';
-  
-  // Remove potentially dangerous content
   let sanitized = input
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/javascript:/gi, '')
@@ -36,164 +31,104 @@ const sanitizeInput = (input) => {
     .replace(/expression\s*\(/gi, '')
     .trim();
   
-  // Limit length
   if (sanitized.length > 1000) {
     sanitized = sanitized.substring(0, 1000) + '...';
   }
-  
   return sanitized;
 };
 
-// Validate email format and domain
 const validateEmail = (email) => {
   if (!email || typeof email !== 'string') return false;
-  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) return false;
-  
   const domain = email.split('@')[1];
   return SECURITY_CONFIG.ALLOWED_EMAIL_DOMAINS.includes(domain);
 };
 
-// Check for blocked content
-const containsBlockedContent = (text) => {
-  const lowerText = text.toLowerCase();
-  return SECURITY_CONFIG.BLOCKED_WORDS.some(word => lowerText.includes(word));
+// Common CSS styles for emails
+const emailStyles = `
+  /* Base styles */
+  body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .header {
+    background: linear-gradient(135deg, #10b981, #ef4444);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+  }
+  .logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  .content {
+    padding: 30px;
+    background: #ffffff;
+  }
+  .details-box {
+    background: #f8f9fa;
+    border-left: 4px solid #10b981;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+  }
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 14px;
+    background: #f8f9fa;
+    border-radius: 0 0 10px 10px;
+  }
+  .button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #10b981;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .alert {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+  }
+`;
+
+// Base64 encoded icons (you can replace these with your own icons)
+const icons = {
+  hospital: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAA70lEQVRIie2WQQ6CMBREn8bEhJ0LPYjxHm48AZ5DT+RajyBrE+PCYGlpO0Bb3MC/aUmH92c6P0OFv6AG2kBbvXr+qjMQrbUBLkCnrxH4kHQvCW6AK7CJ1AZgL2mcE+wK+wgDnCXd5gZbWFJ4LGrbekrBlzlOKfgI3B0/B8s2d8BxLngDPBw/Z+AU+A0wWL424oQkdQCSBklD4HxJUu/Z74Yc8MHzdQIOkrrc4AZ4AtsP/d4kPXOCW+DpeFeHpJgTfPrS7yBp9HyVghugD5w3SS3wkDTlBFdoXvAMHIEtsEvpLHBs1TSw9pXVwMqXVuEbeAHhV6ZqjxQmVQAAAABJRU5ErkJggg==',
+  email: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABxUlEQVRIie2WPWsUURSGn3NnN2EVxGR3ZhYTEQVFVBAs/AHaWPkDLK0EK0G0tLGxFaz8C/4AG8FCrEQUJH4giB+VJsYYN7uZHYtZYVzdnbkzCQh54XKHc+557nv3zj0DK1reMuuOXS84am4YeaZGbyZwZOTLzPqsOdQFrwNmxq8u+Fxk5Fxk5FJkZDKy8nFk5Vdk5UNkZTKycnNk5WBkZTAy0hcZeRYZ+RkZ+RFZeRhZ6Y2MXAZ+R0Z+9Y2c7/R6/2xk5WJk5X1kZDwy8jWycrZvZPSIlTtADfSrWu/2jbzqGzkRGRmNrLyLrExEVl5GVk5GRp5EVr5FVj5HVh5FRgYiK7d6kCPAG+A0sNsY2QqsW+TQj8AzY+TQf+B1wFNj5PB/4EngsQFOLQVPADXGOLFU+MES4Z4xnr9njJwB3gLbgV3GyFpj5C7wYiH4lzFytW9kY2TkQWTlUWTlUWTlRWTlmjFyEHhvjHwHNhkjp4CXQB/YY4ysNUb2L3RxbwKbgb3GyDAwBmwzRnqNkRvA9fngnwXeCJwDhowxAJuAd8bIxIIxrfU4MAmglEoB0ul0plzXnQVQSk0DKK3TnPNMaa2V1vq367rT7Xb7Zx73L9Ef4UKqRMh9wEAAAAAASUVORK5CYII=',
+  phone: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABYklEQVRIie2WTU4CQRCFv2o2xoULZeENvIBewcQjeAIv4EbjQaYxcdyyZaExIWHlIZgYb8DCrWFBhenlp2cGJvElvV2/qqnu6reqoaOOFkoBVAocqvhngfmKfxn4UPFHwLmKPwBuVPwecKviFzXBY+AJmNQEPwP3wF5N8CNwBwzXBb8Bt8CgDvgVuAH6dcCvwDXQqwN+Bi6BnTrgKXABdOuAn4AzoKPm7wEXSqkDrfUXsFBKHWmtZ8AcWGqtj7XWM2AOLLTWx1rrGTAHllrrI631DJgDC631sdb6C1gopQ601l/AQil1qLWeAXOl1L7W+hOYK6UOtNZfwEIpdaS1ngFzYKm1PtZaz4A5sNRaH2utZ8AcWGqtj7TWM2CulDrQWn8BC6XUodb6C5grpfa11p/AXCl1oLX+AhZKqSOt9QyYA0ut9bHWegbMlVIHWusvYKGUOtRafwFzpdS+1voTmGutD7TWM2CulNrXWn8C/0Z/AK8p1meaU/YuAAAAAElFTkSuQmCC',
+  location: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAABz0lEQVRIie2WPWsUURSGn3NnN2EVxGR3ZhYTEQVFVBAs/AHaWPkDLK0EK0G0tLGxFaz8C/4AG8FCrEQUJH4giB+VJsYYN7uZHYtZYVzdnbkzCQh54XKHc+557nv3zj0DK1reMuuOXS84am4YeaZGbyZwZOTLzPqsOdQFrwNmxq8u+Fxk5Fxk5FJkZDKy8nFk5VdkZDKycnNk5WBkZTAy0hcZeRYZ+RkZ+RFZeRhZ6Y2MXAZ+R0Z+9Y2c7/R6/2xk5WJk5X1kZDwy8jWycrZvZPSIlTtADfSrWu/2jbzqGzkRGRmNrLyLrExEVl5GVk5GRp5EVr5FVj5HVh5FRgYiK7d6kCPAG+A0sNsY2QqsW+TQj8AzY+TQf+B1wFNj5PB/4EngsQFOLQVPADXGOLFU+MES4Z4xnr9njJwB3gLbgV3GyFpj5C7wYiH4lzFytW9kY2TkQWTlUWTlUWTlRWTlmjFyEHhvjHwHNhkjp4CXQB/YY4ysNUb2L3RxbwKbgb3GyDAwBmwzRnqNkRvA9fngnwXeCJwDhowxAJuAd8bIxIIxrfU4MAmglEoB0ul0plzXnQVQSk0DKK3TnPNMaa2V1vq367rT7Xb7Zx73L9Ef4UKqRMh9wEAAAAAASUVORK5CYII='
 };
 
-// Rate limiting check
-const checkRateLimit = (email) => {
-  const now = Date.now();
-  const hourAgo = now - 60 * 60 * 1000;
-  const dayAgo = now - 24 * 60 * 60 * 1000;
-  
-  if (!emailCounts.has(email)) {
-    emailCounts.set(email, { hourly: [], daily: [] });
-  }
-  
-  const counts = emailCounts.get(email);
-  
-  // Clean old entries
-  counts.hourly = counts.hourly.filter(time => time > hourAgo);
-  counts.daily = counts.daily.filter(time => time > dayAgo);
-  
-  // Check limits
-  if (counts.hourly.length >= SECURITY_CONFIG.MAX_EMAILS_PER_HOUR) {
-    throw new Error('Rate limit exceeded: too many emails per hour');
-  }
-  
-  if (counts.daily.length >= SECURITY_CONFIG.MAX_EMAILS_PER_DAY) {
-    throw new Error('Rate limit exceeded: too many emails per day');
-  }
-  
-  // Add current request
-  counts.hourly.push(now);
-  counts.daily.push(now);
-};
-
-// Create secure transporter with additional security options
-const createSecureTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: process.env.EMAIL_PORT || 587,
-    secure: false, // Use STARTTLS
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    // Security options
-    tls: {
-      rejectUnauthorized: true,
-      ciphers: 'SSLv3'
-    },
-    // Timeout settings
-    connectionTimeout: SECURITY_CONFIG.EMAIL_TIMEOUT,
-    greetingTimeout: SECURITY_CONFIG.EMAIL_TIMEOUT,
-    socketTimeout: SECURITY_CONFIG.EMAIL_TIMEOUT,
-    // Rate limiting
-    maxConnections: 5,
-    maxMessages: 100,
-    // Security headers
-    disableFileAccess: true,
-    disableUrlAccess: true
-  });
-};
-
-// Secure email sending function
-const sendSecureEmail = async (to, subject, html, options = {}) => {
-  try {
-    // Validate inputs
-    if (!to || !Array.isArray(to) || to.length === 0) {
-      throw new Error('Invalid recipient list');
-    }
-    
-    if (to.length > SECURITY_CONFIG.MAX_RECIPIENTS) {
-      throw new Error('Too many recipients');
-    }
-    
-    // Validate each email
-    for (const email of to) {
-      if (!validateEmail(email)) {
-        throw new Error(`Invalid email format: ${email}`);
-      }
-    }
-    
-    // Check rate limits for each recipient
-    for (const email of to) {
-      checkRateLimit(email);
-    }
-    
-    // Sanitize subject and content
-    const sanitizedSubject = sanitizeInput(subject);
-    const sanitizedHtml = sanitizeInput(html);
-    
-    // Check for blocked content
-    if (containsBlockedContent(sanitizedSubject) || containsBlockedContent(sanitizedHtml)) {
-      throw new Error('Email contains blocked content');
-    }
-    
-    // Create secure transporter
-    const transporter = createSecureTransporter();
-    
-    // Verify connection
-    await transporter.verify();
-    
-    // Send email with security headers
-    const mailOptions = {
-      from: `"${process.env.HOSPITAL_NAME}" <${process.env.EMAIL_USER}>`,
-      to: to.join(', '),
-      subject: sanitizedSubject,
-      html: sanitizedHtml,
-      headers: {
-        'X-Mailer': 'Maiya Hospital Email System',
-        'X-Priority': '3',
-        'X-MSMail-Priority': 'Normal',
-        'X-Report-Abuse': 'Please report abuse to abuse@maiyahospital.com',
-        'List-Unsubscribe': '<mailto:unsubscribe@maiyahospital.com>',
-        'Precedence': 'bulk'
-      },
-      // Security options
-      disableFileAccess: true,
-      disableUrlAccess: true,
-      ...options
-    };
-    
-    const result = await transporter.sendMail(mailOptions);
-    
-    // Log successful email (without sensitive data)
-    console.log(`Email sent successfully to ${to.length} recipient(s)`);
-    
-    return result;
-    
-  } catch (error) {
-    console.error('Email sending failed:', error.message);
-    throw new Error(`Email sending failed: ${error.message}`);
-  }
-};
-
-// Secure email templates with additional sanitization
 const generateSecureAppointmentConfirmationEmail = (data) => {
-  // Sanitize all data
   const sanitizedData = {
     patientName: sanitizeInput(data.patientName || data.name || ''),
     email: sanitizeInput(data.email || data.patientEmail || ''),
@@ -202,168 +137,139 @@ const generateSecureAppointmentConfirmationEmail = (data) => {
     time: sanitizeInput(data.time || data.appointmentTime || ''),
     reason: sanitizeInput(data.reason || '')
   };
-  
+
   return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline';">
-    <title>Appointment Confirmation</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #10b981, #ef4444); color: white; padding: 30px; text-align: center; border-radius: 10px;">
-            <h1 style="margin: 0; font-size: 24px;">Maiya Multi Speciality Hospital</h1>
-            <p style="margin: 10px 0 0 0; opacity: 0.9;">Appointment Request Received</p>
-        </div>
-        
-        <div style="background: #f9f9f9; padding: 30px; border-radius: 10px; margin-top: 20px;">
-            <h2 style="color: #10b981; margin-top: 0;">Dear ${sanitizedData.patientName},</h2>
-            
-            <p>Thank you for booking an appointment with Maiya Multi Speciality Hospital. We have received your appointment request and our team will review it shortly.</p>
-            
-            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
-                <h3 style="margin-top: 0; color: #10b981;">Appointment Details:</h3>
-                <p><strong>Name:</strong> ${sanitizedData.patientName}</p>
-                <p><strong>Email:</strong> ${sanitizedData.email}</p>
-                <p><strong>Phone:</strong> ${sanitizedData.phone}</p>
-                <p><strong>Date:</strong> ${sanitizedData.date}</p>
-                <p><strong>Time:</strong> ${sanitizedData.time}</p>
-                ${sanitizedData.reason ? `<p><strong>Reason:</strong> ${sanitizedData.reason}</p>` : ''}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>${emailStyles}</style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <img src="${icons.hospital}" alt="Hospital Icon" class="logo">
+                <h1>Maiya Multi Speciality Hospital</h1>
+                <p>Appointment Request Confirmation</p>
             </div>
             
-            <p>We will contact you within 24 hours to confirm your appointment. If you have any urgent medical concerns, please call our emergency number: <strong>+91 98450 12345</strong></p>
+            <div class="content">
+                <h2 style="color: #10b981;">Dear ${sanitizedData.patientName},</h2>
+                
+                <p>Thank you for choosing Maiya Multi Speciality Hospital. We have received your appointment request and our team will process it shortly.</p>
+                
+                <div class="details-box">
+                    <h3 style="color: #10b981; margin-top: 0;">Appointment Details:</h3>
+                    <p><img src="${icons.hospital}" alt="Patient" class="icon"> <strong>Patient Name:</strong> ${sanitizedData.patientName}</p>
+                    <p><img src="${icons.email}" alt="Email" class="icon"> <strong>Email:</strong> ${sanitizedData.email}</p>
+                    <p><img src="${icons.phone}" alt="Phone" class="icon"> <strong>Phone:</strong> ${sanitizedData.phone}</p>
+                    <p><img src="${icons.hospital}" alt="Calendar" class="icon"> <strong>Date:</strong> ${sanitizedData.date}</p>
+                    <p><img src="${icons.hospital}" alt="Time" class="icon"> <strong>Time:</strong> ${sanitizedData.time}</p>
+                    ${sanitizedData.reason ? `<p><strong>Reason:</strong> ${sanitizedData.reason}</p>` : ''}
+                </div>
+                
+                <div class="alert">
+                    <p><strong>Next Steps:</strong></p>
+                    <ul>
+                        <li>Our team will review your request within 2-3 business days</li>
+                        <li>You will receive a confirmation email once your appointment is confirmed</li>
+                        <li>Please arrive 15 minutes before your scheduled time</li>
+                    </ul>
+                </div>
+
+                <p>For urgent medical concerns, please contact our emergency number: <strong>+91 98450 12345</strong></p>
+                
+                <a href="https://maiyahospital.com" class="button">Visit Our Website</a>
+            </div>
             
-            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                <p style="margin: 0;"><strong>Important:</strong> Please arrive 15 minutes before your scheduled appointment time.</p>
+            <div class="footer">
+                <p><strong>Maiya Multi Speciality Hospital</strong></p>
+                <p><img src="${icons.location}" alt="Location" class="icon"> 34, 10th Main Rd, Jayanagar 1st Block</p>
+                <p>Bengaluru, Karnataka 560011</p>
+                <p><img src="${icons.phone}" alt="Phone" class="icon"> Emergency: +91 98450 12345</p>
+                <p><img src="${icons.email}" alt="Email" class="icon"> social.maiya@gmail.com</p>
             </div>
         </div>
-        
-        <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
-            <p>Maiya Multi Speciality Hospital<br>
-            34, 10th Main Rd, Jayanagar 1st Block<br>
-            Bengaluru, Karnataka 560011<br>
-            Emergency: +91 98450 12345</p>
-        </div>
-    </div>
-</body>
-</html>
-`;
+    </body>
+    </html>
+  `;
 };
 
-// Similar secure templates for other email types...
-const generateSecureContactConfirmationEmail = (data) => {
-  const sanitizedData = {
-    firstName: sanitizeInput(data.firstName || ''),
-    lastName: sanitizeInput(data.lastName || ''),
-    email: sanitizeInput(data.email || ''),
-    phone: sanitizeInput(data.phone || ''),
-    subject: sanitizeInput(data.subject || 'General Inquiry'),
-    message: sanitizeInput(data.message || '')
-  };
-  
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline';">
-    <title>Message Received</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #10b981, #ef4444); color: white; padding: 30px; text-align: center; border-radius: 10px;">
-            <h1 style="margin: 0; font-size: 24px;">Maiya Multi Speciality Hospital</h1>
-            <p style="margin: 10px 0 0 0; opacity: 0.9;">Message Received</p>
-        </div>
-        
-        <div style="background: #f9f9f9; padding: 30px; border-radius: 10px; margin-top: 20px;">
-            <h2 style="color: #10b981; margin-top: 0;">Dear ${sanitizedData.firstName} ${sanitizedData.lastName},</h2>
-            
-            <p>Thank you for contacting Maiya Multi Speciality Hospital. We have received your message and our team will get back to you within 24 hours.</p>
-            
-            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
-                <h3 style="margin-top: 0; color: #10b981;">Message Details:</h3>
-                <p><strong>Name:</strong> ${sanitizedData.firstName} ${sanitizedData.lastName}</p>
-                <p><strong>Email:</strong> ${sanitizedData.email}</p>
-                <p><strong>Phone:</strong> ${sanitizedData.phone}</p>
-                <p><strong>Subject:</strong> ${sanitizedData.subject}</p>
-                <p><strong>Message:</strong> ${sanitizedData.message}</p>
-            </div>
-            
-            <p>For urgent medical concerns, please call our emergency number: <strong>+91 98450 12345</strong></p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
-            <p>Maiya Multi Speciality Hospital<br>
-            34, 10th Main Rd, Jayanagar 1st Block<br>
-            Bengaluru, Karnataka 560011<br>
-            Emergency: +91 98450 12345</p>
-        </div>
-    </div>
-</body>
-</html>
-`;
-};
-
-// Admin notification templates (simplified for security)
 const generateSecureAdminNotification = (data, formType) => {
   const sanitizedData = {};
-  
-  // Sanitize all data fields
   Object.keys(data).forEach(key => {
     sanitizedData[key] = sanitizeInput(data[key]);
   });
-  
+
+  const formattedDate = new Date().toLocaleString('en-IN', { 
+    timeZone: 'Asia/Kolkata',
+    dateStyle: 'full',
+    timeStyle: 'long'
+  });
+
   return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline';">
-    <title>New ${formType} Submission</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
-    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #10b981, #ef4444); color: white; padding: 30px; text-align: center; border-radius: 10px;">
-            <h1 style="margin: 0; font-size: 24px;">Maiya Multi Speciality Hospital</h1>
-            <p style="margin: 10px 0 0 0; opacity: 0.9;">New ${formType} Submission</p>
-        </div>
-        
-        <div style="background: #f9f9f9; padding: 30px; border-radius: 10px; margin-top: 20px;">
-            <h2 style="color: #10b981; margin-top: 0;">New ${formType} Request</h2>
-            
-            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
-                <h3 style="margin-top: 0; color: #10b981;">Submission Details:</h3>
-                ${Object.entries(sanitizedData).map(([key, value]) => 
-                  `<p><strong>${key}:</strong> ${value}</p>`
-                ).join('')}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>${emailStyles}</style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <img src="${icons.hospital}" alt="Hospital Icon" class="logo">
+                <h1>Maiya Multi Speciality Hospital</h1>
+                <p>New ${formType} Submission</p>
             </div>
             
-            <p><strong>Submission Time:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
+            <div class="content">
+                <div class="details-box">
+                    <h3 style="color: #10b981; margin-top: 0;">Submission Information:</h3>
+                    <p><strong>Form Type:</strong> ${formType}</p>
+                    <p><strong>Submitted On:</strong> ${formattedDate}</p>
+                    <p><strong>Reference ID:</strong> ${crypto.randomBytes(8).toString('hex')}</p>
+                </div>
+
+                <div class="details-box">
+                    <h3 style="color: #10b981; margin-top: 0;">User Details:</h3>
+                    ${Object.entries(sanitizedData).map(([key, value]) => 
+                      `<p><strong>${key}:</strong> ${value}</p>`
+                    ).join('')}
+                </div>
+
+                <a href="https://admin.maiyahospital.com" class="button">View in Dashboard</a>
+            </div>
+            
+            <div class="footer">
+                <p><strong>Maiya Multi Speciality Hospital - Admin Notification</strong></p>
+                <p>This is an automated message. Please do not reply to this email.</p>
+            </div>
         </div>
-        
-        <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
-            <p>Maiya Multi Speciality Hospital<br>
-            Admin Notification System</p>
-        </div>
-    </div>
-</body>
-</html>
-`;
+    </body>
+    </html>
+  `;
 };
 
-// Main email service functions
+// Email service setup
+const createSecureTransport = () => {
+  return nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: process.env.EMAIL_PORT || 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    },
+    tls: {
+      rejectUnauthorized: true,
+      ciphers: 'SSLv3'
+    }
+  });
+};
+
+// Main email sending functions
 const sendUserConfirmation = async (data, formType) => {
   try {
     const userEmail = data.email || data.patientEmail;
@@ -372,31 +278,16 @@ const sendUserConfirmation = async (data, formType) => {
       throw new Error('Invalid user email address');
     }
     
-    let emailHtml;
-    let subject;
+    const emailHtml = generateSecureAppointmentConfirmationEmail(data);
+    const subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Request Confirmation - Maiya Hospital`;
     
-    switch (formType) {
-      case 'appointment':
-        emailHtml = generateSecureAppointmentConfirmationEmail(data);
-        subject = 'Appointment Request Confirmation - Maiya Hospital';
-        break;
-      case 'contact':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Message Received - Maiya Hospital';
-        break;
-      case 'consultation':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Virtual Consultation Request Confirmation - Maiya Hospital';
-        break;
-      case 'assessment':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Health Assessment Submission Confirmation - Maiya Hospital';
-        break;
-      default:
-        throw new Error('Invalid form type');
-    }
-    
-    await sendSecureEmail([userEmail], subject, emailHtml);
+    const transporter = createSecureTransport();
+    await transporter.sendMail({
+      from: `"Maiya Hospital" <${process.env.EMAIL_USER}>`,
+      to: userEmail,
+      subject: subject,
+      html: emailHtml
+    });
     
   } catch (error) {
     console.error('Error sending user confirmation:', error.message);
@@ -415,7 +306,13 @@ const sendAdminNotification = async (data, formType) => {
     const emailHtml = generateSecureAdminNotification(data, formType);
     const subject = `New ${formType} Submission - Maiya Hospital`;
     
-    await sendSecureEmail([adminEmail], subject, emailHtml);
+    const transporter = createSecureTransport();
+    await transporter.sendMail({
+      from: `"Maiya Hospital System" <${process.env.EMAIL_USER}>`,
+      to: adminEmail,
+      subject: subject,
+      html: emailHtml
+    });
     
   } catch (error) {
     console.error('Error sending admin notification:', error.message);
@@ -423,44 +320,9 @@ const sendAdminNotification = async (data, formType) => {
   }
 };
 
-// Security monitoring
-const getEmailStats = () => {
-  const stats = {
-    totalEmails: 0,
-    rateLimitedEmails: 0,
-    blockedEmails: 0,
-    activeConnections: 0
-  };
-  
-  emailCounts.forEach((counts, email) => {
-    stats.totalEmails += counts.daily.length;
-  });
-  
-  return stats;
-};
-
-// Clean up old rate limit data (run periodically)
-const cleanupRateLimits = () => {
-  const now = Date.now();
-  const dayAgo = now - 24 * 60 * 60 * 1000;
-  
-  emailCounts.forEach((counts, email) => {
-    counts.daily = counts.daily.filter(time => time > dayAgo);
-    if (counts.daily.length === 0 && counts.hourly.length === 0) {
-      emailCounts.delete(email);
-    }
-  });
-};
-
-// Run cleanup every hour
-setInterval(cleanupRateLimits, 60 * 60 * 1000);
-
 module.exports = {
   sendUserConfirmation,
   sendAdminNotification,
-  sendSecureEmail,
   validateEmail,
-  sanitizeInput,
-  getEmailStats,
-  SECURITY_CONFIG
-}; 
+  sanitizeInput
+};
