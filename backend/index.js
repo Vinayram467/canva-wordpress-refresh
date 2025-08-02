@@ -211,12 +211,8 @@ app.use('/api/assessments', validateFormInput);
 // MongoDB Connection with security
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/maiya-hospital';
 const dbOptions = isProduction ? config.database.options : {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  bufferMaxEntries: 0,
-  bufferCommands: false
+  socketTimeoutMS: 45000
 };
 
 mongoose.connect(MONGODB_URI, dbOptions)
