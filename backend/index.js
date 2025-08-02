@@ -149,87 +149,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Input validation middleware
-const validateFormInput = (req, res, next) => {
-  try {
-    // Check request size
-    if (req.headers['content-length'] && 
-        parseInt(req.headers['content-length']) > 1024 * 1024) {
-      return res.status(413).json({ error: 'Request too large' });
-    }
-    
-    // Check number of fields
-    const fieldCount = Object.keys(req.body).length;
-    if (fieldCount > 50) {
-      return res.status(400).json({ error: 'Too many form fields' });
-    }
-    
-    // Sanitize all input fields
-    const sanitizedBody = {};
-    for (const [key, value] of Object.entries(req.body)) {
-      if (typeof value === 'string') {
-        // Remove potentially dangerous content
-        let sanitized = value
-          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-          .replace(/javascript:/gi, '')
-          .replace(/vbscript:/gi, '')
-          .replace(/data:/gi, '')
-          .replace(/on\w+\s*=/gi, '')
-          .replace(/eval\s*\(/gi, '')
-          .replace(/expression\s*\(/gi, '')
-          .replace(/<iframe/gi, '')
-          .replace(/<object/gi, '')
-          .replace(/<embed/gi, '')
-          .trim();
-        
-        // Limit length
-        if (sanitized.length > 1000) {
-          sanitized = sanitized.substring(0, 1000) + '...';
-        }
-        
-        sanitizedBody[key] = sanitized;
-        
-        // Check for blocked content
-        const blockedWords = ['script', 'javascript:', 'onload', 'onerror', 'eval', 'expression', 'vbscript:', 'data:'];
-        const lowerValue = value.toLowerCase();
-        if (blockedWords.some(word => lowerValue.includes(word))) {
-          return res.status(400).json({ error: 'Input contains blocked content' });
-        }
-      } else {
-        sanitizedBody[key] = value;
-      }
-    }
-    
-    // Validate email fields
-    const emailFields = ['email', 'patientEmail', 'userEmail'];
-    const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
-    
-    for (const field of emailFields) {
-      if (sanitizedBody[field]) {
-        const email = sanitizedBody[field];
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        if (!emailRegex.test(email)) {
-          return res.status(400).json({ error: `Invalid email format in ${field}` });
-        }
-        
-        const domain = email.split('@')[1];
-        if (!allowedDomains.includes(domain)) {
-          return res.status(400).json({ error: `Email domain not allowed in ${field}` });
-        }
-      }
-    }
-    
-    // Replace request body with sanitized data
-    req.body = sanitizedBody;
-    next();
-    
-  } catch (error) {
-    console.error('Input validation error:', error);
-    return res.status(400).json({ error: 'Invalid input data' });
-  }
-};
-
 // Apply input validation to form routes
 app.use('/api/appointments', validateFormInput);
 app.use('/api/messages', validateFormInput);
@@ -270,7 +189,6 @@ const testimonialsRouter = require('./routes/testimonials');
 const faqsRouter = require('./routes/faqs');
 const usersRouter = require('./routes/users');
 const healthNewsRouter = require('./routes/healthNews');
-const testEmailRouter = require('./routes/test-email');
 
 // Use routes
 console.log('🔗 Setting up API routes...');
@@ -286,7 +204,6 @@ app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/faqs', faqsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
-app.use('/api/test-email', testEmailRouter);
 console.log('✅ All API routes configured');
 
 // Security monitoring
