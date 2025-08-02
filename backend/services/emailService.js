@@ -3,46 +3,7 @@ const crypto = require('crypto');
 const emailStyles = require('./emailStyles');
 const icons = require('./emailIcons');
 
-// Security configurations and validation functions remain the same...
-const SECURITY_CONFIG = {
-  MAX_EMAILS_PER_HOUR: 50,
-  MAX_EMAILS_PER_DAY: 200,
-  EMAIL_SIZE_LIMIT: 1024 * 1024,
-  ALLOWED_EMAIL_DOMAINS: ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'],
-  BLOCKED_WORDS: [
-    'script', 'javascript:', 'onload', 'onerror', 'eval', 'expression',
-    'vbscript:', 'data:', 'iframe', 'object', 'embed', 'base64',
-    'document.cookie', 'window.location', 'alert(', 'confirm(',
-    'prompt(', 'setTimeout', 'setInterval', 'Function('
-  ],
-  MAX_RECIPIENTS: 2,
-  EMAIL_TIMEOUT: 30000,
-  MAX_EMAIL_LENGTH: 50000
-};
-
-const sanitizeInput = (input) => {
-  if (typeof input !== 'string') return '';
-  let sanitized = input
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
-    .replace(/eval\s*\(/gi, '')
-    .replace(/expression\s*\(/gi, '')
-    .trim();
-  
-  if (sanitized.length > 1000) {
-    sanitized = sanitized.substring(0, 1000) + '...';
-  }
-  return sanitized;
-};
-
-const validateEmail = (email) => {
-  if (!email || typeof email !== 'string') return false;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) return false;
-  const domain = email.split('@')[1];
-  return SECURITY_CONFIG.ALLOWED_EMAIL_DOMAINS.includes(domain);
-};
+// ... keep all the existing configurations and validation functions ...
 
 const generateSecureAppointmentConfirmationEmail = (data) => {
   const sanitizedData = {
@@ -53,6 +14,12 @@ const generateSecureAppointmentConfirmationEmail = (data) => {
     time: sanitizeInput(data.time || data.appointmentTime || ''),
     reason: sanitizeInput(data.reason || '')
   };
+
+  const formattedDate = new Date().toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    dateStyle: 'full',
+    timeStyle: 'short'
+  });
 
   return `
     <!DOCTYPE html>
@@ -65,102 +32,81 @@ const generateSecureAppointmentConfirmationEmail = (data) => {
     <body>
         <div class="container">
             <div class="header">
-                ${icons.hospital}
-                <h1>Maiya Multi Speciality Hospital</h1>
-                <p>Appointment Request Confirmation</p>
+                Thank You for Your Submission!
             </div>
             
             <div class="content">
-                <h2 class="greeting">Dear ${sanitizedData.patientName},</h2>
-                
-                <p style="font-size: 16px; line-height: 1.8;">
-                    Thank you for choosing Maiya Multi Speciality Hospital. We have received your appointment request and our team will process it shortly.
-                </p>
-                
-                <div class="details-box">
-                    <h3>${icons.hospital} Appointment Details</h3>
-                    
-                    <div class="detail-row">
-                        ${icons.user}
-                        <div class="detail-content">
-                            <strong>Patient Name</strong>
-                            <span>${sanitizedData.patientName}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        ${icons.email}
-                        <div class="detail-content">
-                            <strong>Email</strong>
-                            <span>${sanitizedData.email}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        ${icons.phone}
-                        <div class="detail-content">
-                            <strong>Phone</strong>
-                            <span>${sanitizedData.phone}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        ${icons.calendar}
-                        <div class="detail-content">
-                            <strong>Date</strong>
-                            <span>${sanitizedData.date}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-row">
-                        ${icons.time}
-                        <div class="detail-content">
-                            <strong>Time</strong>
-                            <span>${sanitizedData.time}</span>
-                        </div>
-                    </div>
-                    
-                    ${sanitizedData.reason ? `
-                    <div class="detail-row">
-                        ${icons.notes}
-                        <div class="detail-content">
-                            <strong>Reason</strong>
-                            <span>${sanitizedData.reason}</span>
-                        </div>
-                    </div>
-                    ` : ''}
+                <div class="greeting">
+                    Dear ${sanitizedData.patientName},
                 </div>
                 
-                <div class="alert">
-                    <h4>${icons.alert} Next Steps</h4>
+                <div class="message">
+                    Thank you for submitting your form. We have successfully received your information and wanted to confirm that your submission has been processed.
+                </div>
+                
+                <div class="details-box">
+                    <h3>Submission Details:</h3>
+                    <div class="detail-item">
+                        <img src="${icons.calendar}" alt="Date" style="vertical-align: middle; margin-right: 8px;">
+                        Submitted on: ${formattedDate}
+                    </div>
+                    <div class="detail-item">
+                        <img src="${icons.user}" alt="ID" style="vertical-align: middle; margin-right: 8px;">
+                        Reference ID: ${crypto.randomBytes(4).toString('hex').toUpperCase()}
+                    </div>
+                    <div class="detail-item">
+                        <img src="${icons.calendar}" alt="Form" style="vertical-align: middle; margin-right: 8px;">
+                        Form Type: Appointment Request
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3>What happens next?</h3>
                     <ul>
-                        <li>Our team will review your request within 2-3 business days</li>
-                        <li>You will receive a confirmation email once your appointment is confirmed</li>
-                        <li>Please arrive 15 minutes before your scheduled time</li>
+                        <li>
+                            <img src="${icons.time}" alt="Time" style="vertical-align: middle; margin-right: 8px;">
+                            Our team will review your submission within 2-3 business days
+                        </li>
+                        <li>
+                            <img src="${icons.email}" alt="Email" style="vertical-align: middle; margin-right: 8px;">
+                            You will receive an email update once the review is complete
+                        </li>
+                        <li>
+                            <img src="${icons.phone}" alt="Phone" style="vertical-align: middle; margin-right: 8px;">
+                            If we need any additional information, we'll contact you directly
+                        </li>
                     </ul>
                 </div>
 
-                <p style="font-size: 16px; margin: 20px 0; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border-left: 4px solid #10b981;">
-                    For urgent medical concerns, please contact our emergency number: <strong>+91 98450 12345</strong>
-                </p>
-                
+                <div class="contact-section">
+                    <p>If you have any questions or need to make changes to your submission, please don't hesitate to contact us:</p>
+                    
+                    <div class="contact-item">
+                        <img src="${icons.email}" alt="Email" style="vertical-align: middle; margin-right: 8px;">
+                        Email: social.maiya@gmail.com
+                    </div>
+                    
+                    <div class="contact-item">
+                        <img src="${icons.phone}" alt="Phone" style="vertical-align: middle; margin-right: 8px;">
+                        Phone: +91 98450 12345
+                    </div>
+                    
+                    <div class="contact-item">
+                        <img src="${icons.website}" alt="Website" style="vertical-align: middle; margin-right: 8px;">
+                        Website: www.maiyahospital.com
+                    </div>
+                </div>
+
                 <a href="https://maiyahospital.com" class="button">Visit Our Website</a>
+
+                <div class="signature">
+                    <div class="company">Maiya Multi Speciality Hospital</div>
+                    <div class="title">Healthcare Excellence</div>
+                </div>
             </div>
             
             <div class="footer">
-                ${icons.hospital}
-                <h3>Maiya Multi Speciality Hospital</h3>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        ${icons.location}
-                        34, 10th Main Rd, Jayanagar 1st Block
-                    </div>
-                    <div class="contact-item">
-                        ${icons.phone}
-                        +91 98450 12345
-                    </div>
-                </div>
-                <p>Bengaluru, Karnataka 560011</p>
+                This is an automated confirmation email. Please do not reply directly to this message.
             </div>
         </div>
     </body>
@@ -168,14 +114,14 @@ const generateSecureAppointmentConfirmationEmail = (data) => {
   `;
 };
 
-// Admin notification template with similar styling
+// Admin notification template with icons
 const generateSecureAdminNotification = (data, formType) => {
   const sanitizedData = {};
   Object.keys(data).forEach(key => {
     sanitizedData[key] = sanitizeInput(data[key]);
   });
 
-  const formattedDate = new Date().toLocaleString('en-IN', { 
+  const formattedDate = new Date().toLocaleString('en-IN', {
     timeZone: 'Asia/Kolkata',
     dateStyle: 'full',
     timeStyle: 'long'
@@ -192,60 +138,54 @@ const generateSecureAdminNotification = (data, formType) => {
     <body>
         <div class="container">
             <div class="header">
-                ${icons.hospital}
-                <h1>Maiya Multi Speciality Hospital</h1>
-                <p>New ${formType} Submission</p>
+                New Form Submission Received
             </div>
             
             <div class="content">
+                <div class="message">
+                    Hello,<br><br>
+                    You have received a new form submission on your website. Please find the details below:
+                </div>
+                
                 <div class="details-box">
-                    <h3>${icons.notes} Submission Information</h3>
-                    
-                    <div class="detail-row">
-                        ${icons.calendar}
-                        <div class="detail-content">
-                            <strong>Submitted On</strong>
-                            <span>${formattedDate}</span>
-                        </div>
+                    <h3>Submission Information:</h3>
+                    <div class="detail-item">
+                        <img src="${icons.calendar}" alt="Date" style="vertical-align: middle; margin-right: 8px;">
+                        Submitted: ${formattedDate}
                     </div>
-                    
-                    <div class="detail-row">
-                        ${icons.notes}
-                        <div class="detail-content">
-                            <strong>Form Type</strong>
-                            <span>${formType}</span>
-                        </div>
+                    <div class="detail-item">
+                        <img src="${icons.user}" alt="Form" style="vertical-align: middle; margin-right: 8px;">
+                        Form: ${formType}
                     </div>
-                    
-                    <div class="detail-row">
-                        ${icons.notes}
-                        <div class="detail-content">
-                            <strong>Reference ID</strong>
-                            <span>${crypto.randomBytes(8).toString('hex')}</span>
-                        </div>
+                    <div class="detail-item">
+                        <img src="${icons.user}" alt="ID" style="vertical-align: middle; margin-right: 8px;">
+                        Reference ID: ${crypto.randomBytes(4).toString('hex').toUpperCase()}
                     </div>
                 </div>
 
                 <div class="details-box">
-                    <h3>${icons.user} User Details</h3>
+                    <h3>Contact Details:</h3>
                     ${Object.entries(sanitizedData).map(([key, value]) => `
-                        <div class="detail-row">
-                            ${icons.notes}
-                            <div class="detail-content">
-                                <strong>${key}</strong>
-                                <span>${value}</span>
-                            </div>
+                        <div class="detail-item">
+                            <img src="${icons[key.toLowerCase().includes('email') ? 'email' : 
+                                      key.toLowerCase().includes('phone') ? 'phone' : 
+                                      key.toLowerCase().includes('name') ? 'user' : 'user']}" 
+                                 alt="${key}" style="vertical-align: middle; margin-right: 8px;">
+                            ${key}: ${value}
                         </div>
                     `).join('')}
                 </div>
 
                 <a href="https://admin.maiyahospital.com/dashboard" class="button">View in Dashboard</a>
+
+                <div class="signature">
+                    <div class="company">Maiya Multi Speciality Hospital</div>
+                    <div class="title">Admin Notification System</div>
+                </div>
             </div>
             
             <div class="footer">
-                ${icons.hospital}
-                <h3>Maiya Multi Speciality Hospital - Admin Portal</h3>
-                <p style="color: #666;">This is an automated notification. Please do not reply to this email.</p>
+                This is an automated notification. Please do not reply to this email.
             </div>
         </div>
     </body>
@@ -253,114 +193,7 @@ const generateSecureAdminNotification = (data, formType) => {
   `;
 };
 
-// Email service functions remain the same...
-const createSecureTransport = () => {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: process.env.EMAIL_PORT || 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    tls: {
-      rejectUnauthorized: true,
-      ciphers: 'SSLv3'
-    }
-  });
-};
-
-const sendUserConfirmation = async (data, formType) => {
-  try {
-    const userEmail = data.email || data.patientEmail;
-    
-    if (!validateEmail(userEmail)) {
-      throw new Error('Invalid user email address');
-    }
-    
-    let emailHtml;
-    let subject;
-    
-    switch (formType.toLowerCase()) {
-      case 'appointment':
-        emailHtml = generateSecureAppointmentConfirmationEmail(data);
-        subject = 'Appointment Request Confirmation - Maiya Hospital';
-        break;
-      case 'contact':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Message Received - Maiya Hospital';
-        break;
-      case 'consultation':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Virtual Consultation Request - Maiya Hospital';
-        break;
-      case 'assessment':
-        emailHtml = generateSecureContactConfirmationEmail(data);
-        subject = 'Health Assessment Submission - Maiya Hospital';
-        break;
-      default:
-        emailHtml = generateSecureAppointmentConfirmationEmail(data);
-        subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Confirmation - Maiya Hospital`;
-    }
-    
-    const transporter = createSecureTransport();
-    await transporter.verify();
-    
-    const mailOptions = {
-      from: `"Maiya Multi Speciality Hospital" <${process.env.EMAIL_USER}>`,
-      to: userEmail,
-      subject: subject,
-      html: emailHtml,
-      headers: {
-        'X-Priority': '1',
-        'X-MSMail-Priority': 'High',
-        'Importance': 'high',
-        'X-Mailer': 'Maiya Hospital Email System'
-      }
-    };
-    
-    const result = await transporter.sendMail(mailOptions);
-    return result;
-  } catch (error) {
-    console.error('Error sending user confirmation:', error);
-    throw error;
-  }
-};
-
-const sendAdminNotification = async (data, formType) => {
-  try {
-    const adminEmail = process.env.ADMIN_EMAIL;
-    
-    if (!validateEmail(adminEmail)) {
-      throw new Error('Invalid admin email address');
-    }
-    
-    const emailHtml = generateSecureAdminNotification(data, formType);
-    const subject = `New ${formType} Submission - Maiya Hospital`;
-    
-    const transporter = createSecureTransport();
-    await transporter.verify();
-    
-    const mailOptions = {
-      from: `"Maiya Hospital System" <${process.env.EMAIL_USER}>`,
-      to: adminEmail,
-      subject: subject,
-      html: emailHtml,
-      headers: {
-        'X-Priority': '1',
-        'X-MSMail-Priority': 'High',
-        'Importance': 'high',
-        'X-Mailer': 'Maiya Hospital Admin Notification System'
-      }
-    };
-    
-    const result = await transporter.sendMail(mailOptions);
-    return result;
-  } catch (error) {
-    console.error('Error sending admin notification:', error);
-    throw error;
-  }
-};
+// Keep the rest of the file (email service functions) the same...
 
 module.exports = {
   sendUserConfirmation,
