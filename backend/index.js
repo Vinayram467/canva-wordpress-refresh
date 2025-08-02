@@ -229,9 +229,19 @@ const dbOptions = isProduction ? config.database.options : {
   socketTimeoutMS: 45000
 };
 
+console.log('🔗 Connecting to MongoDB...');
+console.log('📊 Environment:', process.env.NODE_ENV || 'development');
+console.log('🌐 MongoDB URI:', MONGODB_URI ? 'Set' : 'Not set');
+
 mongoose.connect(MONGODB_URI, dbOptions)
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => {
+  console.log('✅ Connected to MongoDB successfully');
+  console.log('📊 Database:', mongoose.connection.name);
+})
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err);
+  console.error('🔧 Please check your MONGODB_URI environment variable');
+});
 
 // Import routes
 const blogsRouter = require('./routes/blogs');
@@ -249,6 +259,7 @@ const healthNewsRouter = require('./routes/healthNews');
 const testEmailRouter = require('./routes/test-email');
 
 // Use routes
+console.log('🔗 Setting up API routes...');
 app.use('/api/blogs', blogsRouter);
 app.use('/api/doctors', doctorsRouter);
 app.use('/api/events', eventsRouter);
@@ -262,6 +273,7 @@ app.use('/api/faqs', faqsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
 app.use('/api/test-email', testEmailRouter);
+console.log('✅ All API routes configured');
 
 // Security monitoring
 const securityMonitor = {
@@ -284,10 +296,12 @@ const securityMonitor = {
 
 // Health check endpoint with security info
 app.get('/api/health', (req, res) => {
+  console.log('🏥 Health check requested');
   res.json({ 
     status: 'OK', 
     message: 'Maiya Hospital API is running securely',
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
     security: {
       blockedRequests: securityMonitor.blockedRequests,
       rateLimitedRequests: securityMonitor.rateLimitedRequests,
@@ -304,6 +318,23 @@ app.get('/api/security/stats', (req, res) => {
       blockedRequests: securityMonitor.blockedRequests,
       rateLimitedRequests: securityMonitor.rateLimitedRequests,
       suspiciousActivities: securityMonitor.suspiciousActivities.length
+    }
+  });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Maiya Hospital API is running',
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      test: '/test',
+      appointments: '/api/appointments',
+      messages: '/api/messages',
+      consultations: '/api/consultations',
+      assessments: '/api/assessments'
     }
   });
 });
@@ -346,4 +377,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   - Request logging`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🔍 Security stats: http://localhost:${PORT}/api/security/stats`);
+  console.log(`🌐 Root endpoint: http://localhost:${PORT}/`);
+  console.log(`✅ Server ready to accept requests`);
 }); 
