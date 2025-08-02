@@ -14,10 +14,17 @@ const {
   emailLimiter,
   helmetConfig,
   requestLogger,
-  errorHandler,
   securityMonitor,
   SECURITY_CONFIG
 } = require('./security/securityMiddleware');
+
+// Import error handling
+const {
+  errorHandler,
+  asyncHandler,
+  AppError,
+  ErrorTypes
+} = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -35,12 +42,15 @@ app.use(requestLogger);
 app.use('/api/', apiLimiter);
 app.use(['/api/appointments', '/api/messages', '/api/consultations', '/api/assessments'], emailLimiter);
 
-// MongoDB Connection
+// MongoDB Connection with better error handling
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  console.error('❌ MONGODB_URI is not defined in environment variables');
-  process.exit(1);
+  throw new AppError(
+    ErrorTypes.DATABASE_ERROR,
+    'MONGODB_URI is not defined in environment variables',
+    500
+  );
 }
 
 console.log('🔗 Connecting to MongoDB...');
@@ -56,8 +66,12 @@ mongoose.connect(MONGODB_URI, {
   console.log('📊 Database:', mongoose.connection.name);
 })
 .catch(err => {
-  console.error('❌ MongoDB connection error:', err);
-  process.exit(1);
+  throw new AppError(
+    ErrorTypes.DATABASE_ERROR,
+    'Failed to connect to MongoDB',
+    503,
+    err
+  );
 });
 
 // Import routes
@@ -90,39 +104,61 @@ app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
 console.log('✅ All API routes configured');
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check endpoint with error handling
+app.get('/api/health', asyncHandler(async (req, res) => {
+  // Check MongoDB connection
+  if (mongoose.connection.readyState !== 1) {
+    throw new AppError(
+      ErrorTypes.DATABASE_ERROR,
+      'MongoDB connection is not ready',
+      503
+    );
+  }
+
   res.json({
     status: 'OK',
     message: 'Maiya Hospital API is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
+    database: {
+      status: 'connected',
+      name: mongoose.connection.name
+    },
     security: {
       blockedRequests: securityMonitor.blockedRequests,
       rateLimitedRequests: securityMonitor.rateLimitedRequests,
       suspiciousActivities: securityMonitor.suspiciousActivities.length
     }
   });
-});
+}));
 
-// Root endpoint
-app.get('/', (req, res) => {
+// Root endpoint with error handling
+app.get('/', asyncHandler(async (req, res) => {
   res.json({
     message: 'Maiya Hospital API',
     status: 'Running',
     timestamp: new Date().toISOString(),
     docs: '/api/docs'
   });
+}));
+
+// 404 handler
+app.use((req, res, next) => {
+  next(new AppError(
+    ErrorTypes.NOT_FOUND_ERROR,
+    `Route ${req.method} ${req.url} not found`,
+    404
+  ));
 });
 
-// Error handling
+// Error handling middleware
 app.use(errorHandler);
 
-// Start server
+// Start server with error handling
 const PORT = process.env.PORT || 3001;
 const HOST = '0.0.0.0';
 
-app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, HOST, () => {
   console.log(`
 🚀 Server running on port ${PORT}
 🌍 Environment: ${process.env.NODE_ENV || 'development'}
@@ -136,4 +172,18 @@ app.listen(PORT, HOST, () => {
 📊 Health check: http://localhost:${PORT}/api/health
 🌐 Root endpoint: http://localhost:${PORT}/
   `);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Promise Rejection:', err);
+  // Close server & exit process
+  server.close(() => process.exit(1));
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Close server & exit process
+  server.close(() => process.exit(1));
 });
