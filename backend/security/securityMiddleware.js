@@ -1,6 +1,7 @@
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
+const { ipKeyGenerator } = require('express-rate-limit');
 
 // Security configurations
 const SECURITY_CONFIG = {
@@ -30,13 +31,9 @@ const SECURITY_CONFIG = {
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-
-    if (process.env.NODE_ENV === 'development') {
+    if (!origin || process.env.NODE_ENV === 'development') {
       return callback(null, true);
     }
-
     if (SECURITY_CONFIG.ALLOWED_ORIGINS.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -47,17 +44,17 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  maxAge: 600 // 10 minutes
+  maxAge: 600
 };
 
-// Rate limiting configuration
+// Rate limiting configuration with proper IP handling
 const apiLimiter = rateLimit({
   windowMs: SECURITY_CONFIG.RATE_LIMIT.WINDOW_MS,
   max: SECURITY_CONFIG.RATE_LIMIT.MAX_REQUESTS,
   message: { error: SECURITY_CONFIG.RATE_LIMIT.MESSAGE },
   standardHeaders: SECURITY_CONFIG.RATE_LIMIT.STANDARDIZE_HEADERS,
   legacyHeaders: SECURITY_CONFIG.RATE_LIMIT.LEGACY_HEADERS,
-  trustProxy: true // Enable trust proxy
+  keyGenerator: (req) => ipKeyGenerator(req, { ipv6: true })
 });
 
 const emailLimiter = rateLimit({
@@ -66,14 +63,10 @@ const emailLimiter = rateLimit({
   message: { error: SECURITY_CONFIG.EMAIL_RATE_LIMIT.MESSAGE },
   standardHeaders: true,
   legacyHeaders: false,
-  trustProxy: true, // Enable trust proxy
-  keyGenerator: function (req) {
-    // Use X-Forwarded-For header if available, otherwise use IP
-    return req.headers['x-forwarded-for'] || req.ip;
-  }
+  keyGenerator: (req) => ipKeyGenerator(req, { ipv6: true })
 });
 
-// Helmet configuration for security headers
+// Helmet configuration
 const helmetConfig = {
   contentSecurityPolicy: {
     directives: {
@@ -111,14 +104,6 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-// Error handling middleware
-const errorHandler = (err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
-  });
-};
-
 // Security monitoring
 const securityMonitor = {
   blockedRequests: 0,
@@ -130,7 +115,7 @@ const securityMonitor = {
     this.blockedRequests++;
     this.suspiciousActivities.push({
       timestamp: new Date().toISOString(),
-      ip: req.ip,
+      ip: ipKeyGenerator(req, { ipv6: true }),
       url: req.url,
       reason: reason
     });
@@ -144,7 +129,7 @@ const securityMonitor = {
     return {
       blockedRequests: this.blockedRequests,
       rateLimitedRequests: this.rateLimitedRequests,
-      suspiciousActivities: this.suspiciousActivities.slice(-100), // Keep last 100 activities
+      suspiciousActivities: this.suspiciousActivities.slice(-100),
       uptime: Date.now() - this.lastReset
     };
   },
@@ -157,6 +142,15 @@ const securityMonitor = {
   }
 };
 
+// Email validation function
+const validateEmail = (email) => {
+  if (!email || typeof email !== 'string') {
+    return false;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 // Export middleware and configurations
 module.exports = {
   corsOptions,
@@ -164,7 +158,7 @@ module.exports = {
   emailLimiter,
   helmetConfig,
   requestLogger,
-  errorHandler,
   securityMonitor,
-  SECURITY_CONFIG
+  SECURITY_CONFIG,
+  validateEmail
 };
