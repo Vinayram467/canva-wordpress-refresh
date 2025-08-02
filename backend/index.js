@@ -319,10 +319,9 @@ app.use('*', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3001;
-const HOST = isProduction ? config.server.host : 'localhost';
 
-app.listen(PORT, HOST, () => {
-  console.log(`🚀 Server running securely on ${HOST}:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running securely on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔒 Security features enabled:`);
   console.log(`   - Rate limiting`);
@@ -331,6 +330,6 @@ app.listen(PORT, HOST, () => {
   console.log(`   - CORS protection`);
   console.log(`   - Security headers`);
   console.log(`   - Request logging`);
-  console.log(`📊 Health check: http://${HOST}:${PORT}/api/health`);
-  console.log(`🔍 Security stats: http://${HOST}:${PORT}/api/security/stats`);
+  console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`🔍 Security stats: http://localhost:${PORT}/api/security/stats`);
 }); 
