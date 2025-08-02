@@ -278,19 +278,65 @@ const sendUserConfirmation = async (data, formType) => {
       throw new Error('Invalid user email address');
     }
     
-    const emailHtml = generateSecureAppointmentConfirmationEmail(data);
-    const subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Request Confirmation - Maiya Hospital`;
+    let emailHtml;
+    let subject;
+    
+    switch (formType.toLowerCase()) {
+      case 'appointment':
+        emailHtml = generateSecureAppointmentConfirmationEmail(data);
+        subject = 'Appointment Request Confirmation - Maiya Hospital';
+        break;
+      case 'contact':
+        emailHtml = generateSecureContactConfirmationEmail(data);
+        subject = 'Message Received - Maiya Hospital';
+        break;
+      case 'consultation':
+        emailHtml = generateSecureContactConfirmationEmail(data);
+        subject = 'Virtual Consultation Request - Maiya Hospital';
+        break;
+      case 'assessment':
+        emailHtml = generateSecureContactConfirmationEmail(data);
+        subject = 'Health Assessment Submission - Maiya Hospital';
+        break;
+      default:
+        emailHtml = generateSecureAppointmentConfirmationEmail(data);
+        subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Confirmation - Maiya Hospital`;
+    }
+    
+    console.log('Sending email to:', userEmail);
+    console.log('Email subject:', subject);
+    console.log('Form type:', formType);
     
     const transporter = createSecureTransport();
-    await transporter.sendMail({
-      from: `"Maiya Hospital" <${process.env.EMAIL_USER}>`,
+    await transporter.verify();
+    console.log('Transporter verified successfully');
+    
+    const mailOptions = {
+      from: `"Maiya Multi Speciality Hospital" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: subject,
-      html: emailHtml
+      html: emailHtml,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        'Importance': 'high',
+        'X-Mailer': 'Maiya Hospital Email System'
+      }
+    };
+    
+    console.log('Sending mail with options:', {
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      from: mailOptions.from
     });
     
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully:', result.messageId);
+    
+    return result;
   } catch (error) {
-    console.error('Error sending user confirmation:', error.message);
+    console.error('Error sending user confirmation:', error);
+    console.error('Error details:', error.message);
     throw error;
   }
 };
@@ -298,6 +344,7 @@ const sendUserConfirmation = async (data, formType) => {
 const sendAdminNotification = async (data, formType) => {
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
+    console.log('Admin email from env:', adminEmail);
     
     if (!validateEmail(adminEmail)) {
       throw new Error('Invalid admin email address');
@@ -306,16 +353,40 @@ const sendAdminNotification = async (data, formType) => {
     const emailHtml = generateSecureAdminNotification(data, formType);
     const subject = `New ${formType} Submission - Maiya Hospital`;
     
+    console.log('Sending admin notification to:', adminEmail);
+    console.log('Notification subject:', subject);
+    console.log('Form type:', formType);
+    
     const transporter = createSecureTransport();
-    await transporter.sendMail({
+    await transporter.verify();
+    console.log('Admin notification transporter verified');
+    
+    const mailOptions = {
       from: `"Maiya Hospital System" <${process.env.EMAIL_USER}>`,
       to: adminEmail,
       subject: subject,
-      html: emailHtml
+      html: emailHtml,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        'Importance': 'high',
+        'X-Mailer': 'Maiya Hospital Admin Notification System'
+      }
+    };
+    
+    console.log('Sending admin notification with options:', {
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      from: mailOptions.from
     });
     
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Admin notification sent successfully:', result.messageId);
+    
+    return result;
   } catch (error) {
-    console.error('Error sending admin notification:', error.message);
+    console.error('Error sending admin notification:', error);
+    console.error('Error details:', error.message);
     throw error;
   }
 };
