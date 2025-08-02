@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { messageApi } from "@/services/api";
 import { useState } from "react";
+import ApiTest from "@/components/ApiTest";
 
 const Contact = () => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
@@ -73,6 +74,11 @@ const Contact = () => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
+            {/* API Test Component */}
+            <div className="lg:col-span-2 mb-8">
+              <ApiTest />
+            </div>
+            
             {/* Contact Information */}
             <div className="space-y-8">
               <Card className="glass border border-white/80 shadow-2xl">

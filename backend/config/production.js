@@ -53,7 +53,9 @@ module.exports = {
       'https://maiyahospital.com',
       'https://www.maiyahospital.com',
       'https://your-frontend-domain.com',
-      'https://your-app-name.onrender.com'
+      'https://your-app-name.onrender.com',
+      'https://canva-wordpress-refresh.onrender.com',
+      'https://canva-wordpress-refresh-1.onrender.com'
     ]
   },
 

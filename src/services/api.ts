@@ -1,4 +1,6 @@
-const API_BASE_URL = 'https://canva-wordpress-refresh.onrender.com/api';
+import API_CONFIG from '@/config/api';
+
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
 export interface Blog {
   _id: string;
@@ -57,19 +59,34 @@ export interface Appointment {
 // Generic API functions
 const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
+  
+  console.log(`🌐 Making API call to: ${url}`);
+  console.log(`📤 Request data:`, options.body);
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
 
-  if (!response.ok) {
-    throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    console.log(`📥 Response status: ${response.status} ${response.statusText}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ API Error: ${response.status} ${response.statusText}`, errorText);
+      throw new Error(`API call failed: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log(`✅ API call successful:`, data);
+    return data;
+  } catch (error) {
+    console.error(`💥 API call error:`, error);
+    throw error;
   }
-
-  return response.json();
 };
 
 // Blog API functions
@@ -141,7 +158,16 @@ export const appointmentApi = {
 };
 
 // Health check
-export const healthCheck = () => apiCall('/health');
+export const healthCheck = async () => {
+  try {
+    const result = await apiCall('/health');
+    console.log('🏥 Health check successful:', result);
+    return result;
+  } catch (error) {
+    console.error('🏥 Health check failed:', error);
+    throw error;
+  }
+};
 
 export const assessmentApi = {
   create: (data: any) => apiCall('/assessments', {
