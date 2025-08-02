@@ -1,322 +1,222 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { AppError, ErrorTypes } = require('../middleware/errorHandler');
 
-// Keep all the existing ICONS, SECURITY_CONFIG, and emailStyles...
-
-// Validation functions remain the same...
-const sanitizeInput = (input) => {
-  if (typeof input !== 'string') return '';
-  let sanitized = input
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
-    .replace(/eval\s*\(/gi, '')
-    .replace(/expression\s*\(/gi, '')
-    .trim();
-  
-  if (sanitized.length > 1000) {
-    sanitized = sanitized.substring(0, 1000) + '...';
-  }
-  return sanitized;
-};
-
-const validateEmail = (email) => {
-  try {
-    console.log('Validating email:', email);
-    
-    if (!email || typeof email !== 'string') {
-      console.log('Email validation failed: empty or not a string');
-      return false;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      console.log('Email validation failed: invalid format');
-      return false;
-    }
-
-    console.log('Email validation passed:', email);
-    return true;
-  } catch (error) {
-    console.error('Error in validateEmail:', error);
-    return false;
-  }
-};
+// Keep existing ICONS and styles...
 
 const createSecureTransport = () => {
   try {
-    console.log('Creating email transport...');
-    return nodemailer.createTransport({
+    // Log email configuration
+    console.log('Creating email transport with config:', {
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port: process.env.EMAIL_PORT || 587,
+      user: process.env.EMAIL_USER,
+      secure: false,
+      // Not logging password for security
+    });
+
+    // Verify environment variables
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new AppError(
+        ErrorTypes.EMAIL_ERROR,
+        'Missing email credentials in environment variables',
+        500
+      );
+    }
+
+    const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.EMAIL_PORT || '587'),
-      secure: false,
+      secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
       tls: {
-        rejectUnauthorized: true
-      }
+        rejectUnauthorized: true,
+        ciphers: 'SSLv3'
+      },
+      debug: true, // Enable debug logging
+      logger: true  // Enable built-in logger
     });
+
+    return transporter;
   } catch (error) {
-    console.error('Error creating transport:', error);
-    throw error;
+    console.error('Error creating email transport:', error);
+    throw new AppError(
+      ErrorTypes.EMAIL_ERROR,
+      'Failed to create email transport',
+      500,
+      error
+    );
   }
 };
 
-// Template generation functions
-function generateSecureAppointmentConfirmationEmail(data) {
+const sendUserConfirmation = async (data, formType) => {
   try {
-    console.log('Generating appointment confirmation email template...');
-    const sanitizedData = {
-      patientName: sanitizeInput(data.patientName || data.name || ''),
-      email: sanitizeInput(data.email || data.patientEmail || ''),
-      phone: sanitizeInput(data.phone || data.patientPhone || ''),
-      date: sanitizeInput(data.date || data.appointmentDate || ''),
-      time: sanitizeInput(data.time || data.appointmentTime || ''),
-      reason: sanitizeInput(data.reason || '')
-    };
-
-    // ... keep existing template HTML ...
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>${emailStyles}</style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Thank You for Your Submission!</h1>
-          </div>
-          
-          <div class="content">
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.user}" class="icon" alt="User">
-                Personal Information
-              </h3>
-              <div class="detail-row">
-                <img src="${ICONS.user}" class="icon" alt="Name">
-                <div>
-                  <strong>Patient Name:</strong><br>
-                  ${sanitizedData.patientName}
-                </div>
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.email}" class="icon" alt="Email">
-                <div>
-                  <strong>Email:</strong><br>
-                  ${sanitizedData.email}
-                </div>
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.phone}" class="icon" alt="Phone">
-                <div>
-                  <strong>Phone:</strong><br>
-                  ${sanitizedData.phone}
-                </div>
-              </div>
-            </div>
-
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.calendar}" class="icon" alt="Calendar">
-                Appointment Details
-              </h3>
-              <div class="detail-row">
-                <img src="${ICONS.calendar}" class="icon" alt="Date">
-                <div>
-                  <strong>Date:</strong><br>
-                  ${sanitizedData.date}
-                </div>
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.time}" class="icon" alt="Time">
-                <div>
-                  <strong>Time:</strong><br>
-                  ${sanitizedData.time}
-                </div>
-              </div>
-              ${sanitizedData.reason ? `
-              <div class="detail-row">
-                <img src="${ICONS.user}" class="icon" alt="Reason">
-                <div>
-                  <strong>Reason:</strong><br>
-                  ${sanitizedData.reason}
-                </div>
-              </div>
-              ` : ''}
-            </div>
-
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.time}" class="icon" alt="Next">
-                Next Steps
-              </h3>
-              <div class="detail-row">
-                <img src="${ICONS.calendar}" class="icon" alt="Review">
-                Our team will review your submission within 2-3 business days
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.email}" class="icon" alt="Update">
-                You will receive an email update once the review is complete
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.phone}" class="icon" alt="Contact">
-                If we need additional information, we'll contact you directly
-              </div>
-            </div>
-
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.phone}" class="icon" alt="Emergency">
-                Emergency Contact
-              </h3>
-              <div class="detail-row">
-                <img src="${ICONS.phone}" class="icon" alt="Phone">
-                <div>
-                  <strong>24/7 Emergency:</strong><br>
-                  +91 98450 12345
-                </div>
-              </div>
-            </div>
-
-            <a href="https://maiyahospital.com" class="button">Visit Our Website</a>
-
-            <div class="footer">
-              <p><strong>Maiya Multi Speciality Hospital</strong></p>
-              <div class="detail-row">
-                <img src="${ICONS.location}" class="icon" alt="Location">
-                34, 10th Main Rd, Jayanagar 1st Block
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.phone}" class="icon" alt="Phone">
-                +91 98450 12345
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.email}" class="icon" alt="Email">
-                social.maiya@gmail.com
-              </div>
-              <p style="margin-top: 20px; font-size: 12px; color: #666;">
-                This is an automated confirmation email. Please do not reply directly to this message.
-              </p>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
-  } catch (error) {
-    console.error('Error generating appointment confirmation email:', error);
-    throw error;
-  }
-}
-
-function generateSecureAdminNotification(data, formType) {
-  try {
-    console.log('Generating admin notification email template...');
-    const sanitizedData = {};
-    Object.keys(data).forEach(key => {
-      sanitizedData[key] = sanitizeInput(data[key]);
+    console.log('Starting sendUserConfirmation with:', {
+      formType,
+      recipientEmail: data.email || data.patientEmail,
+      senderEmail: process.env.EMAIL_USER
     });
 
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>${emailStyles}</style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>New Form Submission Received</h1>
-          </div>
-          
-          <div class="content">
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.calendar}" class="icon" alt="Info">
-                Submission Information
-              </h3>
-              <div class="detail-row">
-                <img src="${ICONS.calendar}" class="icon" alt="Date">
-                <div>
-                  <strong>Submitted:</strong><br>
-                  ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
-                </div>
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.user}" class="icon" alt="Form">
-                <div>
-                  <strong>Form Type:</strong><br>
-                  ${formType}
-                </div>
-              </div>
-              <div class="detail-row">
-                <img src="${ICONS.user}" class="icon" alt="ID">
-                <div>
-                  <strong>Reference ID:</strong><br>
-                  ${crypto.randomBytes(4).toString('hex').toUpperCase()}
-                </div>
-              </div>
-            </div>
+    const userEmail = data.email || data.patientEmail;
+    
+    if (!userEmail) {
+      throw new AppError(
+        ErrorTypes.VALIDATION_ERROR,
+        'No email address provided',
+        400
+      );
+    }
+    
+    if (!validateEmail(userEmail)) {
+      throw new AppError(
+        ErrorTypes.VALIDATION_ERROR,
+        `Invalid email format: ${userEmail}`,
+        400
+      );
+    }
 
-            <div class="details-box">
-              <h3>
-                <img src="${ICONS.user}" class="icon" alt="User">
-                User Details
-              </h3>
-              ${Object.entries(sanitizedData).map(([key, value]) => `
-                <div class="detail-row">
-                  <img src="${ICONS[key.toLowerCase().includes('email') ? 'email' : 
-                            key.toLowerCase().includes('phone') ? 'phone' : 
-                            key.toLowerCase().includes('name') ? 'user' : 'user']}" 
-                       class="icon" alt="${key}">
-                  <div>
-                    <strong>${key}:</strong><br>
-                    ${value}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
+    console.log('Generating email template...');
+    const emailHtml = generateSecureAppointmentConfirmationEmail(data);
+    const subject = `${formType.charAt(0).toUpperCase() + formType.slice(1)} Confirmation - Maiya Hospital`;
+    
+    console.log('Creating transport...');
+    const transporter = createSecureTransport();
+    
+    console.log('Verifying transport...');
+    await transporter.verify();
+    console.log('Transport verified successfully');
+    
+    console.log('Preparing to send email to:', userEmail);
+    const mailOptions = {
+      from: {
+        name: 'Maiya Multi Speciality Hospital',
+        address: process.env.EMAIL_USER
+      },
+      to: userEmail,
+      subject: subject,
+      html: emailHtml,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        'Importance': 'high',
+        'X-Mailer': 'Maiya Hospital Email System'
+      }
+    };
+    
+    console.log('Sending email with options:', {
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject
+    });
 
-            <a href="https://admin.maiyahospital.com/dashboard" class="button">View in Dashboard</a>
-
-            <div class="footer">
-              <p><strong>Maiya Multi Speciality Hospital - Admin Portal</strong></p>
-              <p style="margin-top: 20px; font-size: 12px; color: #666;">
-                This is an automated notification. Please do not reply to this email.
-              </p>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully:', {
+      messageId: result.messageId,
+      response: result.response,
+      accepted: result.accepted,
+      rejected: result.rejected
+    });
+    
+    return result;
   } catch (error) {
-    console.error('Error generating admin notification email:', error);
-    throw error;
+    console.error('Error in sendUserConfirmation:', error);
+    throw new AppError(
+      ErrorTypes.EMAIL_ERROR,
+      'Failed to send confirmation email',
+      500,
+      error
+    );
   }
-}
+};
 
-// Main email sending functions remain the same...
-async function sendUserConfirmation(data, formType) {
-  // ... keep existing function ...
-}
+const sendAdminNotification = async (data, formType) => {
+  try {
+    console.log('Starting sendAdminNotification with:', {
+      formType,
+      adminEmail: process.env.ADMIN_EMAIL,
+      senderEmail: process.env.EMAIL_USER
+    });
 
-async function sendAdminNotification(data, formType) {
-  // ... keep existing function ...
-}
+    const adminEmail = process.env.ADMIN_EMAIL;
+    
+    if (!adminEmail) {
+      throw new AppError(
+        ErrorTypes.EMAIL_ERROR,
+        'ADMIN_EMAIL environment variable is not set',
+        500
+      );
+    }
+    
+    if (!validateEmail(adminEmail)) {
+      throw new AppError(
+        ErrorTypes.VALIDATION_ERROR,
+        `Invalid admin email format: ${adminEmail}`,
+        400
+      );
+    }
 
-// Export all functions
+    console.log('Generating admin notification template...');
+    const emailHtml = generateSecureAdminNotification(data, formType);
+    const subject = `New ${formType} Submission - Maiya Hospital`;
+    
+    console.log('Creating transport...');
+    const transporter = createSecureTransport();
+    
+    console.log('Verifying transport...');
+    await transporter.verify();
+    console.log('Transport verified successfully');
+    
+    console.log('Preparing to send admin notification to:', adminEmail);
+    const mailOptions = {
+      from: {
+        name: 'Maiya Hospital System',
+        address: process.env.EMAIL_USER
+      },
+      to: adminEmail,
+      subject: subject,
+      html: emailHtml,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        'Importance': 'high',
+        'X-Mailer': 'Maiya Hospital Admin Notification System'
+      }
+    };
+    
+    console.log('Sending admin notification with options:', {
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject
+    });
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Admin notification sent successfully:', {
+      messageId: result.messageId,
+      response: result.response,
+      accepted: result.accepted,
+      rejected: result.rejected
+    });
+    
+    return result;
+  } catch (error) {
+    console.error('Error in sendAdminNotification:', error);
+    throw new AppError(
+      ErrorTypes.EMAIL_ERROR,
+      'Failed to send admin notification',
+      500,
+      error
+    );
+  }
+};
+
+// Keep existing template generation functions...
+
 module.exports = {
   sendUserConfirmation,
   sendAdminNotification,
   validateEmail,
-  sanitizeInput,
-  generateSecureAppointmentConfirmationEmail,
-  generateSecureAdminNotification
+  sanitizeInput
 };

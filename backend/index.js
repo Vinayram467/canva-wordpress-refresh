@@ -23,7 +23,8 @@ const {
   errorHandler,
   asyncHandler,
   AppError,
-  ErrorTypes
+  ErrorTypes,
+  addRequestId
 } = require('./middleware/errorHandler');
 
 const app = express();
@@ -32,6 +33,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 // Basic middleware
+app.use(addRequestId); // Add request ID first
 app.use(helmet(helmetConfig));
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
@@ -87,6 +89,7 @@ const testimonialsRouter = require('./routes/testimonials');
 const faqsRouter = require('./routes/faqs');
 const usersRouter = require('./routes/users');
 const healthNewsRouter = require('./routes/healthNews');
+const testRouter = require('./routes/test');
 
 // Use routes
 console.log('🔗 Setting up API routes...');
@@ -102,6 +105,7 @@ app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/faqs', faqsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
+app.use('/api/test', testRouter);
 console.log('✅ All API routes configured');
 
 // Health check endpoint with error handling

@@ -1,3 +1,5 @@
+const { MongooseError } = require('mongoose');
+
 // Error types
 const ErrorTypes = {
   VALIDATION_ERROR: 'ValidationError',
@@ -6,13 +8,15 @@ const ErrorTypes = {
   NOT_FOUND_ERROR: 'NotFoundError',
   RATE_LIMIT_ERROR: 'RateLimitError',
   DATABASE_ERROR: 'DatabaseError',
-  EMAIL_ERROR: 'EmailError'
+  EMAIL_ERROR: 'EmailError',
+  SERVER_ERROR: 'ServerError'
 };
 
 // Custom error class
 class AppError extends Error {
   constructor(type, message, statusCode = 500, details = null) {
     super(message);
+    this.name = 'AppError';
     this.type = type;
     this.statusCode = statusCode;
     this.details = details;
@@ -22,18 +26,19 @@ class AppError extends Error {
 
 // Error handler middleware
 const errorHandler = (err, req, res, next) => {
+  // Log error details
   console.error('Error occurred:', {
+    name: err.name,
     type: err.type || 'UnknownError',
     message: err.message,
-    stack: err.stack,
-    details: err.details || {},
     path: req.path,
     method: req.method,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 
-  // Default error response
-  const errorResponse = {
+  // Initialize error response
+  let errorResponse = {
     success: false,
     error: {
       type: err.type || 'UnknownError',
@@ -44,62 +49,68 @@ const errorHandler = (err, req, res, next) => {
     }
   };
 
-  // Add details in development
-  if (process.env.NODE_ENV !== 'production' && err.details) {
-    errorResponse.error.details = err.details;
-  }
-
   // Handle specific error types
-  switch (err.type) {
-    case ErrorTypes.VALIDATION_ERROR:
-      errorResponse.error.code = 400;
-      break;
-    
-    case ErrorTypes.AUTHENTICATION_ERROR:
-      errorResponse.error.code = 401;
-      break;
-    
-    case ErrorTypes.AUTHORIZATION_ERROR:
-      errorResponse.error.code = 403;
-      break;
-    
-    case ErrorTypes.NOT_FOUND_ERROR:
-      errorResponse.error.code = 404;
-      break;
-    
-    case ErrorTypes.RATE_LIMIT_ERROR:
-      errorResponse.error.code = 429;
-      break;
-    
-    case ErrorTypes.DATABASE_ERROR:
-      errorResponse.error.code = 503;
-      errorResponse.error.message = 'Database service unavailable';
-      break;
-    
-    case ErrorTypes.EMAIL_ERROR:
-      errorResponse.error.code = 502;
-      errorResponse.error.message = 'Email service unavailable';
-      break;
-    
-    default:
-      // Handle mongoose validation errors
-      if (err.name === 'ValidationError') {
-        errorResponse.error.code = 400;
+  if (err instanceof AppError) {
+    errorResponse.error.type = err.type;
+    errorResponse.error.code = err.statusCode;
+    if (process.env.NODE_ENV === 'development' && err.details) {
+      errorResponse.error.details = err.details;
+    }
+  }
+  // Handle Mongoose Validation Errors
+  else if (err instanceof MongooseError) {
+    errorResponse.error.type = ErrorTypes.VALIDATION_ERROR;
+    errorResponse.error.code = 400;
+    if (err.name === 'ValidationError') {
+      errorResponse.error.details = Object.values(err.errors).map(e => ({
+        field: e.path,
+        message: e.message
+      }));
+    }
+  }
+  // Handle Express Rate Limit Errors
+  else if (err.type === 'RateLimitExceeded') {
+    errorResponse.error.type = ErrorTypes.RATE_LIMIT_ERROR;
+    errorResponse.error.code = 429;
+    errorResponse.error.message = 'Too many requests';
+  }
+  // Handle Nodemailer Errors
+  else if (err.message && err.message.includes('EAUTH')) {
+    errorResponse.error.type = ErrorTypes.EMAIL_ERROR;
+    errorResponse.error.code = 500;
+    errorResponse.error.message = 'Email service configuration error';
+  }
+  // Handle other common errors
+  else {
+    switch (err.name) {
+      case 'CastError':
         errorResponse.error.type = ErrorTypes.VALIDATION_ERROR;
-        errorResponse.error.details = Object.values(err.errors).map(e => e.message);
-      }
-      // Handle mongoose cast errors
-      else if (err.name === 'CastError') {
         errorResponse.error.code = 400;
-        errorResponse.error.type = ErrorTypes.VALIDATION_ERROR;
         errorResponse.error.message = 'Invalid data format';
-      }
-      break;
+        break;
+      case 'JsonWebTokenError':
+        errorResponse.error.type = ErrorTypes.AUTHENTICATION_ERROR;
+        errorResponse.error.code = 401;
+        errorResponse.error.message = 'Invalid token';
+        break;
+      case 'TokenExpiredError':
+        errorResponse.error.type = ErrorTypes.AUTHENTICATION_ERROR;
+        errorResponse.error.code = 401;
+        errorResponse.error.message = 'Token expired';
+        break;
+      default:
+        errorResponse.error.type = ErrorTypes.SERVER_ERROR;
+        errorResponse.error.code = 500;
+        break;
+    }
   }
 
-  // Log error to monitoring service if in production
+  // Add request ID for tracking
+  errorResponse.error.requestId = req.id || crypto.randomBytes(4).toString('hex');
+
+  // Log error to monitoring service in production
   if (process.env.NODE_ENV === 'production') {
-    // Here you could add integration with error monitoring services
+    // Here you could integrate with error monitoring services
     // like Sentry, New Relic, etc.
   }
 
@@ -112,10 +123,17 @@ const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
 
+// Request ID middleware
+const addRequestId = (req, res, next) => {
+  req.id = crypto.randomBytes(4).toString('hex').toUpperCase();
+  next();
+};
+
 // Export everything
 module.exports = {
   ErrorTypes,
   AppError,
   errorHandler,
-  asyncHandler
+  asyncHandler,
+  addRequestId
 };
