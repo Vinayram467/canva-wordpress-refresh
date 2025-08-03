@@ -75,23 +75,74 @@ const generateUserConfirmationEmail = (data, type) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
       <title>Appointment Confirmation - Maiya Hospital</title>
       <style>
+        /* Reset styles for email clients */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
         body { 
-          font-family: 'Segoe UI', Arial, sans-serif; 
+          font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif !important; 
           line-height: 1.6; 
           color: #1a1a1a;
           background-color: #f5f5f5;
           margin: 0;
           padding: 0;
+          width: 100% !important;
+          -webkit-text-size-adjust: 100%;
+          -ms-text-size-adjust: 100%;
         }
+        
+        /* Forces Outlook.com to display emails at full width */
+        .ExternalClass {
+          width: 100%;
+        }
+        
+        /* Forces Outlook to display normal line spacing */
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%;
+        }
+        
+        /* Prevents Gmail from changing the text color in conversation threads */
+        .im {
+          color: inherit !important;
+        }
+        
+        /* Prevents Gmail from displaying a download button on large images */
+        img {
+          border: 0 !important;
+          outline: none !important;
+          text-decoration: none !important;
+        }
+        
+        /* Basic table reset */
+        table {
+          border-collapse: collapse !important;
+          mso-table-lspace: 0pt !important;
+          mso-table-rspace: 0pt !important;
+        }
+        
+        table td {
+          border-collapse: collapse !important;
+        }
+        
         .container { 
-          max-width: 600px; 
-          margin: 40px auto; 
+          width: 100% !important;
+          max-width: 600px !important; 
+          margin: 0 auto !important;
           background: #ffffff;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .header { 
           background: linear-gradient(135deg, #16a731 0%, #0d8024 100%);
@@ -304,133 +355,224 @@ const generateUserConfirmationEmail = (data, type) => {
         }
       </style>
     </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>🏥 Maiya Hospital</h1>
-          <p>Excellence in Healthcare Since 1978</p>
-        </div>
-        
-        <div class="content">
-          <div class="success-banner">
-            <h2>✅ Appointment Confirmed!</h2>
-            <p>Thank you for choosing Maiya Hospital. Your ${typeText.toLowerCase()} has been received.</p>
-          </div>
+    <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
+      <!-- Main Container Table -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f5;">
+        <tr>
+          <td align="center" style="padding: 40px 10px;">
+            <!-- Content Table -->
+            <table class="container" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 20px; overflow: hidden;">
+              <!-- Header -->
+              <tr>
+                <td align="center" style="background: linear-gradient(135deg, #16a731 0%, #0d8024 100%); padding: 40px 20px;">
+                  <h1 style="margin: 0; color: #ffffff; font-size: 28px;">${ICONS.hospital} Maiya Hospital</h1>
+                  <p style="margin: 10px 0 0; color: #ffffff; opacity: 0.9;">Excellence in Healthcare Since 1978</p>
+                </td>
+              </tr>
+              
+              <!-- Content -->
+              <tr>
+                <td style="padding: 40px 30px;">
+                  <!-- Success Banner -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #16a731 0%, #0d8024 100%); border-radius: 12px; margin-bottom: 30px;">
+                    <tr>
+                      <td align="center" style="padding: 20px;">
+                        <h2 style="margin: 0; color: #ffffff; font-size: 24px;">${ICONS.checkmark} ${typeText} Confirmed!</h2>
+                        <p style="margin: 10px 0 0; color: #ffffff; opacity: 0.9;">Thank you for choosing Maiya Hospital. Your ${typeText.toLowerCase()} has been received.</p>
+                      </td>
+                    </tr>
+                  </table>
 
-          <div class="appointment-details">
-            <h3 style="margin: 0 0 20px; color: #16a731;">Your Appointment Details</h3>
-            
-            <div class="detail-row">
-              <span class="detail-label">${ICONS.user} Patient Name</span>
-              <span class="detail-value">${sanitizedData.patientName}</span>
-            </div>
+                  <!-- Appointment Details -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 30px;">
+                    <tr>
+                      <td style="padding: 25px;">
+                        <h3 style="margin: 0 0 20px; color: #16a731;">Your Appointment Details</h3>
+                        
+                        <!-- Patient Name -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                          <tr>
+                            <td width="140" style="color: #16a731; font-weight: 600; padding: 10px 0;">${ICONS.user} Patient Name</td>
+                            <td style="color: #1a1a1a;">${sanitizedData.patientName}</td>
+                          </tr>
+                        </table>
 
-            <div class="detail-row">
-              <span class="detail-label">${ICONS.calendar} Date</span>
-              <span class="detail-value">${sanitizedData.date || 'Not specified'}</span>
-            </div>
+                        <!-- Date -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                          <tr>
+                            <td width="140" style="color: #16a731; font-weight: 600; padding: 10px 0;">${ICONS.calendar} Date</td>
+                            <td style="color: #1a1a1a;">${sanitizedData.date || 'Not specified'}</td>
+                          </tr>
+                        </table>
 
-            ${sanitizedData.time ? `
-            <div class="detail-row">
-              <span class="detail-label">${ICONS.clock} Time</span>
-              <span class="detail-value">${sanitizedData.time}</span>
-            </div>
-            ` : ''}
+                        ${sanitizedData.time ? `
+                        <!-- Time -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                          <tr>
+                            <td width="140" style="color: #16a731; font-weight: 600; padding: 10px 0;">${ICONS.clock} Time</td>
+                            <td style="color: #1a1a1a;">${sanitizedData.time}</td>
+                          </tr>
+                        </table>
+                        ` : ''}
 
-            <div class="detail-row">
-              <span class="detail-label">${ICONS.phone} Phone</span>
-              <span class="detail-value">${sanitizedData.phone}</span>
-            </div>
+                        <!-- Phone -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                          <tr>
+                            <td width="140" style="color: #16a731; font-weight: 600; padding: 10px 0;">${ICONS.phone} Phone</td>
+                            <td style="color: #1a1a1a;">${sanitizedData.phone}</td>
+                          </tr>
+                        </table>
 
-            ${sanitizedData.reason ? `
-            <div class="detail-row">
-              <span class="detail-label">${ICONS.stethoscope} Purpose</span>
-              <span class="detail-value">${sanitizedData.reason}</span>
-            </div>
-            ` : ''}
-          </div>
+                        ${sanitizedData.reason ? `
+                        <!-- Purpose -->
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 15px;">
+                          <tr>
+                            <td width="140" style="color: #16a731; font-weight: 600; padding: 10px 0;">${ICONS.stethoscope} Purpose</td>
+                            <td style="color: #1a1a1a;">${sanitizedData.reason}</td>
+                          </tr>
+                        </table>
+                        ` : ''}
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <!-- Why Choose Us Section -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 30px;">
+                    <tr>
+                      <td style="padding: 25px;">
+                        <h3 style="color: #16a731; margin: 0 0 20px;">Why Choose Maiya Hospital ${ICONS.star}</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 32px; margin-bottom: 15px;">${ICONS.stethoscope}</div>
+                              <h4 style="margin: 10px 0; color: #16a731; font-size: 18px;">Expert Doctors</h4>
+                              <p style="margin: 0; color: #666; font-size: 14px;">Highly qualified specialists with years of experience</p>
+                            </td>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 32px; margin-bottom: 15px;">${ICONS.heart}</div>
+                              <h4 style="margin: 10px 0; color: #16a731; font-size: 18px;">Patient Care</h4>
+                              <p style="margin: 0; color: #666; font-size: 14px;">Personalized attention and comprehensive care</p>
+                            </td>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 32px; margin-bottom: 15px;">${ICONS.award}</div>
+                              <h4 style="margin: 10px 0; color: #16a731; font-size: 18px;">Advanced Technology</h4>
+                              <p style="margin: 0; color: #666; font-size: 14px;">State-of-the-art medical equipment</p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <!-- About Us Section -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 30px;">
+                    <tr>
+                      <td style="padding: 25px;">
+                        <h3 style="color: #16a731; margin: 0 0 20px;">About Maiya Hospital ${ICONS.hospital}</h3>
+                        <p style="line-height: 1.6; color: #444; margin: 0 0 20px;">
+                          With over 45 years of excellence in healthcare, Maiya Hospital has been at the forefront of medical innovation 
+                          and patient care in Bangalore. Our commitment to providing world-class healthcare services has made us one of 
+                          the most trusted healthcare institutions in the region.
+                        </p>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 28px; font-weight: 700; color: #16a731;">45+</div>
+                              <div style="color: #666; font-size: 14px;">Years of Service</div>
+                            </td>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 28px; font-weight: 700; color: #16a731;">50+</div>
+                              <div style="color: #666; font-size: 14px;">Expert Doctors</div>
+                            </td>
+                            <td width="33%" align="center" style="padding: 15px;">
+                              <div style="font-size: 28px; font-weight: 700; color: #16a731;">24/7</div>
+                              <div style="color: #666; font-size: 14px;">Emergency Care</div>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
 
-          <div class="section why-choose-us">
-            <h3 style="color: #16a731; margin: 30px 0 20px;">Why Choose Maiya Hospital ${ICONS.star}</h3>
-            <div class="features-grid">
-              <div class="feature">
-                <div class="feature-icon">${ICONS.stethoscope}</div>
-                <h4>Expert Doctors</h4>
-                <p>Highly qualified specialists with years of experience</p>
-              </div>
-              <div class="feature">
-                <div class="feature-icon">${ICONS.heart}</div>
-                <h4>Patient Care</h4>
-                <p>Personalized attention and comprehensive care</p>
-              </div>
-              <div class="feature">
-                <div class="feature-icon">${ICONS.award}</div>
-                <h4>Advanced Technology</h4>
-                <p>State-of-the-art medical equipment and facilities</p>
-              </div>
-            </div>
-          </div>
+                  <!-- Action Buttons -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 30px;">
+                    <tr>
+                      <td align="center">
+                        <table cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td style="padding: 0 10px;">
+                              <a href="https://maiyahospital.com" style="display: inline-block; padding: 12px 24px; background: #16a731; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                                Visit Our Website
+                              </a>
+                            </td>
+                            <td style="padding: 0 10px;">
+                              <a href="https://maiyahospital.com/contact" style="display: inline-block; padding: 12px 24px; background: #f8f9fa; color: #16a731; text-decoration: none; border-radius: 8px; font-weight: 600; border: 2px solid #16a731;">
+                                Contact Us
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  <!-- Next Steps -->
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 30px;">
+                    <tr>
+                      <td style="padding: 25px;">
+                        <h3 style="color: #16a731; margin: 0 0 20px;">Next Steps ${ICONS.checkmark}</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            <td style="padding: 10px 0;">1. Our team will review your appointment request</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px 0;">2. You'll receive a confirmation call within 24 hours</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px 0;">3. Arrive 15 minutes before your appointment time</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 10px 0;">4. Bring any relevant medical records</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              
+              <!-- Footer -->
+              <tr>
+                <td style="background: #1a1a1a; color: white; padding: 40px 30px; text-align: center; border-radius: 0 0 20px 20px;">
+                  <h3 style="margin: 0; font-size: 24px;">Maiya Hospital</h3>
+                  <p style="margin: 10px 0 20px; opacity: 0.9;">Excellence in Healthcare Since 1978</p>
+                  
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                    <tr>
+                      <td style="padding: 20px 0;">
+                        <p style="margin: 10px 0; font-size: 14px;">${ICONS.phone} Emergency: +91 98450 12345</p>
+                        <p style="margin: 10px 0; font-size: 14px;">${ICONS.hospital} 24/7 Emergency Care Available</p>
+                        <p style="margin: 10px 0; font-size: 14px;">${ICONS.location} 34, 10th Main Rd, Jayanagar 1st Block, Bengaluru</p>
+                        <p style="margin: 10px 0; font-size: 14px;">${ICONS.email} info@maiyahospital.com</p>
+                      </td>
+                    </tr>
+                  </table>
 
-          <div class="section about-us">
-            <h3 style="color: #16a731; margin: 30px 0 20px;">About Maiya Hospital ${ICONS.hospital}</h3>
-            <p style="line-height: 1.6; color: #444;">
-              With over 45 years of excellence in healthcare, Maiya Hospital has been at the forefront of medical innovation 
-              and patient care in Bangalore. Our commitment to providing world-class healthcare services has made us one of 
-              the most trusted healthcare institutions in the region.
-            </p>
-            <div class="stats-grid">
-              <div class="stat">
-                <div class="stat-number">45+</div>
-                <div class="stat-label">Years of Service</div>
-              </div>
-              <div class="stat">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">Expert Doctors</div>
-              </div>
-              <div class="stat">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Emergency Care</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="action-buttons">
-            <a href="https://maiyahospital.com" class="button primary">
-              Visit Our Website
-            </a>
-            <a href="https://maiyahospital.com/contact" class="button secondary">
-              Contact Us
-            </a>
-          </div>
-
-          <div class="next-steps">
-            <h3 style="color: #16a731; margin: 30px 0 20px;">Next Steps ${ICONS.checkmark}</h3>
-            <ol class="steps-list">
-              <li>Our team will review your appointment request</li>
-              <li>You'll receive a confirmation call within 24 hours</li>
-              <li>Arrive 15 minutes before your appointment time</li>
-              <li>Bring any relevant medical records</li>
-            </ol>
-          </div>
-        </div>
-        
-        <div class="footer">
-          <h3>Maiya Hospital</h3>
-          <p>Excellence in Healthcare Since 1978</p>
-          
-          <div class="contact-info">
-            <p>${ICONS.phone} Emergency: +91 98450 12345</p>
-            <p>${ICONS.hospital} 24/7 Emergency Care Available</p>
-            <p>${ICONS.location} 34, 10th Main Rd, Jayanagar 1st Block, Bengaluru</p>
-            <p>${ICONS.email} info@maiyahospital.com</p>
-          </div>
-
-          <div class="social-links">
-            <a href="https://facebook.com/maiyahospital" class="social-button">Facebook</a>
-            <a href="https://twitter.com/maiyahospital" class="social-button">Twitter</a>
-            <a href="https://instagram.com/maiyahospital" class="social-button">Instagram</a>
-          </div>
-        </div>
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td align="center">
+                        <a href="https://facebook.com/maiyahospital" style="display: inline-block; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 20px; font-size: 14px; margin: 0 5px;">Facebook</a>
+                        <a href="https://twitter.com/maiyahospital" style="display: inline-block; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 20px; font-size: 14px; margin: 0 5px;">Twitter</a>
+                        <a href="https://instagram.com/maiyahospital" style="display: inline-block; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 20px; font-size: 14px; margin: 0 5px;">Instagram</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
       </div>
     </body>
     </html>
@@ -622,40 +764,40 @@ const generateAdminNotificationEmail = (data, type) => {
               Received on ${currentDate} at ${currentTime}
             </div>
           </div>
-
+          
           <div class="patient-details">
             <h3 style="margin: 0 0 20px; color: #2563eb;">Patient Information</h3>
             
             <div class="detail-row">
               <span class="detail-label">Patient Name</span>
               <span class="detail-value">${sanitizedData.patientName}</span>
-            </div>
-
+          </div>
+          
             <div class="detail-row">
               <span class="detail-label">Email Address</span>
               <span class="detail-value">${sanitizedData.email}</span>
-            </div>
-
+          </div>
+          
             <div class="detail-row">
               <span class="detail-label">Phone Number</span>
               <span class="detail-value">${sanitizedData.phone}</span>
-            </div>
-
-            ${sanitizedData.date ? `
+          </div>
+          
+          ${sanitizedData.date ? `
             <div class="detail-row">
               <span class="detail-label">Requested Date</span>
               <span class="detail-value">${sanitizedData.date}</span>
-            </div>
-            ` : ''}
-
-            ${sanitizedData.time ? `
+          </div>
+          ` : ''}
+          
+          ${sanitizedData.time ? `
             <div class="detail-row">
               <span class="detail-label">Requested Time</span>
               <span class="detail-value">${sanitizedData.time}</span>
-            </div>
-            ` : ''}
-
-            ${sanitizedData.reason ? `
+          </div>
+          ` : ''}
+          
+          ${sanitizedData.reason ? `
             <div class="detail-row">
               <span class="detail-label">Visit Purpose</span>
               <span class="detail-value">${sanitizedData.reason}</span>
