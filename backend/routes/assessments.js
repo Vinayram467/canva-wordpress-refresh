@@ -31,12 +31,31 @@ router.get('/:id', async (req, res) => {
 // POST new assessment
 router.post('/', async (req, res) => {
   try {
-    const assessment = new Assessment(req.body);
+    console.log('📝 Received assessment data:', req.body);
+    
+    // Map frontend field names to backend expected names
+    const assessmentData = {
+      patientName: req.body.patientName || req.body.name || '',
+      email: req.body.email || req.body.patientEmail || req.body.userEmail || '',
+      phone: req.body.phone || req.body.patientPhone || req.body.userPhone || '',
+      date: req.body.date || req.body.assessmentDate || '',
+      time: req.body.time || req.body.assessmentTime || '',
+      reason: req.body.reason || req.body.message || req.body.assessmentReason || '',
+      symptoms: req.body.symptoms || req.body.symptomList || '',
+      medicalHistory: req.body.medicalHistory || req.body.history || '',
+      status: req.body.status || 'pending',
+      type: req.body.type || 'general'
+    };
+    
+    console.log('📧 Mapped assessment data:', assessmentData);
+    console.log('📧 Email field:', assessmentData.email);
+    
+    const assessment = new Assessment(assessmentData);
     const newAssessment = await assessment.save();
     
     // Send confirmation email to user
     try {
-      await emailService.sendUserConfirmation(req.body, 'assessment');
+      await emailService.sendUserConfirmation(assessmentData, 'assessment');
       console.log('User confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending user confirmation email:', emailError);
@@ -44,7 +63,7 @@ router.post('/', async (req, res) => {
     
     // Send notification email to admin
     try {
-      await emailService.sendAdminNotification(req.body, 'assessment');
+      await emailService.sendAdminNotification(assessmentData, 'assessment');
       console.log('Admin notification email sent successfully');
     } catch (emailError) {
       console.error('Error sending admin notification email:', emailError);

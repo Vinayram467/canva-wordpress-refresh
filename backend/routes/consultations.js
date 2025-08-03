@@ -31,12 +31,30 @@ router.get('/:id', async (req, res) => {
 // POST new consultation
 router.post('/', async (req, res) => {
   try {
-    const consultation = new Consultation(req.body);
+    console.log('📝 Received consultation data:', req.body);
+    
+    // Map frontend field names to backend expected names
+    const consultationData = {
+      patientName: req.body.patientName || req.body.name || '',
+      email: req.body.email || req.body.patientEmail || req.body.userEmail || '',
+      phone: req.body.phone || req.body.patientPhone || req.body.userPhone || '',
+      date: req.body.date || req.body.consultationDate || '',
+      time: req.body.time || req.body.consultationTime || '',
+      reason: req.body.reason || req.body.message || req.body.consultationReason || '',
+      doctorId: req.body.doctorId || '',
+      status: req.body.status || 'pending',
+      type: req.body.type || 'virtual'
+    };
+    
+    console.log('📧 Mapped consultation data:', consultationData);
+    console.log('📧 Email field:', consultationData.email);
+    
+    const consultation = new Consultation(consultationData);
     const newConsultation = await consultation.save();
     
     // Send confirmation email to user
     try {
-      await emailService.sendUserConfirmation(req.body, 'consultation');
+      await emailService.sendUserConfirmation(consultationData, 'consultation');
       console.log('User confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending user confirmation email:', emailError);
@@ -44,7 +62,7 @@ router.post('/', async (req, res) => {
     
     // Send notification email to admin
     try {
-      await emailService.sendAdminNotification(req.body, 'consultation');
+      await emailService.sendAdminNotification(consultationData, 'consultation');
       console.log('Admin notification email sent successfully');
     } catch (emailError) {
       console.error('Error sending admin notification email:', emailError);

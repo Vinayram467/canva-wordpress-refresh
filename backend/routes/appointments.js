@@ -31,12 +31,31 @@ router.get('/:id', async (req, res) => {
 // POST new appointment
 router.post('/', async (req, res) => {
   try {
-    const appointment = new Appointment(req.body);
+    console.log('📝 Received appointment data:', req.body);
+    
+    // Map frontend field names to backend expected names
+    const appointmentData = {
+      patientName: req.body.patientName || req.body.name || '',
+      email: req.body.email || req.body.patientEmail || req.body.userEmail || '',
+      phone: req.body.phone || req.body.patientPhone || req.body.userPhone || '',
+      date: req.body.date || req.body.appointmentDate || '',
+      time: req.body.time || req.body.appointmentTime || '',
+      reason: req.body.reason || req.body.message || '',
+      doctorId: req.body.doctorId || '',
+      status: req.body.status || 'pending',
+      isUrgent: req.body.isUrgent || false,
+      notes: req.body.notes || ''
+    };
+    
+    console.log('📧 Mapped appointment data:', appointmentData);
+    console.log('📧 Email field:', appointmentData.email);
+    
+    const appointment = new Appointment(appointmentData);
     const newAppointment = await appointment.save();
     
     // Send confirmation email to user
     try {
-      await emailService.sendUserConfirmation(req.body, 'appointment');
+      await emailService.sendUserConfirmation(appointmentData, 'appointment');
       console.log('User confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending user confirmation email:', emailError);
@@ -44,7 +63,7 @@ router.post('/', async (req, res) => {
     
     // Send notification email to admin
     try {
-      await emailService.sendAdminNotification(req.body, 'appointment');
+      await emailService.sendAdminNotification(appointmentData, 'appointment');
       console.log('Admin notification email sent successfully');
     } catch (emailError) {
       console.error('Error sending admin notification email:', emailError);

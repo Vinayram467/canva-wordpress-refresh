@@ -31,12 +31,27 @@ router.get('/:id', async (req, res) => {
 // POST new message
 router.post('/', async (req, res) => {
   try {
-    const message = new Message(req.body);
+    console.log('📝 Received message data:', req.body);
+    
+    // Map frontend field names to backend expected names
+    const messageData = {
+      name: req.body.name || req.body.patientName || req.body.userName || '',
+      email: req.body.email || req.body.patientEmail || req.body.userEmail || '',
+      phone: req.body.phone || req.body.patientPhone || req.body.userPhone || '',
+      message: req.body.message || req.body.reason || req.body.content || '',
+      subject: req.body.subject || 'Contact Form Submission',
+      status: req.body.status || 'unread'
+    };
+    
+    console.log('📧 Mapped message data:', messageData);
+    console.log('📧 Email field:', messageData.email);
+    
+    const message = new Message(messageData);
     const newMessage = await message.save();
     
     // Send confirmation email to user
     try {
-      await emailService.sendUserConfirmation(req.body, 'contact');
+      await emailService.sendUserConfirmation(messageData, 'contact');
       console.log('User confirmation email sent successfully');
     } catch (emailError) {
       console.error('Error sending user confirmation email:', emailError);
@@ -44,7 +59,7 @@ router.post('/', async (req, res) => {
     
     // Send notification email to admin
     try {
-      await emailService.sendAdminNotification(req.body, 'contact');
+      await emailService.sendAdminNotification(messageData, 'contact');
       console.log('Admin notification email sent successfully');
     } catch (emailError) {
       console.error('Error sending admin notification email:', emailError);
