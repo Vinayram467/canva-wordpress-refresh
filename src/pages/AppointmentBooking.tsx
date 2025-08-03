@@ -3,7 +3,24 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, User, Phone, Mail, MapPin, Users, Heart, Award, CheckCircle } from "lucide-react";
+import { 
+  Calendar, 
+  Clock, 
+  User, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Users, 
+  Heart, 
+  Award, 
+  CheckCircle,
+  Building2,
+  Stethoscope,
+  Trophy,
+  ThumbsUp,
+  ArrowRight,
+  ExternalLink
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -183,6 +200,174 @@ const AppointmentBooking = () => {
             <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
               Schedule your consultation with our expert doctors at Maiya Hospital
             </p>
+            <div className="flex justify-center gap-4 pt-4">
+              <Button 
+                className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg rounded-full flex items-center gap-2 transform hover:scale-105 transition-all duration-300"
+                onClick={() => window.open('https://maiyahospital.com', '_blank')}
+              >
+                Visit Our Website
+                <ExternalLink className="w-5 h-5" />
+              </Button>
+              <Button 
+                className="bg-blue-400 hover:bg-blue-500 text-white px-8 py-6 text-lg rounded-full flex items-center gap-2 transform hover:scale-105 transition-all duration-300"
+                onClick={() => document.getElementById('appointment-form')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Book Now
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Why Choose Maiya Hospital Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                Why Choose <span className="text-green-700">Maiya Hospital</span>
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Excellence in healthcare, backed by decades of experience
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                {
+                  icon: Building2,
+                  title: "State-of-the-Art Facility",
+                  description: "Modern equipment and comfortable environment"
+                },
+                {
+                  icon: Stethoscope,
+                  title: "Expert Doctors",
+                  description: "Highly qualified and experienced medical professionals"
+                },
+                {
+                  icon: Trophy,
+                  title: "Award-Winning Care",
+                  description: "Recognized for excellence in healthcare services"
+                },
+                {
+                  icon: ThumbsUp,
+                  title: "Patient Satisfaction",
+                  description: "98% patient satisfaction rate"
+                }
+              ].map((item, index) => (
+                <Card key={index} className="glass border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                  <CardContent className="p-6 text-center">
+                    <div className="mb-4 flex justify-center">
+                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center">
+                        <item.icon className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-foreground">{item.title}</h3>
+                    <p className="text-muted-foreground">{item.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Next Steps Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                What to <span className="text-green-700">Expect</span>
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Your journey to better health starts here
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  step: "1",
+                  title: "Book Appointment",
+                  description: "Fill out the form below with your details"
+                },
+                {
+                  step: "2",
+                  title: "Confirmation",
+                  description: "Receive confirmation via email and SMS"
+                },
+                {
+                  step: "3",
+                  title: "Visit Hospital",
+                  description: "Meet our expert doctors at scheduled time"
+                }
+              ].map((item, index) => (
+                <div key={index} className="relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-green-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    {item.step}
+                  </div>
+                  <Card className="pt-8 glass border-none shadow-lg">
+                    <CardContent className="p-6 text-center">
+                      <h3 className="text-xl font-semibold mb-2 text-foreground">{item.title}</h3>
+                      <p className="text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                  {index < 2 && (
+                    <div className="hidden md:block absolute top-1/2 left-full w-full h-0.5 bg-gradient-to-r from-green-700 to-transparent -translate-x-4"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* About Maiya Hospital Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                About <span className="text-green-700">Maiya Hospital</span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                With over 45 years of excellence in healthcare, Maiya Hospital has been at the forefront of medical innovation and patient care in Bangalore.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-700/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users className="w-6 h-6 text-green-700" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Expert Team</h3>
+                    <p className="text-muted-foreground">Our team of experienced doctors and staff are committed to providing the best care.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-400/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Building2 className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Modern Facilities</h3>
+                    <p className="text-muted-foreground">State-of-the-art equipment and comfortable environment for better patient care.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Heart className="w-6 h-6 text-red-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Patient-Centric Care</h3>
+                    <p className="text-muted-foreground">Focused on providing personalized care and attention to every patient.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-green-700/20 to-blue-400/20 rounded-3xl transform rotate-3"></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <img 
+                    src="/doctor-profiles/DR-G L-MAIYA.png" 
+                    alt="Dr. G L Maiya" 
+                    className="rounded-2xl shadow-xl relative z-10 transform hover:scale-105 transition-all duration-500"
+                  />
+                  <img 
+                    src="/doctor-profiles/DR-GEETHA-B V.png" 
+                    alt="Dr. Geetha B V" 
+                    className="rounded-2xl shadow-xl relative z-10 transform hover:scale-105 transition-all duration-500"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Appointment Form */}
