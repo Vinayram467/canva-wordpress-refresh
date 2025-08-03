@@ -136,12 +136,15 @@ const AppointmentBooking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Format date to ISO string for MongoDB
+      const formattedDate = new Date(formData.date).toISOString();
+      
       await appointmentApi.create({
         patientName: formData.patientName,
-        patientEmail: formData.email,
-        patientPhone: formData.phone,
-        appointmentDate: formData.date,
-        appointmentTime: formData.time,
+        email: formData.email, // Using the standardized field names
+        phone: formData.phone,
+        date: formattedDate,
+        time: formData.time,
         reason: formData.reason,
       });
       setSuccessDetails(formData); // Show success card

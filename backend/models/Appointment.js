@@ -6,32 +6,36 @@ const appointmentSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  patientEmail: {
+  email: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    alias: 'patientEmail' // This allows both email and patientEmail to work
   },
-  patientPhone: {
+  phone: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    alias: 'patientPhone' // This allows both phone and patientPhone to work
   },
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Doctor',
-    // required: true // doctorId is now optional
+    required: false // Make it optional
   },
-  appointmentDate: {
+  date: {
     type: Date,
-    required: true
+    required: true,
+    alias: 'appointmentDate' // This allows both date and appointmentDate to work
   },
-  appointmentTime: {
+  time: {
     type: String,
-    required: true
+    required: true,
+    alias: 'appointmentTime' // This allows both time and appointmentTime to work
   },
   reason: {
     type: String,
-    required: false, // make it optional
+    required: false,
     trim: true
   },
   status: {
