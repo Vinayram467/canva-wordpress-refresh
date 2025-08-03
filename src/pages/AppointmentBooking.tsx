@@ -395,101 +395,139 @@ const AppointmentBooking = () => {
                     <div className="text-foreground/60 text-xs">A confirmation will be sent to your email/phone.</div>
                   </div>
                 ) : (
-                <form onSubmit={handleSubmit} className="space-y-8 p-2">
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {/* Patient Information */}
-                    <div className="space-y-6 bg-white/60 rounded-2xl p-6 shadow-md border border-white/80">
-                      <h3 className="text-lg font-semibold text-foreground mb-4">Patient Information</h3>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-700 w-5 h-5" />
-                        <Input
-                          name="patientName"
-                          placeholder="Full Name"
-                          value={formData.patientName}
-                          onChange={handleInputChange}
-                          className="pl-12 bg-white/80 border border-white/80 text-foreground placeholder:text-muted-foreground h-12 rounded-2xl shadow-sm"
-                          required
-                        />
+                <form onSubmit={handleSubmit} className="space-y-8 p-6" id="appointment-form">
+                  <div className="bg-white/80 rounded-3xl p-8 shadow-xl border border-white/80">
+                    {/* Form Header */}
+                    <div className="text-center mb-8">
+                      <h3 className="text-2xl font-bold text-foreground">Book Your Appointment</h3>
+                      <p className="text-muted-foreground mt-2">Fill in your details below</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Left Column */}
+                      <div className="space-y-6">
+                        {/* Patient Name */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <User className="w-4 h-4 text-green-700" />
+                            Patient Name
+                          </label>
+                          <Input
+                            name="patientName"
+                            placeholder="Enter your full name"
+                            value={formData.patientName}
+                            onChange={handleInputChange}
+                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-green-700 focus:ring-green-700 transition-all duration-300"
+                            required
+                          />
+                        </div>
+
+                        {/* Email */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-blue-400" />
+                            Email Address
+                          </label>
+                          <Input
+                            name="email"
+                            type="email"
+                            placeholder="your.email@example.com"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-blue-400 focus:ring-blue-400 transition-all duration-300"
+                            required
+                          />
+                        </div>
+
+                        {/* Phone */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Phone className="w-4 h-4 text-red-500" />
+                            Phone Number
+                          </label>
+                          <Input
+                            name="phone"
+                            placeholder="+91 98765 43210"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-red-500 focus:ring-red-500 transition-all duration-300"
+                            required
+                          />
+                        </div>
                       </div>
-                      <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 w-5 h-5" />
-                        <Input
-                          name="phone"
-                          placeholder="Phone Number"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="pl-12 bg-white/80 border border-white/80 text-foreground placeholder:text-muted-foreground h-12 rounded-2xl shadow-sm"
-                          required
-                        />
-                      </div>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-red-500 w-5 h-5" />
-                        <Input
-                          name="email"
-                          type="email"
-                          placeholder="Email Address"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="pl-12 bg-white/80 border border-white/80 text-foreground placeholder:text-muted-foreground h-12 rounded-2xl shadow-sm"
-                          required
-                        />
+
+                      {/* Right Column */}
+                      <div className="space-y-6">
+                        {/* Date */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-green-700" />
+                            Preferred Date
+                          </label>
+                          <Input
+                            name="date"
+                            type="date"
+                            value={formData.date}
+                            onChange={handleInputChange}
+                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-green-700 focus:ring-green-700 transition-all duration-300"
+                            required
+                          />
+                        </div>
+
+                        {/* Time */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-blue-400" />
+                            Preferred Time
+                          </label>
+                          <select
+                            name="time"
+                            value={formData.time}
+                            onChange={handleInputChange}
+                            className="w-full h-12 rounded-xl bg-white border-gray-200 focus:border-blue-400 focus:ring-blue-400 transition-all duration-300"
+                            required
+                          >
+                            <option value="">Select a time slot</option>
+                            {Array.from({ length: 9 }, (_, i) => {
+                              const hour = i + 9; // Start from 9 AM
+                              const time = `${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`;
+                              return (
+                                <option key={time} value={time}>
+                                  {time}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+
+                        {/* Reason */}
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                            <Stethoscope className="w-4 h-4 text-red-500" />
+                            Reason for Visit
+                          </label>
+                          <textarea
+                            name="reason"
+                            placeholder="Please describe your symptoms or reason for visit"
+                            value={formData.reason}
+                            onChange={handleInputChange}
+                            className="w-full p-3 rounded-xl bg-white border-gray-200 focus:border-red-500 focus:ring-red-500 transition-all duration-300 resize-none h-24"
+                          />
+                        </div>
                       </div>
                     </div>
-                    {/* Appointment Details */}
-                    <div className="space-y-6 bg-white/60 rounded-2xl p-6 shadow-md border border-white/80">
-                      <h3 className="text-lg font-semibold text-foreground mb-4">Appointment Details</h3>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-700 w-5 h-5" />
-                        <Input
-                          name="date"
-                          type="date"
-                          value={formData.date}
-                          onChange={handleInputChange}
-                          className="pl-12 bg-white/80 border border-white/80 text-foreground h-12 rounded-2xl shadow-sm"
-                          required
-                        />
-                      </div>
-                      <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 w-5 h-5" />
-                        <select
-                          name="time"
-                          value={formData.time}
-                          onChange={handleInputChange}
-                          className="w-full pl-12 pr-4 py-3 bg-white/80 border border-white/80 rounded-2xl text-foreground h-12 shadow-sm"
-                          required
-                        >
-                          <option className="text-foreground bg-white" value="">Select Time</option>
-                          <option className="text-foreground bg-white" value="9:00 AM">9:00 AM</option>
-                          <option className="text-foreground bg-white" value="10:00 AM">10:00 AM</option>
-                          <option className="text-foreground bg-white" value="11:00 AM">11:00 AM</option>
-                          <option className="text-foreground bg-white" value="12:00 PM">12:00 PM</option>
-                          <option className="text-foreground bg-white" value="1:00 PM">1:00 PM</option>
-                          <option className="text-foreground bg-white" value="2:00 PM">2:00 PM</option>
-                          <option className="text-foreground bg-white" value="3:00 PM">3:00 PM</option>
-                          <option className="text-foreground bg-white" value="4:00 PM">4:00 PM</option>
-                          <option className="text-foreground bg-white" value="5:00 PM">5:00 PM</option>
-                        </select>
-                      </div>
-                      <div className="relative">
-                        <textarea
-                          name="reason"
-                          placeholder="Reason for visit (optional)"
-                          value={formData.reason}
-                          onChange={handleInputChange}
-                          className="w-full p-4 bg-white/80 border border-white/80 rounded-2xl text-foreground placeholder:text-muted-foreground h-24 resize-none shadow-sm"
-                        />
-                      </div>
+
+                    {/* Submit Button */}
+                    <div className="mt-8 text-center">
+                      <Button 
+                        type="submit"
+                        className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-green-700 text-white px-12 py-6 rounded-full text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center gap-2 mx-auto"
+                      >
+                        <Calendar className="w-5 h-5" />
+                        Book Appointment
+                        <ArrowRight className="w-5 h-5" />
+                      </Button>
                     </div>
-                  </div>
-                  {/* Submit Button */}
-                  <div className="text-center pt-6">
-                    <Button 
-                      type="submit"
-                      className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-red-500 text-white px-12 py-4 rounded-2xl text-lg font-semibold transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
-                    >
-                      <Calendar className="w-5 h-5 mr-2" />
-                      Book Appointment
-                    </Button>
                   </div>
                 </form>
                 )}

@@ -2,12 +2,20 @@ const nodemailer = require('nodemailer');
 const { validateEmail } = require('../security/securityMiddleware');
 
 // Email icons (Base64 encoded SVG)
+// Using Font Awesome icons for better email client compatibility
 const ICONS = {
-  checkmark: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDZMMTAgMTZMNCAxMCIgc3Ryb2tlPSIjMTZhNzMxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K',
-  calendar: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMkE2IDYgMCAwIDAgMiA4VjE5QTYgNiAwIDAgMCA4IDI1SDE2QTYgNiAwIDAgMCAyMiAxOVY4QTYgNiAwIDAgMCAxNiAySDhNMjAgMTlBMyAzIDAgMCAxIDE3IDIySDdBMyAzIDAgMCAxIDQgMTlWMTFBMiAyIDAgMCAxIDYgOUgxOEEyIDIgMCAwIDEgMjAgMTFWMjBaIiBmaWxsPSIjMTZhNzMxIi8+Cjwvc3ZnPgo=',
-  phone: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIyIDE2LjkydjNhMiAyIDAgMCAxLTIuMTggMS45OUgxNC4wNGEyIDIgMCAwIDEtMS45OS0yLjE4bC4zMS0yLjYxYzEuMDctLjQzIDIuMTQtLjk0IDMuMTQtMS40M2wuNzguNzNhMiAyIDAgMCAxIDAgMi44M2wtMi40NyAyLjQ3YTIgMiAwIDAgMS0yLjgzIDBsLS43OC0uNzNhMTIuNDMgMTIuNDMgMCAwIDEtMS40My0zLjE0bC0yLjYxLjMxYTIgMiAwIDAgMS0yLjE4LTEuOTlWMTYuOTJhMiAyIDAgMCAxIDEuOTktMi4xOGwyLjYxLS4zMWMuNDMtMS4wNy45NC0yLjA3IDEuNDMtMy4xNGwtLjc4LS43M2EyIDIgMCAwIDEgMC0yLjgzbDIuNDctMi40N2EyIDIgMCAwIDEgMi44MyAwbC43OC43M2ExMi40MyAxMi40MyAwIDAgMSAzLjE0IDEuNDNsMi42MS0uMzFBMiAyIDAgMCAxIDIyIDE2LjkyeiIgZmlsbD0iIzE2YTczMSIvPgo8L3N2Zz4K',
-  user: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDIxVjE5QzIwIDE3LjM0IDE4LjY2IDE2IDE3IDE2SDEzQzExLjM0IDE2IDEwIDE3LjM0IDEwIDE5VjIxIiBzdHJva2U9IiMxNmE3MzEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIgc3Ryb2tlPSIjMTZhNzMxIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+Cg==',
-  hospital: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5IDE0VjExQzE5IDkuMzQgMTcuNjYgOCAxNiA4SDEyQzEwLjM0IDggOSA5LjM0IDkgMTFWMTQiIHN0cm9rZT0iIzE2YTczMSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTE0IDJWNkgyMFYyIiBzdHJva2U9IiMxNmE3MzEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0xMCAyMlYxNCIgc3Ryb2tlPSIjMTZhNzMxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K'
+  checkmark: '✅',
+  calendar: '📅',
+  phone: '📞',
+  user: '👤',
+  hospital: '🏥',
+  email: '📧',
+  clock: '⏰',
+  location: '📍',
+  star: '⭐',
+  heart: '❤️',
+  award: '🏆',
+  stethoscope: '👨‍⚕️'
 };
 
 const sanitizeInput = (input) => {
@@ -67,16 +75,233 @@ const generateUserConfirmationEmail = (data, type) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Confirmation - Maiya Hospital</title>
+      <title>Appointment Confirmation - Maiya Hospital</title>
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #16a731; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-        .content { background: #f9f9f9; padding: 30px; }
-        .success { background: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 5px; margin: 20px 0; text-align: center; }
-        .info-row { display: flex; align-items: center; margin: 15px 0; padding: 10px; background: white; border-radius: 5px; }
-        .icon { width: 20px; height: 20px; margin-right: 10px; }
-        .footer { background: #333; color: white; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }
+        body { 
+          font-family: 'Segoe UI', Arial, sans-serif; 
+          line-height: 1.6; 
+          color: #1a1a1a;
+          background-color: #f5f5f5;
+          margin: 0;
+          padding: 0;
+        }
+        .container { 
+          max-width: 600px; 
+          margin: 40px auto; 
+          background: #ffffff;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header { 
+          background: linear-gradient(135deg, #16a731 0%, #0d8024 100%);
+          color: white;
+          padding: 40px 20px;
+          text-align: center;
+        }
+        .header h1 {
+          margin: 0;
+          font-size: 28px;
+          font-weight: 600;
+        }
+        .header p {
+          margin: 10px 0 0;
+          opacity: 0.9;
+          font-size: 16px;
+        }
+        .content {
+          padding: 40px 30px;
+          background: #ffffff;
+        }
+        .success-banner {
+          background: linear-gradient(135deg, #16a731 0%, #0d8024 100%);
+          color: white;
+          padding: 20px;
+          border-radius: 12px;
+          text-align: center;
+          margin-bottom: 30px;
+        }
+        .success-banner h2 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .success-banner p {
+          margin: 10px 0 0;
+          opacity: 0.9;
+        }
+        .appointment-details {
+          background: #f8f9fa;
+          border-radius: 12px;
+          padding: 25px;
+          margin-top: 30px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .detail-row {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+          border-bottom: none;
+        }
+        .detail-label {
+          font-weight: 600;
+          color: #16a731;
+          width: 140px;
+          flex-shrink: 0;
+        }
+        .detail-value {
+          color: #1a1a1a;
+          flex-grow: 1;
+        }
+        .section {
+          margin: 40px 0;
+          padding: 30px;
+          background: #f8f9fa;
+          border-radius: 12px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-top: 20px;
+        }
+        .feature {
+          text-align: center;
+          padding: 20px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .feature-icon {
+          font-size: 32px;
+          margin-bottom: 15px;
+        }
+        .feature h4 {
+          margin: 10px 0;
+          color: #16a731;
+          font-size: 18px;
+        }
+        .feature p {
+          margin: 0;
+          color: #666;
+          font-size: 14px;
+        }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          margin-top: 30px;
+        }
+        .stat {
+          text-align: center;
+          padding: 20px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .stat-number {
+          font-size: 28px;
+          font-weight: 700;
+          color: #16a731;
+          margin-bottom: 5px;
+        }
+        .stat-label {
+          color: #666;
+          font-size: 14px;
+        }
+        .action-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          margin: 30px 0;
+        }
+        .button {
+          display: inline-block;
+          padding: 12px 24px;
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+        .button.primary {
+          background: #16a731;
+          color: white;
+        }
+        .button.secondary {
+          background: #f8f9fa;
+          color: #16a731;
+          border: 2px solid #16a731;
+        }
+        .button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .next-steps {
+          background: #f8f9fa;
+          padding: 30px;
+          border-radius: 12px;
+          margin: 30px 0;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .steps-list {
+          margin: 20px 0;
+          padding-left: 20px;
+        }
+        .steps-list li {
+          margin: 10px 0;
+          color: #444;
+          line-height: 1.6;
+        }
+        .footer {
+          background: #1a1a1a;
+          color: white;
+          padding: 40px 30px;
+          text-align: center;
+          border-radius: 0 0 20px 20px;
+        }
+        .footer h3 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .footer p {
+          margin: 10px 0 0;
+          opacity: 0.9;
+          font-size: 16px;
+        }
+        .contact-info {
+          margin: 30px 0;
+          padding: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .contact-info p {
+          margin: 10px 0;
+          font-size: 14px;
+        }
+        .social-links {
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+          margin-top: 20px;
+        }
+        .social-button {
+          display: inline-block;
+          padding: 8px 16px;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          text-decoration: none;
+          border-radius: 20px;
+          font-size: 14px;
+          transition: all 0.3s ease;
+        }
+        .social-button:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
       </style>
     </head>
     <body>
@@ -87,45 +312,124 @@ const generateUserConfirmationEmail = (data, type) => {
         </div>
         
         <div class="content">
-          <div class="success">
-            <h2>✅ Request Received Successfully!</h2>
-            <p>Thank you for contacting Maiya Hospital. We have received your ${typeText.toLowerCase()} and will get back to you within 24 hours.</p>
+          <div class="success-banner">
+            <h2>✅ Appointment Confirmed!</h2>
+            <p>Thank you for choosing Maiya Hospital. Your ${typeText.toLowerCase()} has been received.</p>
           </div>
-          
-          <div class="info-row">
-            <img src="${ICONS.user}" alt="👤" class="icon">
-            <strong>Name:</strong> ${sanitizedData.patientName}
+
+          <div class="appointment-details">
+            <h3 style="margin: 0 0 20px; color: #16a731;">Your Appointment Details</h3>
+            
+            <div class="detail-row">
+              <span class="detail-label">${ICONS.user} Patient Name</span>
+              <span class="detail-value">${sanitizedData.patientName}</span>
+            </div>
+
+            <div class="detail-row">
+              <span class="detail-label">${ICONS.calendar} Date</span>
+              <span class="detail-value">${sanitizedData.date || 'Not specified'}</span>
+            </div>
+
+            ${sanitizedData.time ? `
+            <div class="detail-row">
+              <span class="detail-label">${ICONS.clock} Time</span>
+              <span class="detail-value">${sanitizedData.time}</span>
+            </div>
+            ` : ''}
+
+            <div class="detail-row">
+              <span class="detail-label">${ICONS.phone} Phone</span>
+              <span class="detail-value">${sanitizedData.phone}</span>
+            </div>
+
+            ${sanitizedData.reason ? `
+            <div class="detail-row">
+              <span class="detail-label">${ICONS.stethoscope} Purpose</span>
+              <span class="detail-value">${sanitizedData.reason}</span>
+            </div>
+            ` : ''}
           </div>
-          
-          <div class="info-row">
-            <img src="${ICONS.calendar}" alt="📅" class="icon">
-            <strong>Date:</strong> ${sanitizedData.date || 'Not specified'}
+
+          <div class="section why-choose-us">
+            <h3 style="color: #16a731; margin: 30px 0 20px;">Why Choose Maiya Hospital ${ICONS.star}</h3>
+            <div class="features-grid">
+              <div class="feature">
+                <div class="feature-icon">${ICONS.stethoscope}</div>
+                <h4>Expert Doctors</h4>
+                <p>Highly qualified specialists with years of experience</p>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">${ICONS.heart}</div>
+                <h4>Patient Care</h4>
+                <p>Personalized attention and comprehensive care</p>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">${ICONS.award}</div>
+                <h4>Advanced Technology</h4>
+                <p>State-of-the-art medical equipment and facilities</p>
+              </div>
+            </div>
           </div>
-          
-          ${sanitizedData.time ? `
-          <div class="info-row">
-            <img src="${ICONS.calendar}" alt="🕐" class="icon">
-            <strong>Time:</strong> ${sanitizedData.time}
+
+          <div class="section about-us">
+            <h3 style="color: #16a731; margin: 30px 0 20px;">About Maiya Hospital ${ICONS.hospital}</h3>
+            <p style="line-height: 1.6; color: #444;">
+              With over 45 years of excellence in healthcare, Maiya Hospital has been at the forefront of medical innovation 
+              and patient care in Bangalore. Our commitment to providing world-class healthcare services has made us one of 
+              the most trusted healthcare institutions in the region.
+            </p>
+            <div class="stats-grid">
+              <div class="stat">
+                <div class="stat-number">45+</div>
+                <div class="stat-label">Years of Service</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Expert Doctors</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Emergency Care</div>
+              </div>
+            </div>
           </div>
-          ` : ''}
-          
-          <div class="info-row">
-            <img src="${ICONS.phone}" alt="📞" class="icon">
-            <strong>Phone:</strong> ${sanitizedData.phone}
+
+          <div class="action-buttons">
+            <a href="https://maiyahospital.com" class="button primary">
+              Visit Our Website
+            </a>
+            <a href="https://maiyahospital.com/contact" class="button secondary">
+              Contact Us
+            </a>
           </div>
-          
-          ${sanitizedData.reason ? `
-          <div class="info-row">
-            <img src="${ICONS.hospital}" alt="🏥" class="icon">
-            <strong>Details:</strong> ${sanitizedData.reason}
+
+          <div class="next-steps">
+            <h3 style="color: #16a731; margin: 30px 0 20px;">Next Steps ${ICONS.checkmark}</h3>
+            <ol class="steps-list">
+              <li>Our team will review your appointment request</li>
+              <li>You'll receive a confirmation call within 24 hours</li>
+              <li>Arrive 15 minutes before your appointment time</li>
+              <li>Bring any relevant medical records</li>
+            </ol>
           </div>
-          ` : ''}
         </div>
         
         <div class="footer">
-          <h3>🏥 Maiya Hospital</h3>
-          <p>Providing world-class healthcare services for over 46 years</p>
-          <p>📞 +91 98450 12345 | 🕐 24/7 Emergency Care</p>
+          <h3>Maiya Hospital</h3>
+          <p>Excellence in Healthcare Since 1978</p>
+          
+          <div class="contact-info">
+            <p>${ICONS.phone} Emergency: +91 98450 12345</p>
+            <p>${ICONS.hospital} 24/7 Emergency Care Available</p>
+            <p>${ICONS.location} 34, 10th Main Rd, Jayanagar 1st Block, Bengaluru</p>
+            <p>${ICONS.email} info@maiyahospital.com</p>
+          </div>
+
+          <div class="social-links">
+            <a href="https://facebook.com/maiyahospital" class="social-button">Facebook</a>
+            <a href="https://twitter.com/maiyahospital" class="social-button">Twitter</a>
+            <a href="https://instagram.com/maiyahospital" class="social-button">Instagram</a>
+          </div>
         </div>
       </div>
     </body>
@@ -148,77 +452,234 @@ const generateAdminNotificationEmail = (data, type) => {
                    type === 'consultation' ? 'Virtual Consultation Request' :
                    type === 'assessment' ? 'Health Assessment Submission' : 'Form Submission';
 
+  const currentTime = new Date().toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   return `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New ${typeText} - Maiya Hospital</title>
+      <title>New Patient Request - Maiya Hospital Admin</title>
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #dc2626; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-        .content { background: #f9f9f9; padding: 30px; }
-        .alert { background: #fef2f2; border: 1px solid #fecaca; padding: 20px; border-radius: 5px; margin: 20px 0; text-align: center; }
-        .info-row { display: flex; align-items: center; margin: 15px 0; padding: 10px; background: white; border-radius: 5px; }
-        .icon { width: 20px; height: 20px; margin-right: 10px; }
-        .footer { background: #333; color: white; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }
+        body { 
+          font-family: 'Segoe UI', Arial, sans-serif; 
+          line-height: 1.6; 
+          color: #1a1a1a;
+          background-color: #f5f5f5;
+          margin: 0;
+          padding: 0;
+        }
+        .container { 
+          max-width: 600px; 
+          margin: 40px auto; 
+          background: #ffffff;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header { 
+          background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+          color: white;
+          padding: 40px 20px;
+          text-align: center;
+        }
+        .header h1 {
+          margin: 0;
+          font-size: 28px;
+          font-weight: 600;
+        }
+        .header p {
+          margin: 10px 0 0;
+          opacity: 0.9;
+          font-size: 16px;
+        }
+        .content {
+          padding: 40px 30px;
+          background: #ffffff;
+        }
+        .notification-banner {
+          background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+          color: white;
+          padding: 20px;
+          border-radius: 12px;
+          text-align: center;
+          margin-bottom: 30px;
+        }
+        .notification-banner h2 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .notification-banner p {
+          margin: 10px 0 0;
+          opacity: 0.9;
+        }
+        .timestamp {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 8px 16px;
+          border-radius: 20px;
+          margin-top: 15px;
+          display: inline-block;
+          font-size: 14px;
+        }
+        .patient-details {
+          background: #f8f9fa;
+          border-radius: 12px;
+          padding: 25px;
+          margin-top: 30px;
+        }
+        .detail-row {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          border-bottom: 1px solid #e9ecef;
+        }
+        .detail-row:last-child {
+          border-bottom: none;
+        }
+        .detail-label {
+          font-weight: 600;
+          color: #2563eb;
+          width: 140px;
+          flex-shrink: 0;
+        }
+        .detail-value {
+          color: #1a1a1a;
+          flex-grow: 1;
+        }
+        .priority-tag {
+          display: inline-block;
+          padding: 4px 12px;
+          background: #fef3c7;
+          color: #92400e;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: 500;
+          margin-top: 20px;
+        }
+        .action-buttons {
+          margin-top: 30px;
+          text-align: center;
+        }
+        .button {
+          display: inline-block;
+          padding: 12px 24px;
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: 600;
+          margin: 0 10px;
+        }
+        .button-primary {
+          background: #2563eb;
+          color: white;
+        }
+        .button-secondary {
+          background: #e5e7eb;
+          color: #1f2937;
+        }
+        .footer {
+          background: #1a1a1a;
+          color: white;
+          padding: 30px;
+          text-align: center;
+        }
+        .footer h3 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 600;
+        }
+        .footer p {
+          margin: 10px 0 0;
+          opacity: 0.8;
+          font-size: 14px;
+        }
       </style>
     </head>
     <body>
       <div class="container">
         <div class="header">
-          <h1>🏥 Maiya Hospital</h1>
-          <p>New ${typeText} Received</p>
+          <h1>🏥 Maiya Hospital Admin</h1>
+          <p>New Patient Request Notification</p>
         </div>
         
         <div class="content">
-          <div class="alert">
+          <div class="notification-banner">
             <h2>🔔 New ${typeText}</h2>
-            <p>A new ${typeText.toLowerCase()} has been submitted through the website.</p>
+            <p>A new request has been submitted and requires your attention.</p>
+            <div class="timestamp">
+              Received on ${currentDate} at ${currentTime}
+            </div>
           </div>
-          
-          <div class="info-row">
-            <img src="${ICONS.user}" alt="👤" class="icon">
-            <strong>Patient Name:</strong> ${sanitizedData.patientName}
+
+          <div class="patient-details">
+            <h3 style="margin: 0 0 20px; color: #2563eb;">Patient Information</h3>
+            
+            <div class="detail-row">
+              <span class="detail-label">Patient Name</span>
+              <span class="detail-value">${sanitizedData.patientName}</span>
+            </div>
+
+            <div class="detail-row">
+              <span class="detail-label">Email Address</span>
+              <span class="detail-value">${sanitizedData.email}</span>
+            </div>
+
+            <div class="detail-row">
+              <span class="detail-label">Phone Number</span>
+              <span class="detail-value">${sanitizedData.phone}</span>
+            </div>
+
+            ${sanitizedData.date ? `
+            <div class="detail-row">
+              <span class="detail-label">Requested Date</span>
+              <span class="detail-value">${sanitizedData.date}</span>
+            </div>
+            ` : ''}
+
+            ${sanitizedData.time ? `
+            <div class="detail-row">
+              <span class="detail-label">Requested Time</span>
+              <span class="detail-value">${sanitizedData.time}</span>
+            </div>
+            ` : ''}
+
+            ${sanitizedData.reason ? `
+            <div class="detail-row">
+              <span class="detail-label">Visit Purpose</span>
+              <span class="detail-value">${sanitizedData.reason}</span>
+            </div>
+            ` : ''}
+
+            <div class="priority-tag">
+              ⚡ Requires Response within 24 Hours
+            </div>
           </div>
-          
-          <div class="info-row">
-            <img src="${ICONS.phone}" alt="📞" class="icon">
-            <strong>Email:</strong> ${sanitizedData.email}
+
+          <div class="action-buttons">
+            <a href="https://maiyahospital.com/admin/appointments" class="button button-primary">
+              View in Dashboard
+            </a>
+            <a href="tel:${sanitizedData.phone}" class="button button-secondary">
+              Call Patient
+            </a>
           </div>
-          
-          <div class="info-row">
-            <img src="${ICONS.phone}" alt="📞" class="icon">
-            <strong>Phone:</strong> ${sanitizedData.phone}
-          </div>
-          
-          ${sanitizedData.date ? `
-          <div class="info-row">
-            <img src="${ICONS.calendar}" alt="📅" class="icon">
-            <strong>Preferred Date:</strong> ${sanitizedData.date}
-          </div>
-          ` : ''}
-          
-          ${sanitizedData.time ? `
-          <div class="info-row">
-            <img src="${ICONS.calendar}" alt="🕐" class="icon">
-            <strong>Preferred Time:</strong> ${sanitizedData.time}
-          </div>
-          ` : ''}
-          
-          ${sanitizedData.reason ? `
-          <div class="info-row">
-            <img src="${ICONS.hospital}" alt="🏥" class="icon">
-            <strong>Details:</strong> ${sanitizedData.reason}
-          </div>
-          ` : ''}
         </div>
         
         <div class="footer">
-          <h3>🏥 Maiya Hospital Admin</h3>
-          <p>Please respond to this request within 24 hours</p>
+          <h3>Maiya Hospital Administration</h3>
+          <p>This is an automated notification. Please handle the request according to standard procedures.</p>
         </div>
       </div>
     </body>
