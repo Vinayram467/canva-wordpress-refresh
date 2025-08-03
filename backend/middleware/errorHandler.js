@@ -1,4 +1,5 @@
 const { MongooseError } = require('mongoose');
+const crypto = require('crypto');
 
 // Error types
 const ErrorTypes = {
