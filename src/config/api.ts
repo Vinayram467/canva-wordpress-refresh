@@ -12,4 +12,27 @@ export const API_CONFIG = {
     : import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 };
 
+// Strapi CMS Configuration (for future use)
+export const STRAPI_URL = process.env.REACT_APP_STRAPI_URL || 'http://localhost:1337';
+export const STRAPI_API_TOKEN = process.env.REACT_APP_STRAPI_API_TOKEN;
+
+export const fetchFromStrapi = async (endpoint: string) => {
+  const response = await fetch(`${STRAPI_URL}/api/${endpoint}`, {
+    headers: {
+      'Authorization': `Bearer ${STRAPI_API_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.json();
+};
+
+// Content Service (temporary until Strapi is working)
+export const getContent = async (endpoint: string) => {
+  // For now, return mock data
+  return {
+    data: [],
+    meta: {}
+  };
+};
+
 export default API_CONFIG; 

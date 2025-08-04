@@ -13,48 +13,62 @@ import HealthInsights from "@/components/HealthInsights";
 import NewsEvents from "@/components/NewsEvents";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getMedicalOrganizationSchema } from "@/utils/schema";
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
-      <Header />
-      <AutoScrollBanner />
-      <div className="container mx-auto px-2">
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <HeroSection />
+    <>
+      <SEOHead
+        title="Leading Medical Center in [City] | Comprehensive Healthcare Services"
+        description="Trusted medical center in [City] offering expert doctors, advanced treatments, and comprehensive healthcare services. Book your appointment today."
+        keywords="medical center, healthcare, doctors, specialists, hospital, treatment, consultation"
+        canonical="https://yourdomain.com"
+        ogTitle="Leading Medical Center in [City] | Expert Healthcare Services"
+        ogDescription="Trusted medical center in [City] offering expert doctors, advanced treatments, and comprehensive healthcare services."
+        ogImage="https://yourdomain.com/og-image.jpg"
+        structuredData={getMedicalOrganizationSchema()}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+        <Header />
+        <AutoScrollBanner />
+        <div className="container mx-auto px-2">
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <HeroSection />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <HealthUpdatesTicker />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <StatsSection />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <ServicesGrid />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <AboutSection />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <DoctorProfiles />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <PatientTestimonials />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <AppointmentBooking />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <HealthInsights />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <NewsEvents />
+          </div>
+          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+            <ContactSection />
+          </div>
         </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <HealthUpdatesTicker />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <StatsSection />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <ServicesGrid />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <AboutSection />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <DoctorProfiles />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <PatientTestimonials />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <AppointmentBooking />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <HealthInsights />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <NewsEvents />
-        </div>
-        <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
-          <ContactSection />
-        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }

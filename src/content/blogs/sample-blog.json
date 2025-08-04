@@ -1,0 +1,20 @@
+{
+  "id": "sample-blog",
+  "title": "Understanding Heart Health: A Comprehensive Guide",
+  "slug": "understanding-heart-health",
+  "content": "Heart health is crucial for overall well-being. In this comprehensive guide, we'll explore the key factors that contribute to cardiovascular health and provide practical tips for maintaining a healthy heart. From diet and exercise to stress management and regular check-ups, we'll cover everything you need to know to keep your heart in optimal condition.",
+  "excerpt": "Learn about maintaining good heart health and preventing cardiovascular diseases through proper diet, exercise, and lifestyle choices.",
+  "category": "General Health",
+  "publishedAt": "2024-01-15T00:00:00.000Z",
+  "featuredImage": "/public/heart-health-banner.jpg",
+  "author": "Dr. Sarah Johnson",
+  "seo": {
+    "metaTitle": "Understanding Heart Health | Medical Center",
+    "metaDescription": "Learn about maintaining good heart health and preventing cardiovascular diseases through proper diet, exercise, and lifestyle choices.",
+    "keywords": "heart health, cardiovascular, medical advice, healthy heart, heart disease prevention",
+    "canonicalUrl": "https://yourdomain.com/blog/understanding-heart-health",
+    "ogTitle": "Understanding Heart Health: A Comprehensive Guide",
+    "ogDescription": "Learn about maintaining good heart health and preventing cardiovascular diseases through proper diet, exercise, and lifestyle choices.",
+    "ogImage": "https://yourdomain.com/heart-health-banner.jpg"
+  }
+} 
