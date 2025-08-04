@@ -13,8 +13,8 @@ export const API_CONFIG = {
 };
 
 // Strapi CMS Configuration (for future use)
-export const STRAPI_URL = process.env.REACT_APP_STRAPI_URL || 'http://localhost:1337';
-export const STRAPI_API_TOKEN = process.env.REACT_APP_STRAPI_API_TOKEN;
+export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337';
+export const STRAPI_API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
 export const fetchFromStrapi = async (endpoint: string) => {
   const response = await fetch(`${STRAPI_URL}/api/${endpoint}`, {

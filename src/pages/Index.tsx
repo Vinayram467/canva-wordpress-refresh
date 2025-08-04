@@ -15,18 +15,15 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
+import { getSEOData } from "@/utils/seoManager";
 
 export default function Index() {
+  const seoData = getSEOData('home');
+  
   return (
     <>
       <SEOHead
-        title="Leading Medical Center in [City] | Comprehensive Healthcare Services"
-        description="Trusted medical center in [City] offering expert doctors, advanced treatments, and comprehensive healthcare services. Book your appointment today."
-        keywords="medical center, healthcare, doctors, specialists, hospital, treatment, consultation"
-        canonical="https://yourdomain.com"
-        ogTitle="Leading Medical Center in [City] | Expert Healthcare Services"
-        ogDescription="Trusted medical center in [City] offering expert doctors, advanced treatments, and comprehensive healthcare services."
-        ogImage="https://yourdomain.com/og-image.jpg"
+        {...seoData}
         structuredData={getMedicalOrganizationSchema()}
       />
       <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">

@@ -27,7 +27,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   twitterImage,
   structuredData
 }) => {
-  const siteUrl = process.env.REACT_APP_SITE_URL || 'https://yourdomain.com';
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://yourdomain.com';
   
   return (
     <Helmet>

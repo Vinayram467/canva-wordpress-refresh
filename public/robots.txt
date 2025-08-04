@@ -2,18 +2,37 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://maiyahospital.in/sitemap.xml
 
 # Disallow admin areas
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_next/
 Disallow: /static/
+Disallow: /private/
+Disallow: /temp/
 
 # Allow important pages
 Allow: /doctors/
 Allow: /services/
+Allow: /specialties/
+Allow: /appointment/
+Allow: /virtual-consultation/
+Allow: /deluxe-surgeries/
 Allow: /blogs/
 Allow: /events/
 Allow: /contact/
-Allow: /appointment/
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Allow all images and assets
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.ico$
+Allow: /*.svg$
