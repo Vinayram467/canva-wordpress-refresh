@@ -201,282 +201,158 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Doctor Detail Pages - All 15 Doctors -->
   <url>
-    <loc>https://maiyahospital.in/specialty/7</loc>
+    <loc>https://maiyahospital.in/doctor/1</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/8</loc>
+    <loc>https://maiyahospital.in/doctor/2</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/9</loc>
+    <loc>https://maiyahospital.in/doctor/3</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/10</loc>
+    <loc>https://maiyahospital.in/doctor/4</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/5</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/6</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/7</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/8</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/9</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/10</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/11</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/12</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/13</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/14</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/doctor/15</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Doctor Detail Pages - All 17 Doctors -->
+  <!-- Surgery Detail Pages - All 10 Surgeries -->
   <url>
-    <loc>https://maiyahospital.in/doctor/dr-abhey-vasudev</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-akshay-dhanda</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-hrishikesh-vemula</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-ananth-krishna</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-sujay-rao</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-n-t-babu</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-b-g-mahesh</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-murali-p</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-ishwarya-bhandari</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-varsha-manohar</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-g-l-maiya</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-geetha-b-v</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-gopal-m-g</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-chinmay-nagesh</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-chandrashekar-h-s</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-krishnappa-r</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/doctor/dr-lakshmi-v-pandit</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Service Detail Pages - These will be generated dynamically -->
-  <url>
-    <loc>https://maiyahospital.in/service/cardiology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/orthopedics</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/anaesthesia</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/neurosurgery</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/ophthalmology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/general-medicine</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/obstetrics-gynaecology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/paediatrics</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/dermatology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/ent</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/pulmonology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/service/psychiatry</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Surgery Detail Pages - These will be generated dynamically -->
-  <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/laparoscopic-hernia-repair</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/1</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/total-knee-replacement</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/2</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/laparoscopic-gallbladder-removal</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/3</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/laparoscopic-hysterectomy</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/4</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/arthroscopy</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/5</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/total-hip-replacement</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/6</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/kidney-stone-removal</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/7</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/dj-stenting</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/8</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/turp</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/9</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/modified-radical-mastectomy</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/10</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  
-  <!-- Blog and Event Detail Pages - These will be generated dynamically -->
-  <url>
-    <loc>https://maiyahospital.in/blog/health-tips</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/event/health-camp</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
   </url>
 </urlset> 
