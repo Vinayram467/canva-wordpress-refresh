@@ -5,41 +5,55 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Star, MapPin, Phone, Mail, Award, GraduationCap } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getPhysicianSchema } from "@/utils/schema";
 
-// Import the doctors data
+// Import the doctors data - Updated to match current structure
 const doctorsData = [
+  // Radiology
+  { id: "1", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png", slug: "dr-b-g-mahesh" },
+  
+  // Orthopedics
+  { id: "2", name: "Dr. Chandrashekar HS", specialty: "Orthopedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg", slug: "dr-chandrashekar-h-s" },
+  
   // Anaesthesia
-  { id: "1", name: "Dr. Abhey Vasudev", specialty: "Anaesthesia", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/dr-abhey-vasudev.jpg" },
-  { id: "2", name: "Dr. Akshay Dhanda", specialty: "Anaesthesia", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg" },
+  { id: "3", name: "Dr. Akshay Dhanda", specialty: "Anaesthesia", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg", slug: "dr-akshay-dhanda" },
+  
+  // Surgical Oncology
+  { id: "4", name: "Dr. Krishnappa R", specialty: "Surgical Oncology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg", slug: "dr-krishnappa-r" },
+  
+  // General Surgery
+  { id: "5", name: "Dr. G L Maiya", specialty: "General Surgery", degrees: "MBBS, MS", experience: "35 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹1000", image: "/doctor-profiles/DR-G L-MAIYA.png", slug: "dr-g-l-maiya" },
   
   // Cardiology
-  { id: "3", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/doctor-profiles/DR-HRISHIKESH- VEMULA.jpg" },
-  { id: "4", name: "Dr. Ananth Krishna", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "30 Years", visitingDays: "Mon–Sat", timings: "2PM – 4PM", consultationFee: "₹800", image: "/doctor-profiles/DR-ANANTH-KRISHNA.jpeg" },
+  { id: "6", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/doctor-profiles/DR-HRISHIKESH- VEMULA.jpg", slug: "dr-hrishikesh-vemula" },
   
-  // Neurosurgery
-  { id: "5", name: "Dr. Sujay Rao", specialty: "Neurosurgery", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/doctor-profiles/DR-SUJAY- RAO.png" },
+  // Orthopedics
+  { id: "7", name: "Dr. Abhey Vasudev", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/dr-abhey-vasudev.jpg", slug: "dr-abhey-vasudev" },
   
-  // Ophthalmology
-  { id: "6", name: "Dr. N T Babu", specialty: "Ophthalmology", degrees: "MBBS, DOMS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "10AM – 12PM", consultationFee: "₹600", image: "/doctor-profiles/DR-N T-BABU.jpg" },
-  
-  // General Medicine
-  { id: "7", name: "Dr. B G Mahesh", specialty: "General Medicine", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png" },
-  { id: "8", name: "Dr. Murali P", specialty: "General Medicine", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "2PM – 8PM", consultationFee: "₹600", image: "/doctor-profiles/DR-MURALI-P.jpeg" },
+  // Neurology
+  { id: "8", name: "Dr. Sujay Rao", specialty: "Neurology", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/doctor-profiles/DR-SUJAY- RAO.png", slug: "dr-sujay-rao" },
   
   // Obstetrics & Gynaecology
-  { id: "9", name: "Dr. Ishwarya Bhandari", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "10 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹500", image: "/doctor-profiles/DR-ISHWARYA- BHANDARI.jpg" },
-  { id: "10", name: "Dr. Varsha Manohar", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "12 Years", visitingDays: "Mon–Sat", timings: "10AM – 2PM", consultationFee: "₹550", image: "/doctor-profiles/DR-VARSHA- MANOHAR.jpg" },
+  { id: "9", name: "Dr. Ishwarya Bhandari", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "10 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹500", image: "/doctor-profiles/DR-ISHWARYA- BHANDARI.jpg", slug: "dr-ishwarya-bhandari" },
   
-  // Administration
-  { id: "11", name: "Dr. G L Maiya", specialty: "Administration", degrees: "MBBS, MS", experience: "35 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹1000", image: "/doctor-profiles/DR-G L-MAIYA.png" },
+  // Ophthalmology
+  { id: "10", name: "Dr. N T Babu", specialty: "Ophthalmology", degrees: "MBBS, DOMS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "10AM – 12PM", consultationFee: "₹600", image: "/doctor-profiles/DR-N T-BABU.jpg", slug: "dr-n-t-babu" },
   
-  // Other Specialists
-  { id: "12", name: "Dr. Geetha B V", specialty: "Paediatrics", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-GEETHA-B V.png" },
-  { id: "13", name: "Dr. Gopal M G", specialty: "Dermatology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹700", image: "/doctor-profiles/DR-GOPAL-M G.jpeg" },
-  { id: "14", name: "Dr. Chinmay Nagesh", specialty: "Orthopaedics", degrees: "MBBS, MS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-CHINMAY- NAGESH.jpeg" },
-  { id: "15", name: "Dr. Chandrashekar H S", specialty: "ENT", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg" },
-  { id: "16", name: "Dr. Krishnappa R", specialty: "Pulmonology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg" },
-  { id: "17", name: "Dr. Lakshmi V Pandit", specialty: "Psychiatry", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹700", image: "/doctor-profiles/DR-LAKSHMI-V-PANDIT.jpg" }
+  // Vascular Surgery
+  { id: "11", name: "Dr. Chinmay Nagesh", specialty: "Vascular Surgery", degrees: "MBBS, MS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-CHINMAY- NAGESH.jpeg", slug: "dr-chinmay-nagesh" },
+  
+  // Medical Oncology
+  { id: "12", name: "Dr. Murali P", specialty: "Medical Oncology", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "2PM – 8PM", consultationFee: "₹600", image: "/doctor-profiles/DR-MURALI-P.jpeg", slug: "dr-murali-p" },
+  
+  // Psychiatry
+  { id: "13", name: "Dr. Lakshmi V Pandit", specialty: "Psychiatry", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹700", image: "/doctor-profiles/DR-LAKSHMI-V-PANDIT.jpg", slug: "dr-lakshmi-v-pandit" },
+  
+  // Surgical Gastroenterology
+  { id: "14", name: "Dr. Ananth Krishna", specialty: "Surgical Gastroenterology", degrees: "MBBS, MD, DM", experience: "30 Years", visitingDays: "Mon–Sat", timings: "2PM – 4PM", consultationFee: "₹800", image: "/doctor-profiles/DR-ANANTH-KRISHNA.jpeg", slug: "dr-ananth-krishna" },
+  
+  // General Medicine
+  { id: "15", name: "Dr. Geetha B V", specialty: "General Medicine", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-GEETHA-B V.png", slug: "dr-geetha-b-v" }
 ];
 
 const DoctorDetail = () => {
@@ -56,6 +70,22 @@ const DoctorDetail = () => {
     timings: "N/A",
     consultationFee: "N/A",
     image: "/placeholder.svg",
+    slug: "not-found"
+  };
+
+  // Generate SEO data for the doctor
+  const seoData = {
+    title: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
+    description: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience. Book consultation for ${doctor.specialty.toLowerCase()} treatment in Jayanagar, Bangalore.`,
+    keywords: `${doctor.name}, ${doctor.specialty} jayanagar, ${doctor.specialty.toLowerCase()} doctor bangalore, best ${doctor.specialty.toLowerCase()} jayanagar, ${doctor.specialty.toLowerCase()} specialist bangalore`,
+    canonical: `https://maiyahospital.in/doctor/${doctor.slug}`,
+    ogTitle: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
+    ogDescription: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience.`,
+    ogImage: `https://maiyahospital.in${doctor.image}`,
+    twitterTitle: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
+    twitterDescription: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience.`,
+    twitterImage: `https://maiyahospital.in${doctor.image}`,
+    structuredData: getPhysicianSchema(doctor)
   };
 
   // Additional doctor details
@@ -81,6 +111,7 @@ const DoctorDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <SEOHead {...seoData} />
       <Header />
       
       {/* Hero Section */}
@@ -96,79 +127,66 @@ const DoctorDetail = () => {
             <Card className="glass shadow-2xl border border-white/80">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-3 gap-8 items-center">
-                  {/* Doctor Image */}
+                  {/* Doctor Image - Updated to display full image */}
                   <div className="text-center">
-                    <div className="w-64 h-80 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 bg-gradient-to-br from-green-700/10 to-blue-400/10">
+                    <div className="relative inline-block">
                       <img 
                         src={doctor.image} 
                         alt={doctor.name}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          const target = e.currentTarget as HTMLImageElement;
-                          target.style.display = 'none';
-                          (target.nextElementSibling as HTMLElement).style.display = 'flex';
-                        }}
+                        className="w-64 h-80 rounded-lg object-cover border-4 border-white shadow-lg"
                       />
-                      {/* Enhanced fallback placeholder */}
-                      <div className="w-full h-full bg-gradient-to-br from-green-700 via-blue-400 to-red-500 flex flex-col items-center justify-center text-white relative" style={{ display: 'none' }}>
-                        <div className="absolute inset-0 bg-black/20"></div>
-                        <div className="relative z-10 text-center">
-                          <div className="text-6xl font-bold mb-4">
-                            {doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                          </div>
-                          <div className="text-sm opacity-90 bg-white/20 px-4 py-2 rounded-full">
-                            Doctor Photo
-                          </div>
-                          <div className="text-xs opacity-75 mt-2">
-                            Placeholder Image
-                          </div>
-                        </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                        <div className="w-3 h-3 bg-white rounded-full"></div>
                       </div>
                     </div>
                   </div>
+                  
                   {/* Doctor Info */}
                   <div className="md:col-span-2 space-y-4">
                     <div>
-                      <h1 className="text-4xl font-bold text-foreground mb-2">{doctor.name}</h1>
-                      <Badge className="bg-gradient-to-r from-green-700/10 to-blue-400/10 text-green-700 border-green-700/30 text-lg px-4 py-2">
+                      <h1 className="text-3xl font-bold text-foreground mb-2">{doctor.name}</h1>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1 text-sm">
                         {doctor.specialty}
                       </Badge>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-4 text-muted-foreground">
-                      <div className="flex items-center space-x-2">
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-3 text-muted-foreground">
                         <GraduationCap className="w-5 h-5 text-blue-400" />
                         <span>{doctor.degrees}</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Star className="w-5 h-5 text-yellow-400" />
+                      <div className="flex items-center space-x-3 text-muted-foreground">
+                        <Award className="w-5 h-5 text-yellow-400" />
                         <span>{doctor.experience} Experience</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Clock className="w-5 h-5 text-green-700" />
-                        <span>{doctor.timings}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="w-5 h-5 text-purple-400" />
+                      <div className="flex items-center space-x-3 text-muted-foreground">
+                        <Calendar className="w-5 h-5 text-green-400" />
                         <span>{doctor.visitingDays}</span>
                       </div>
+                      <div className="flex items-center space-x-3 text-muted-foreground">
+                        <Clock className="w-5 h-5 text-purple-400" />
+                        <span>{doctor.timings}</span>
+                      </div>
                     </div>
-                    <div className="text-center md:text-left pt-4">
-                      <span className="text-green-700 font-bold text-2xl">
-                        {doctor.consultationFee}
-                      </span>
-                      <span className="text-muted-foreground text-lg ml-2">consultation</span>
+                    
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg font-semibold text-green-700">Consultation Fee:</span>
+                      <span className="text-lg text-foreground">{doctor.consultationFee}</span>
                     </div>
-                    <div className="flex gap-4 pt-4">
+                    
+                    <div className="flex space-x-4">
                       <Button 
-                        onClick={() => window.location.href = `/appointment?doctor=${doctor.id}`}
-                        className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-red-500 text-white px-8 py-3 rounded-2xl"
+                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+                        onClick={() => window.location.href = '/appointment'}
                       >
-                        <Calendar className="w-5 h-5 mr-2" />
                         Book Appointment
                       </Button>
-                      <Button variant="outline" className="glass text-green-700 hover:bg-white/80 px-8 py-3 rounded-2xl border border-green-700/30">
-                        <Phone className="w-5 h-5 mr-2 text-blue-400" />
-                        Call Now
+                      <Button 
+                        variant="outline" 
+                        className="border-green-600 text-green-600 hover:bg-green-50 px-6 py-2"
+                        onClick={() => window.location.href = '/doctors'}
+                      >
+                        View All Doctors
                       </Button>
                     </div>
                   </div>
@@ -176,10 +194,9 @@ const DoctorDetail = () => {
               </CardContent>
             </Card>
           </div>
-
-          {/* Detailed Information */}
+          
+          {/* Doctor Details */}
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            {/* About & Education */}
             <div className="space-y-8">
               {/* About */}
               <Card className="glass shadow-2xl border border-white/80">

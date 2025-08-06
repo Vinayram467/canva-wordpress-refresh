@@ -1,45 +1,144 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { sampleEvents } from '@/lib/utils';
-import { ArrowLeft, Calendar, Clock, MapPin } from 'lucide-react';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { getMedicalOrganizationSchema } from '@/utils/schema';
 
-const EventDetail = () => {
+export default function EventDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const event = sampleEvents.find(e => e.id === id);
 
-  if (!event) return <div className="text-center text-white py-20">Event not found.</div>;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950 pb-16">
-      <div className="container mx-auto px-4 pt-10">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-emerald-400 hover:text-blue-400 font-semibold mb-6"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          Back
-        </button>
-        <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
-          <div className="p-8">
-            <span className="inline-block bg-gradient-to-r from-emerald-400 to-blue-400 text-white text-xs font-bold px-4 py-1 rounded-full shadow mb-4">
-              {event.type}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent mb-4 animate-gradient-text">
-              {event.title}
-            </h1>
-            <div className="flex flex-col gap-2 text-white/90 text-base mb-6">
-              <div className="flex items-center gap-2"><Calendar className="w-5 h-5 text-emerald-400" /> <span>{event.date}</span></div>
-              <div className="flex items-center gap-2"><Clock className="w-5 h-5 text-blue-400" /> <span>{event.time}</span></div>
-              <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-purple-400" /> <span>{event.location}</span></div>
-            </div>
-            <div className="text-lg text-white/90 leading-relaxed">
-              {event.description}
-            </div>
+  if (!event) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-foreground mb-4">Event Not Found</h1>
+            <p className="text-muted-foreground mb-6">The event you are looking for does not exist.</p>
+            <button 
+              onClick={() => window.history.back()} 
+              className="bg-green-700 hover:bg-blue-400 text-white px-6 py-2 rounded-lg transition-colors"
+            >
+              Go Back
+            </button>
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Generate SEO data for the event detail page
+  const seoData = {
+    title: `${event.title} | Medical Event in Jayanagar | Maiya Hospital`,
+    description: event.description,
+    keywords: `medical events jayanagar, health camps bangalore, ${event.title.toLowerCase()}, maiya hospital events, community health bangalore, medical awareness jayanagar`,
+    canonical: `https://maiyahospital.in/event/${id}`,
+    ogTitle: `${event.title} | Medical Event in Jayanagar | Maiya Hospital`,
+    ogDescription: event.description,
+    ogImage: 'https://maiyahospital.in/event-default-og.jpg',
+    twitterTitle: `${event.title} | Medical Event in Jayanagar | Maiya Hospital`,
+    twitterDescription: event.description,
+    twitterImage: 'https://maiyahospital.in/event-default-twitter.jpg',
+    structuredData: getMedicalOrganizationSchema()
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
+      <SEOHead {...seoData} />
+      <div className="container mx-auto px-4">
+        <article className="max-w-4xl mx-auto">
+          {/* Event Header */}
+          <header className="mb-8">
+            <div className="flex items-center text-sm text-muted-foreground mb-4">
+              <span className={`inline-block px-4 py-1 rounded-full text-xs font-bold shadow ${
+                event.type === 'Health Camp' ? 'bg-emerald-500 text-white' : 
+                event.type === 'Vaccination' ? 'bg-blue-500 text-white' : 
+                'bg-purple-500 text-white'
+              }`}>
+                {event.type}
+              </span>
+              <span className="mx-2">•</span>
+              <span>{event.date}</span>
+              <span className="mx-2">•</span>
+              <span>{event.time}</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
+              {event.title}
+            </h1>
+            <div className="flex flex-col sm:flex-row gap-4 text-muted-foreground">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+                <span>{event.location}</span>
+              </div>
+            </div>
+          </header>
+
+          {/* Event Content */}
+          <div className="prose prose-lg max-w-none">
+            <div className="text-muted-foreground leading-relaxed">
+              {event.description}
+            </div>
+          </div>
+
+          {/* Event Details */}
+          <div className="mt-12 grid md:grid-cols-2 gap-8">
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+              <h3 className="text-xl font-semibold text-foreground mb-4">Event Details</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-muted-foreground">Date: {event.date}</span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-muted-foreground">Time: {event.time}</span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-purple-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-muted-foreground">Location: {event.location}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+              <h3 className="text-xl font-semibold text-foreground mb-4">Registration</h3>
+              <p className="text-muted-foreground mb-4">
+                Join us for this important health event. Registration is free and open to all.
+              </p>
+              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                Register Now
+              </button>
+            </div>
+          </div>
+
+          {/* Event Footer */}
+          <footer className="mt-12 pt-8 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-muted-foreground">Share this event:</span>
+                <button className="text-blue-600 hover:text-blue-700">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6 3a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2H6zM4 5a4 4 0 014-4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V5z"/>
+                  </svg>
+                </button>
+              </div>
+              <button 
+                onClick={() => window.history.back()} 
+                className="text-green-600 hover:text-green-700 font-semibold"
+              >
+                ← Back to Events
+              </button>
+            </div>
+          </footer>
+        </article>
+      </div>
     </div>
   );
-};
-
-export default EventDetail; 
+} 

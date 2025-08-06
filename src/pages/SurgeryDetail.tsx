@@ -1,20 +1,23 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ArrowLeft, Phone, Clock, Shield, Award, Heart, Users, Activity, Scissors, Brain, Eye, Baby, Bone, MapPin, Mail, ArrowRight, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Phone, Clock, Shield, Award, Heart, Users, Activity } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getMedicalOrganizationSchema } from "@/utils/schema";
 
 // Surgery data - this would normally come from an API
 const surgeryData = {
-  "laparoscopic-hernia-repair": {
-    name: "Laparoscopic Herina Repair",
+  "1": {
+    name: "Laparoscopic Hernia Repair",
     description: "We make life pain-free with Laparoscopic Hernia Repair that ensures better recovery and no discomfort.",
     about: "Laparoscopic hernia repair is a **minimally invasive surgical** procedure done to repair the protrusion.",
     indications: [
-      "Inguinal - Protrusion happens in the inner groin",
+      "Inguinal - Protrusion happens in theinner groin",
       "Femoral - Protrusion happens in the outer groin/upper thigh", 
       "Incisional - Protrusion happens through a scar or incision in the abdomen",
       "Ventral - Protrusion happens in the general abdominal/ventral wall",
@@ -49,10 +52,14 @@ const surgeryData = {
         question: "Is it safe to leave a mesh inside the body?",
         answer: "The mesh used is the same as the one used in open operations over the last many decades. The safety and efficacy of the mesh are beyond any doubt, as it has been proved by numerous trials done across the world."
       }
-    ]
+    ],
+    image: "/Laparoscopic Herina Repair.jpeg",
+    banner: "/Laparoscopic Herina Repair banner.png",
+    duration: "1-2 hours",
+    recovery: "2-4 weeks"
   },
-  "laparoscopic-gall-bladder-removal": {
-    name: "Laparoscopic GallBlaadder Removal",
+  "2": {
+    name: "Laparoscopic Gall Bladder Removal",
     description: "Advanced laparoscopic cholecystectomy procedure for safe and effective gall bladder removal.",
     about: "Laparoscopic gallbladder removal (cholecystectomy) is a minimally invasive surgical procedure to remove the gallbladder.",
     indications: [
@@ -79,10 +86,14 @@ const surgeryData = {
         question: "What is the recovery time?",
         answer: "Most patients can return to normal activities within 1-2 weeks."
       }
-    ]
+    ],
+    image: "/Laparoscopic GallBlaadder Removal.jpeg",
+    banner: "/Laparoscopic GallBlaadder Removal banner.png",
+    duration: "1-1.5 hours",
+    recovery: "1-2 weeks"
   },
-  "laparoscopic-hysterectomy": {
-    name: "Laparascopic Hysterectomy",
+  "3": {
+    name: "Laparoscopic Hysterectomy",
     description: "Minimally invasive hysterectomy procedure with reduced recovery time and improved outcomes.",
     about: "Laparoscopic hysterectomy is a surgical procedure to remove the uterus using minimally invasive techniques.",
     indications: [
@@ -110,10 +121,14 @@ const surgeryData = {
         question: "How long is the recovery period?",
         answer: "Recovery typically takes 4-6 weeks."
       }
-    ]
+    ],
+    image: "/Laparascopic Hysterectomy.jpeg",
+    banner: "/Laparascopic Hysterectomy banner.png",
+    duration: "2-3 hours",
+    recovery: "2-4 weeks"
   },
-  "arthroscopy": {
-    name: "Arthroscopy Surgery",
+  "4": {
+    name: "Arthroscopy",
     description: "Advanced joint examination and treatment using arthroscopic techniques for precise diagnosis and treatment.",
     about: "Arthroscopy is a minimally invasive surgical procedure used to diagnose and treat joint problems.",
     indications: [
@@ -140,9 +155,13 @@ const surgeryData = {
         question: "How long does recovery take?",
         answer: "Recovery time varies but typically ranges from a few days to several weeks."
       }
-    ]
+    ],
+    image: "/Arthroscopy Surgery .jpeg",
+    banner: "/Arthroscopy Surgery banner.png",
+    duration: "30-60 minutes",
+    recovery: "1-2 weeks"
   },
-  "total-knee-replacement": {
+  "5": {
     name: "Total Knee Replacement",
     description: "Complete knee joint replacement using state-of-the-art prosthetics and surgical techniques.",
     about: "Total knee replacement is a surgical procedure to replace a damaged knee joint with an artificial implant.",
@@ -170,9 +189,13 @@ const surgeryData = {
         question: "When can I return to normal activities?",
         answer: "Most patients can return to normal activities within 3-6 months."
       }
-    ]
+    ],
+    image: "/Total Knee Replacement.jpeg",
+    banner: "/Total Knee Replacement banner.png",
+    duration: "2-3 hours",
+    recovery: "6-8 weeks"
   },
-  "total-hip-replacement": {
+  "6": {
     name: "Total Hip Replacement",
     description: "Advanced hip joint replacement procedure for improved mobility and pain relief.",
     about: "Total hip replacement is a surgical procedure to replace a damaged hip joint with an artificial implant.",
@@ -200,10 +223,14 @@ const surgeryData = {
         question: "What activities can I do after hip replacement?",
         answer: "Most patients can return to normal activities including walking, swimming, and golf."
       }
-    ]
+    ],
+    image: "/Total Hip Replacement.jpeg",
+    banner: "/Total Hip Replacement banner.jpg",
+    duration: "2-3 hours",
+    recovery: "6-8 weeks"
   },
-  "kidney-stone-removal": {
-    name: "Kidney stone removal",
+  "7": {
+    name: "Kidney Stone Removal",
     description: "Effective kidney stone removal using modern techniques and equipment.",
     about: "Kidney stone removal involves various procedures to break down or remove stones from the urinary tract.",
     indications: [
@@ -230,40 +257,48 @@ const surgeryData = {
         question: "How can I prevent kidney stones?",
         answer: "Drinking plenty of water and following a balanced diet can help prevent kidney stones."
       }
-    ]
+    ],
+    image: "/Kidney stone removal.jpeg",
+    banner: "/Kidney stone removal banner.png",
+    duration: "1-2 hours",
+    recovery: "1-2 weeks"
   },
-  "dj-stenting": {
-    name: "Dj Stenting",
-    description: "Double J stenting procedure for urinary tract obstruction relief.",
-    about: "DJ stenting is a procedure to place a stent in the ureter to maintain urine flow from the kidney to the bladder.",
+  "8": {
+    name: "DJ Stenting",
+    description: "Advanced DJ stenting procedure for urinary tract treatment and management.",
+    about: "DJ stenting is a minimally invasive procedure to place a stent in the ureter to maintain urine flow.",
     indications: [
       "Ureteral obstruction",
       "Kidney stones",
       "Ureteral strictures",
-      "Post-surgical support",
-      "Cancer-related obstruction"
+      "Post-operative drainage",
+      "Urinary tract infections"
     ],
-    procedure: "A flexible tube (stent) is placed in the ureter using endoscopic techniques.",
+    procedure: "A flexible stent is placed in the ureter using endoscopic techniques to maintain urine flow and prevent obstruction.",
     benefits: [
-      "Relieves obstruction",
-      "Maintains kidney function",
-      "Reduces pain",
-      "Prevents complications",
-      "Temporary solution"
+      "Relieves urinary obstruction",
+      "Maintains urine flow",
+      "Minimal invasiveness",
+      "Quick recovery",
+      "Reduces complications"
     ],
     faqs: [
       {
-        question: "How long does the stent stay in place?",
-        answer: "Stents are typically left in place for 2-6 weeks depending on the condition."
+        question: "How long does the procedure take?",
+        answer: "DJ stenting typically takes 30-60 minutes to complete."
       },
       {
-        question: "Will I feel the stent?",
-        answer: "Some patients may experience mild discomfort or urinary symptoms."
+        question: "What is the recovery time?",
+        answer: "Most patients can return to normal activities within 1-2 weeks."
       }
-    ]
+    ],
+    image: "/Dj Stenting.jpeg",
+    banner: "/Dj Stenting banner.png",
+    duration: "30-60 minutes",
+    recovery: "1-2 weeks"
   },
-  "turp": {
-    name: "Transurethral Prostate Resection",
+  "9": {
+    name: "TURP (Prostate Surgery)",
     description: "Transurethral resection of the prostate for benign prostatic hyperplasia treatment.",
     about: "TURP is a surgical procedure to remove part of the prostate gland to relieve urinary symptoms.",
     indications: [
@@ -290,242 +325,280 @@ const surgeryData = {
         question: "What is the recovery time?",
         answer: "Most patients can return to normal activities within 1-2 weeks."
       }
-    ]
+    ],
+    image: "/Transurethral Prostate Resection.jpeg",
+    banner: "/Transurethral Prostate Resection banner.png",
+    duration: "1-1.5 hours",
+    recovery: "2-4 weeks"
   },
-  "modified-radical-mastectomy": {
+  "10": {
     name: "Modified Radical Mastectomy",
-    description: "Comprehensive breast cancer treatment with advanced surgical techniques.",
-    about: "Modified radical mastectomy is a surgical procedure to remove the breast and lymph nodes for breast cancer treatment.",
+    description: "Advanced breast cancer surgery with comprehensive treatment approach and improved outcomes.",
+    about: "Modified radical mastectomy is a surgical procedure to remove the breast and some lymph nodes while preserving chest muscles.",
     indications: [
       "Breast cancer",
       "Large tumors",
       "Multiple tumors",
-      "Inflammatory breast cancer",
-      "Prevention in high-risk patients"
+      "Lymph node involvement",
+      "High-risk cases"
     ],
-    procedure: "The entire breast and some lymph nodes are removed while preserving the chest muscles.",
+    procedure: "The procedure involves removing the breast tissue, nipple, areola, and some lymph nodes while preserving the chest muscles for better reconstruction options.",
     benefits: [
-      "Effective cancer treatment",
-      "Reduced risk of recurrence",
-      "Comprehensive lymph node evaluation",
+      "Comprehensive cancer treatment",
       "Preserves chest muscles",
-      "Better cosmetic outcomes"
+      "Better reconstruction options",
+      "Reduced risk of recurrence",
+      "Improved survival rates"
     ],
     faqs: [
       {
-        question: "Will I need chemotherapy after surgery?",
-        answer: "The need for chemotherapy depends on the stage and type of cancer."
+        question: "What is the recovery time after mastectomy?",
+        answer: "Recovery typically takes 4-6 weeks, with gradual return to normal activities."
       },
       {
-        question: "Can I have breast reconstruction?",
-        answer: "Yes, breast reconstruction can be performed immediately or later."
+        question: "Can I have breast reconstruction after mastectomy?",
+        answer: "Yes, breast reconstruction can be performed immediately or delayed after mastectomy."
       }
-    ]
+    ],
+    image: "/Modified Radical Mastectomy .jpeg",
+    banner: "/Modified Radical Mastectomy banner.png",
+    duration: "2-4 hours",
+    recovery: "4-6 weeks"
   }
 };
 
 const SurgeryDetail = () => {
   const { slug } = useParams();
-  const surgery = surgeryData[slug];
-
-  // Dynamically generate the banner path based on the surgery name
-  const bannerPath = surgery ? `/${surgery.name} banner.png` : '';
+  const surgery = surgeryData[slug as keyof typeof surgeryData];
 
   if (!surgery) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">Surgery Not Found</h2>
-          <Link to="/deluxe-surgeries">
-            <Button>Back to Deluxe Surgeries</Button>
-          </Link>
+          <h1 className="text-2xl font-bold text-foreground mb-4">Surgery Not Found</h1>
+          <p className="text-muted-foreground mb-6">The surgery you are looking for does not exist.</p>
+          <Button onClick={() => window.history.back()}>
+            Go Back
+          </Button>
         </div>
       </div>
     );
   }
 
+  // Generate SEO data for the surgery detail page
+  const seoData = {
+    title: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
+    description: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons. Best ${surgery.name.toLowerCase()} treatment available.`,
+    keywords: `${surgery.name.toLowerCase()} bangalore, minimally invasive surgery, ${surgery.name.toLowerCase()} jayanagar, best ${surgery.name.toLowerCase()} surgeon, ${surgery.name.toLowerCase()} treatment bangalore`,
+    canonical: `https://maiyahospital.in/deluxe-surgeries/${slug}`,
+    ogTitle: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
+    ogDescription: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons.`,
+    ogImage: `https://maiyahospital.in/surgery-${slug}-og.jpg`,
+    twitterTitle: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
+    twitterDescription: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons.`,
+    twitterImage: `https://maiyahospital.in/surgery-${slug}-twitter.jpg`,
+    structuredData: getMedicalOrganizationSchema()
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <SEOHead {...seoData} />
       <Header />
       
-      {/* Banner */}
-      <div 
-        className="w-full h-screen relative"
-        style={{
-          backgroundImage: `url('${bannerPath}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-      </div>
-
-      {/* About Surgery */}
-      <section className="container mx-auto px-4 py-16">
-        <Card className="glass shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-foreground">About {surgery.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg text-muted-foreground mb-6">{surgery.about}</p>
-            
-            <h3 className="text-2xl font-semibold text-foreground mb-4">What are the indications of {surgery.name.toLowerCase()}?</h3>
-            <p className="text-muted-foreground mb-4">
-              A hernia is a protrusion of internal organs or other parts of the body through the muscle wall or tissue that usually contains it. Abdomen is the most common site for hernia development is the abdomen due to the weakening of the abdominal walls, which results in a bulge or tear. The most common types of hernia are:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              {surgery.indications.map((indication, index) => (
-                <li key={index} className="text-lg">{indication}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Procedure */}
-      <section className="container mx-auto px-4 py-16">
-        <Card className="glass shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-foreground">How is the procedure done?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-lg text-muted-foreground">{surgery.procedure}</p>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Benefits */}
-      <section className="container mx-auto px-4 py-16">
-        <Card className="glass shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-foreground">What are the benefits of {surgery.name.toLowerCase()}?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground mb-4">Below-mentioned is some of the benefits:</p>
-            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              {surgery.benefits.map((benefit, index) => (
-                <li key={index} className="text-lg">{benefit}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Why Choose Maiya Hospital */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Maiya Hospital?</h2>
+      {/* Hero Section with Banner */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <Card className="glass shadow-xl text-center">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Efficient and Empathetic Staff</h3>
-              <p className="text-muted-foreground">Our health care professionals are dedicated to providing the best healthcare services, prioritizing the needs of the patient.</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="glass shadow-xl text-center">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Activity className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Latest and Advanced Technology</h3>
-              <p className="text-muted-foreground">We aim at providing the latest diagnostics, high-tech treatment facilities and constructive medical procedures at affordable prices.</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="glass shadow-xl text-center">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Transparent Pricing</h3>
-              <p className="text-muted-foreground">We have a transparent pricing system with detailed information of tests, consultations and medical procedures.</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="glass shadow-xl text-center">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Patient-Centric Approach</h3>
-              <p className="text-muted-foreground">We believe in adopting a patient centric approach to cater the individual needs of the patient.</p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
-      {/* FAQ Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Frequently Asked Questions (FAQ's)</h2>
-        </div>
-        
-        <Card className="glass shadow-xl">
-          <CardContent className="p-6">
-            <Accordion type="single" collapsible className="w-full">
-              {surgery.faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left text-lg font-semibold text-foreground">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Book Appointment Section */}
-      <section className="container mx-auto px-4 py-16">
-        <Card className="glass shadow-xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-foreground">Book an Appointment</CardTitle>
-            <p className="text-muted-foreground">Please fill out the form & our representative will contact you within 24hrs.</p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Patient Full Name</label>
-                <input type="text" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Phone</label>
-                <input type="tel" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Email</label>
-                <input type="email" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Gender</label>
-                <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option>Select Gender</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-foreground mb-2">Your Query</label>
-                <textarea rows={4} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-              </div>
-              <div className="md:col-span-2 text-center">
-                <Button className="bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 hover:from-green-600 hover:via-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold">
-                  Submit Request
-                </Button>
-              </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-emerald-400 font-semibold text-sm mb-6">
+              <Scissors className="w-4 h-4" />
+              <span>Advanced Surgery</span>
             </div>
-          </CardContent>
-        </Card>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              {surgery.name}
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              {surgery.description}
+            </p>
+          </div>
+
+                     {/* Surgery Banner Image */}
+           <div className="relative mb-12">
+             <div className="w-full h-auto rounded-2xl shadow-2xl overflow-hidden">
+               <img 
+                 src={surgery.banner} 
+                 alt={`${surgery.name} - Maiya Hospital`}
+                 className="w-full h-auto object-cover"
+                 onError={(e) => {
+                   // Fallback to a gradient if image fails to load
+                   e.currentTarget.style.background = 'linear-gradient(to right, #3b82f6, #1d4ed8)';
+                   e.currentTarget.style.display = 'flex';
+                   e.currentTarget.style.alignItems = 'center';
+                   e.currentTarget.style.justifyContent = 'center';
+                   e.currentTarget.innerHTML = '<svg class="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                 }}
+               />
+             </div>
+           </div>
+
+          <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Surgery Details */}
+            <div className="lg:col-span-2 space-y-8">
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground">About {surgery.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <p className="text-muted-foreground leading-relaxed">
+                    {surgery.about}
+                  </p>
+                  
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-3">Indications</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {surgery.indications.map((indication, index) => (
+                        <Badge key={index} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          {indication}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-3">Key Benefits</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {surgery.benefits.map((benefit, index) => (
+                        <Badge key={index} variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                          {benefit}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Procedure */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-xl text-foreground">Surgical Procedure</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {surgery.procedure}
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* FAQ Section */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground text-center">Frequently Asked Questions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    {surgery.faqs.map((faq, index) => (
+                      <AccordionItem key={index} value={`item-${index}`}>
+                        <AccordionTrigger className="text-left">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <p className="text-muted-foreground">{faq.answer}</p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Surgery Image */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardContent className="p-6">
+                                     <div className="w-full h-64 rounded-xl overflow-hidden mb-4">
+                     <img 
+                       src={surgery.image} 
+                       alt={`${surgery.name} - Maiya Hospital`}
+                       className="w-full h-full object-contain"
+                       onError={(e) => {
+                         // Fallback to a gradient if image fails to load
+                         e.currentTarget.style.background = 'linear-gradient(to right, #3b82f6, #1d4ed8)';
+                         e.currentTarget.style.display = 'flex';
+                         e.currentTarget.style.alignItems = 'center';
+                         e.currentTarget.style.justifyContent = 'center';
+                         e.currentTarget.innerHTML = '<svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                       }}
+                     />
+                   </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{surgery.name}</h3>
+                  <p className="text-muted-foreground text-sm mb-4">{surgery.description}</p>
+                  
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Duration:</span>
+                      <span className="font-semibold">{surgery.duration}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Recovery:</span>
+                      <span className="font-semibold">{surgery.recovery}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* CTA Card */}
+              <Card className="glass shadow-2xl border border-white/80 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-3">Ready for Your Surgery?</h3>
+                  <p className="text-white/90 mb-4">
+                    Contact our expert surgeons to discuss your {surgery.name} procedure and schedule your consultation.
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    <Button 
+                      className="bg-white text-green-600 hover:bg-gray-100"
+                      onClick={() => window.location.href = '/appointment'}
+                    >
+                      Book Consultation
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="border-white text-white hover:bg-white hover:text-green-600"
+                      onClick={() => window.location.href = '/doctors'}
+                    >
+                      Meet Our Surgeons
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Contact Info */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">Contact Information</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <Phone className="w-5 h-5 text-green-600" />
+                      <span className="text-sm text-muted-foreground">070223 16149</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Mail className="w-5 h-5 text-blue-600" />
+                      <span className="text-sm text-muted-foreground">info@maiyahospital.in</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="w-5 h-5 text-purple-600" />
+                      <span className="text-sm text-muted-foreground">Jayanagar, Bangalore</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </section>
 
       <Footer />

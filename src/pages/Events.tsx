@@ -1,9 +1,27 @@
 import { sampleEvents } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { getMedicalOrganizationSchema, getEventSchema } from '@/utils/schema';
 
 export default function Events() {
+  // Generate SEO data for the events listing page
+  const seoData = {
+    title: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
+    description: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings, medical awareness programs, and community health initiatives.",
+    keywords: "medical events jayanagar, health camps bangalore, wellness programs jayanagar, health screenings bangalore, medical awareness jayanagar, community health bangalore, maiya hospital events",
+    canonical: "https://maiyahospital.in/events",
+    ogTitle: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
+    ogDescription: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings and medical awareness programs.",
+    ogImage: "https://maiyahospital.in/events-og.jpg",
+    twitterTitle: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
+    twitterDescription: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings and medical awareness programs.",
+    twitterImage: "https://maiyahospital.in/events-twitter.jpg",
+    structuredData: getMedicalOrganizationSchema()
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-emerald-950 py-16">
+      <SEOHead {...seoData} />
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">News & Events</h1>
         <div className="grid md:grid-cols-3 gap-8">
@@ -26,6 +44,21 @@ export default function Events() {
           ))}
         </div>
       </div>
+      
+      {/* Event Schema for Rich Results */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Medical Events at Maiya Hospital",
+          "description": "Upcoming medical events, health camps, and wellness programs at Maiya Hospital",
+          "itemListElement": sampleEvents.map((event, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": getEventSchema(event)
+          }))
+        })}
+      </script>
     </div>
   );
 } 

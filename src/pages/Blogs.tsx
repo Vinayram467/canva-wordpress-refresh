@@ -1,11 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { blogApi, Blog } from '@/services/api';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { getMedicalOrganizationSchema } from '@/utils/schema';
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Generate SEO data for the blogs listing page
+  const seoData = {
+    title: "Health Blog | Medical News & Tips - Maiya Hospital Bangalore",
+    description: "Stay informed with Maiya Hospital's health blog. Latest medical news, health tips, wellness advice from expert doctors in Bangalore. Read health articles now.",
+    keywords: "health blog bangalore, medical news updates, healthcare tips, health information bangalore, medical articles, maiya hospital blog, health tips jayanagar",
+    canonical: "https://maiyahospital.in/blogs",
+    ogTitle: "Health Blog | Medical News & Tips - Maiya Hospital Bangalore",
+    ogDescription: "Stay informed with Maiya Hospital's health blog. Latest medical news, health tips, wellness advice from expert doctors in Bangalore.",
+    ogImage: "https://maiyahospital.in/blogs-og.jpg",
+    twitterTitle: "Health Blog | Medical News & Tips - Maiya Hospital Bangalore",
+    twitterDescription: "Stay informed with Maiya Hospital's health blog. Latest medical news, health tips, wellness advice from expert doctors in Bangalore.",
+    twitterImage: "https://maiyahospital.in/blogs-twitter.jpg",
+    structuredData: getMedicalOrganizationSchema()
+  };
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -28,6 +45,7 @@ export default function Blogs() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
+        <SEOHead {...seoData} />
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
             Maiya Blogs
@@ -53,6 +71,7 @@ export default function Blogs() {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
+        <SEOHead {...seoData} />
         <div className="container mx-auto px-4">
           <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
             Maiya Blogs
@@ -73,6 +92,7 @@ export default function Blogs() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
+      <SEOHead {...seoData} />
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
           Maiya Blogs
@@ -98,23 +118,22 @@ export default function Blogs() {
                       }}
                     />
                     <span className="absolute top-4 left-4 bg-green-700 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">
-                      {blog.category}
-                    </span>
-                    <span className="absolute top-4 right-4 bg-blue-400 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                      {blog.readTime}
+                      Health Tips
                     </span>
                   </div>
                   <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center gap-3 text-muted-foreground text-xs mb-2">
-                      <span>{new Date(blog.date).toLocaleDateString()}</span>
-                      <span className="w-1 h-1 bg-green-700 rounded-full"></span>
-                      <span>{blog.author}</span>
+                    <div className="flex items-center text-sm text-muted-foreground mb-3">
+                      <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                      <span className="mx-2">•</span>
+                      <span>5 min read</span>
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-green-700 transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
                       {blog.title}
                     </h3>
-                    <p className="text-muted-foreground mb-4 flex-1">{blog.summary}</p>
-                    <span className="mt-auto inline-block text-green-700 font-semibold hover:underline">
+                    <p className="text-muted-foreground mb-4 flex-1 line-clamp-3">
+                      {blog.excerpt || blog.content.substring(0, 150) + '...'}
+                    </p>
+                    <span className="text-green-600 font-semibold hover:underline group-hover:text-green-700 transition-colors duration-300">
                       Read More &rarr;
                     </span>
                   </div>

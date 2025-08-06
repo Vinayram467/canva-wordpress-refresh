@@ -21,6 +21,7 @@ import Events from "./pages/Events";
 import ServiceDetail from "./pages/ServiceDetail";
 import DeluxeSurgeries from "./pages/DeluxeSurgeries";
 import SurgeryDetail from "./pages/SurgeryDetail";
+import SpecialtyDetail from "./pages/SpecialtyDetail";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/events" element={<Events />} />
               <Route path="/service/:id" element={<ServiceDetail />} />
+              <Route path="/specialty/:id" element={<SpecialtyDetail />} />
               <Route path="/deluxe-surgeries" element={<DeluxeSurgeries />} />
               <Route path="/deluxe-surgeries/:slug" element={<SurgeryDetail />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

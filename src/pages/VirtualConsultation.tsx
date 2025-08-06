@@ -7,12 +7,29 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { consultationApi } from "@/services/api";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getMedicalOrganizationSchema } from "@/utils/schema";
 
 const VirtualConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ patientName: '', patientEmail: '', phone: '', description: '', date: '' });
   const [successDetails, setSuccessDetails] = useState<null | typeof formData>(null);
   const { toast } = useToast();
+
+  // Generate SEO data for the virtual consultation page
+  const seoData = {
+    title: "Online Doctor Consultation in Jayanagar | Maiya Hospital Bangalore",
+    description: "Get online doctor consultation in Jayanagar from expert doctors at Maiya Hospital. Virtual medical consultation, telemedicine services, and remote healthcare. Book online consultation.",
+    keywords: "online doctor consultation jayanagar, virtual consultation bangalore, telemedicine jayanagar, remote consultation bangalore, online medical consultation jayanagar, video consultation bangalore",
+    canonical: "https://maiyahospital.in/virtual-consultation",
+    ogTitle: "Online Doctor Consultation in Jayanagar | Maiya Hospital Bangalore",
+    ogDescription: "Get online doctor consultation in Jayanagar from expert doctors at Maiya Hospital. Virtual medical consultation, telemedicine services, and remote healthcare.",
+    ogImage: "https://maiyahospital.in/virtual-consultation-og.jpg",
+    twitterTitle: "Online Doctor Consultation in Jayanagar | Maiya Hospital Bangalore",
+    twitterDescription: "Get online doctor consultation in Jayanagar from expert doctors at Maiya Hospital. Virtual medical consultation, telemedicine services, and remote healthcare.",
+    twitterImage: "https://maiyahospital.in/virtual-consultation-twitter.jpg",
+    structuredData: getMedicalOrganizationSchema()
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -67,6 +84,7 @@ const VirtualConsultation = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <SEOHead {...seoData} />
       <Header />
       
       <main className="relative overflow-hidden">

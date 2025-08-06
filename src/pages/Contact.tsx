@@ -3,271 +3,185 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
-  Navigation,
-  Send,
-  MessageCircle,
-  Heart
-} from "lucide-react";
+import { MessageSquare, Building, MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useToast } from "@/hooks/use-toast";
-import { messageApi } from "@/services/api";
-import { useState } from "react";
-import ApiTest from "@/components/ApiTest";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getMedicalOrganizationSchema, getLocalBusinessSchema } from "@/utils/schema";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
-  const { toast } = useToast();
-
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await messageApi.create(formData);
-      toast({
-        title: "Message Sent!",
-        description: "Your message has been sent. A confirmation email has been sent to your email address.",
-      });
-      setFormData({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' });
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-      });
-    }
+  // Generate SEO data for the contact page
+  const seoData = {
+    title: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
+    description: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    keywords: "contact maiya hospital, hospital address bangalore, maiya hospital phone number, hospital location jayanagar, get directions hospital, maiya hospital contact",
+    canonical: "https://maiyahospital.in/contact",
+    ogTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
+    ogDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    ogImage: "https://maiyahospital.in/contact-og.jpg",
+    twitterTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
+    twitterDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    twitterImage: "https://maiyahospital.in/contact-twitter.jpg",
+    structuredData: getMedicalOrganizationSchema()
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <SEOHead {...seoData} />
       <Header />
       
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
-        {/* Animated background elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-6 h-6 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg animate-float opacity-80"></div>
-          <div className="absolute top-60 right-20 w-4 h-12 bg-gradient-to-b from-red-500 to-pink-500 rounded-full animate-float delay-300 opacity-70"></div>
-          <div className="absolute bottom-40 left-32 w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full animate-float delay-700 opacity-60"></div>
-          
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 mb-12">
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              <span className="block mb-4">Contact</span>
-              <span className="bg-gradient-to-r from-green-600 via-blue-400 to-red-500 bg-clip-text text-transparent animate-text-glow">
-                Maiya Hospital
-              </span>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Get in Touch
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              Get in touch with us for appointments, inquiries, or emergency medical care
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              We're here to help you with any questions about our services, appointments, or general inquiries. 
+              Contact us today for quality healthcare at Maiya Hospital, Jayanagar, Bangalore.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* API Test Component */}
-            <div className="lg:col-span-2 mb-8">
-              <ApiTest />
-            </div>
-            
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <Card className="glass border border-white/80 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-foreground text-2xl flex items-center">
-                    <MapPin className="mr-3 text-green-600" />
-                    Hospital Address
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground text-lg leading-relaxed">
-                    Maiya Multi Speciality Hospital<br />
-                    34, 10th Main Rd, Jayanagar 1st Block<br />
-                    Bengaluru, Karnataka 560011<br />
-                    India
-                  </p>
-                  <Button className="bg-gradient-to-r from-green-600 to-red-500 hover:from-green-700 hover:to-red-600 text-white rounded-2xl">
-                    <Navigation className="w-4 h-4 mr-2" />
-                    Get Directions
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="glass border border-white/80 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-foreground text-2xl flex items-center">
-                    <Phone className="mr-3 text-green-600" />
-                    Phone Numbers
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Emergency:</span>
-                      <span className="text-green-600 font-semibold">+91 98450 12345</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Reception:</span>
-                      <span className="text-red-500 font-semibold">70223 16149 / 74060 07777</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Landline:</span>
-                      <span className="text-blue-600 font-semibold">080-41000980</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass border border-white/80 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-foreground text-2xl flex items-center">
-                    <Clock className="mr-3 text-green-600" />
-                    Hospital Timings
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">24/7, 365 Days:</span>
-                      <span className="text-green-600 font-semibold">Always Open</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Emergency:</span>
-                      <span className="text-red-500 font-semibold">24/7 Available</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Services:</span>
-                      <span className="text-blue-600 font-semibold">Round the Clock</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
+          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}
-            <Card className="glass border border-white/80 shadow-2xl">
+            <Card className="glass shadow-2xl border border-white/80">
               <CardHeader>
-                <CardTitle className="text-foreground text-2xl flex items-center">
-                  <MessageCircle className="mr-3 text-green-600" />
+                <CardTitle className="text-2xl text-foreground flex items-center">
+                  <MessageSquare className="w-6 h-6 mr-2 text-green-600" />
                   Send us a Message
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <form onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName" className="text-foreground">First Name</Label>
-                      <Input 
-                        id="firstName"
-                        name="firstName"
-                        placeholder="Your first name"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName" className="text-foreground">Last Name</Label>
-                      <Input 
-                        id="lastName"
-                        name="lastName"
-                        placeholder="Your last name"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                      />
-                    </div>
-                  </div>
-
+                <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-foreground">Email Address</Label>
-                    <Input 
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your.email@example.com"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                    />
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input id="firstName" placeholder="Enter your first name" />
                   </div>
-
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-foreground">Phone Number</Label>
-                    <Input 
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+91 9876543210"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                    />
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input id="lastName" placeholder="Enter your last name" />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="subject" className="text-foreground">Subject</Label>
-                    <Input 
-                      id="subject"
-                      name="subject"
-                      placeholder="How can we help you?"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message" className="text-foreground">Message</Label>
-                    <Textarea 
-                      id="message"
-                      name="message"
-                      placeholder="Tell us more about your inquiry..."
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows={4}
-                      className="bg-white/80 border-gray-300 text-foreground placeholder:text-muted-foreground"
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full bg-gradient-to-r from-green-600 to-red-500 hover:from-green-700 hover:to-red-600 text-white rounded-2xl py-6 text-lg font-semibold shadow-lg hover:shadow-green-500/30 transform hover:-translate-y-1 transition-all duration-300">
-                    <Send className="w-5 h-5 mr-2" />
-                    Send Message
-                  </Button>
-                </form>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address *</Label>
+                  <Input id="email" type="email" placeholder="Enter your email address" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input id="phone" type="tel" placeholder="Enter your phone number" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="subject">Subject *</Label>
+                  <Input id="subject" placeholder="What is this regarding?" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message *</Label>
+                  <Textarea 
+                    id="message" 
+                    placeholder="Please describe your inquiry or concern..."
+                    className="min-h-[120px]"
+                  />
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  <Send className="w-4 h-4 mr-2" />
+                  Send Message
+                </Button>
               </CardContent>
             </Card>
+
+            {/* Contact Information */}
+            <div className="space-y-8">
+              {/* Hospital Information */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground flex items-center">
+                    <Building className="w-6 h-6 mr-2 text-blue-600" />
+                    Hospital Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="w-5 h-5 text-red-500 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Address</h4>
+                      <p className="text-muted-foreground">
+                        Maiya Hospital<br />
+                        Jayanagar, Bangalore<br />
+                        Karnataka, India
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Phone className="w-5 h-5 text-green-500 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Phone Numbers</h4>
+                      <p className="text-muted-foreground">
+                        Emergency: 070223 16149<br />
+                        Ambulance: 74060 07777<br />
+                        General: +91 98450 12345
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Mail className="w-5 h-5 text-blue-500 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Email</h4>
+                      <p className="text-muted-foreground">
+                        info@maiyahospital.in<br />
+                        emergency@maiyahospital.in
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Clock className="w-5 h-5 text-purple-500 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Visiting Hours</h4>
+                      <p className="text-muted-foreground">
+                        Emergency: 24/7<br />
+                        OPD: 9:00 AM - 8:00 PM<br />
+                        Visiting Hours: 10:00 AM - 8:00 PM
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Emergency Contact */}
+              <Card className="glass shadow-2xl border border-white/80 bg-gradient-to-r from-red-600 to-red-700 text-white">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-3">Emergency Contact</h3>
+                  <p className="text-white/90 mb-4">
+                    For medical emergencies, call our emergency number immediately. Our emergency team is available 24/7.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4" />
+                      <span className="font-semibold">Emergency: 070223 16149</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4" />
+                      <span>Ambulance: 74060 07777</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Emergency Contact Section */}
-      <section className="py-16 bg-white/5 backdrop-blur-sm border-t border-white/10">
-        <div className="container mx-auto px-4 text-center">
-          <div className="bg-red-500/20 backdrop-blur-xl border border-red-500/30 rounded-3xl p-8 max-w-2xl mx-auto">
-            <Heart className="w-16 h-16 text-red-500 mx-auto mb-4 animate-pulse" />
-            <h3 className="text-2xl font-bold text-foreground mb-4">Medical Emergency?</h3>
-            <p className="text-muted-foreground mb-6">
-              For immediate medical attention, call our emergency number or visit our emergency department.
-            </p>
-            <Button size="lg" className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-2xl px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-red-500/30">
-              <Phone className="w-5 h-5 mr-2" />
-              Emergency: +91 98450 12345
-            </Button>
-          </div>
-        </div>
-      </section>
-
+      
       <Footer />
+      
+      {/* LocalBusiness Schema for Rich Results */}
+      <script type="application/ld+json">
+        {JSON.stringify(getLocalBusinessSchema())}
+      </script>
     </div>
   );
 };

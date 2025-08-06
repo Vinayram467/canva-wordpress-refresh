@@ -1,147 +1,43 @@
-import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Users, 
-  Heart, 
-  Award, 
-  CheckCircle,
-  Building2,
-  Stethoscope,
-  Trophy,
-  ThumbsUp,
-  ArrowRight,
-  ExternalLink
-} from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar, Clock, Phone, Mail, MapPin, User, CalendarDays, MessageSquare, CheckCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useToast } from "@/hooks/use-toast";
-import { appointmentApi } from "@/services/api";
-
-// Custom hook for counting animation
-const useCountAnimation = (end: number, duration: number = 2000) => {
-  const [count, setCount] = useState(0);
-  const countRef = useRef(count);
-  const [isInView, setIsInView] = useState(false);
-  const elementRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
-    }
-
-    return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    const startTime = Date.now();
-    const startValue = countRef.current;
-    
-    const updateCount = () => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / duration, 1);
-      
-      if (progress < 1) {
-        const nextCount = Math.floor(startValue + (end - startValue) * progress);
-        setCount(nextCount);
-        countRef.current = nextCount;
-        requestAnimationFrame(updateCount);
-      } else {
-        setCount(end);
-        countRef.current = end;
-      }
-    };
-
-    requestAnimationFrame(updateCount);
-  }, [end, duration, isInView]);
-
-  return { count, ref: elementRef };
-};
+import { SEOHead } from "@/components/seo/SEOHead";
+import { getMedicalOrganizationSchema } from "@/utils/schema";
 
 const AppointmentBooking = () => {
-  const [searchParams] = useSearchParams();
-  const doctorId = searchParams.get('doctor');
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [formData, setFormData] = useState({
-    patientName: '',
-    phone: '',
-    email: '',
-    date: '',
-    time: '',
-    reason: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    date: "",
+    time: "",
+    department: "",
+    doctor: "",
+    message: ""
   });
-  const [successDetails, setSuccessDetails] = useState<null | typeof formData>(null);
-  const { toast } = useToast();
 
-  const stats = [
-    { 
-      number: 50, 
-      suffix: "+",
-      label: "Expert Doctors", 
-      icon: Users,
-      description: "Specialists across departments",
-      color: "from-emerald-500 to-emerald-600"
-    },
-    { 
-      number: 15000, 
-      suffix: "+",
-      label: "Patients Served", 
-      icon: Heart,
-      description: "Trust and satisfaction",
-      color: "from-blue-500 to-blue-600"
-    },
-    { 
-      number: 98, 
-      suffix: "%",
-      label: "Success Rate", 
-      icon: Award,
-      description: "Quality healthcare delivery",
-      color: "from-purple-500 to-purple-600"
-    },
-    { 
-      number: 24, 
-      suffix: "/7",
-      label: "Available", 
-      icon: Clock,
-      description: "Round-the-clock service",
-      color: "from-red-500 to-red-600"
-    }
-  ];
-
-  // This would normally fetch doctor data from the doctors list
-  useEffect(() => {
-    if (doctorId) {
-      // Mock doctor data - in real app, fetch from API
-      setSelectedDoctor({
-        name: "Dr. Selected Doctor",
-        specialty: "Specialty",
-        consultationFee: "₹600"
-      });
-    }
-  }, [doctorId]);
+  // Generate SEO data for the appointment booking page
+  const seoData = {
+    title: "Book Appointment Online | Maiya Hospital Bangalore | Easy Booking",
+    description: "Book doctor appointment online at Maiya Hospital Bangalore. Easy online booking system for consultations, check-ups. Schedule your visit today - Quick & convenient.",
+    keywords: "book appointment online, doctor appointment bangalore, online booking hospital, schedule consultation, appointment booking system, maiya hospital appointment",
+    canonical: "https://maiyahospital.in/appointment",
+    ogTitle: "Book Appointment Online | Maiya Hospital Bangalore | Easy Booking",
+    ogDescription: "Book doctor appointment online at Maiya Hospital Bangalore. Easy online booking system for consultations, check-ups. Schedule your visit today - Quick & convenient.",
+    ogImage: "https://maiyahospital.in/appointment-og.jpg",
+    twitterTitle: "Book Appointment Online | Maiya Hospital Bangalore | Easy Booking",
+    twitterDescription: "Book doctor appointment online at Maiya Hospital Bangalore. Easy online booking system for consultations, check-ups. Schedule your visit today - Quick & convenient.",
+    twitterImage: "https://maiyahospital.in/appointment-twitter.jpg",
+    structuredData: getMedicalOrganizationSchema()
+  };
 
   const handleInputChange = (e) => {
     setFormData({
@@ -150,470 +46,349 @@ const AppointmentBooking = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      // Format date to ISO string for MongoDB
-      const formattedDate = new Date(formData.date).toISOString();
-      
-      await appointmentApi.create({
-        patientName: formData.patientName,
-        email: formData.email, // Using the standardized field names
-        phone: formData.phone,
-        date: formattedDate,
-        time: formData.time,
-        reason: formData.reason,
-      });
-      setSuccessDetails(formData); // Show success card
-      toast({
-        title: "Appointment Booked!",
-        description: "We have received your appointment request. A confirmation email has been sent to your email address.",
-      });
-      setFormData({ patientName: '', phone: '', email: '', date: '', time: '', reason: '' });
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "Failed to book appointment. Please try again.",
-      });
-    }
+    // Handle appointment booking logic here
+    console.log("Appointment booking:", formData);
   };
+
+  const departments = [
+    "General Medicine",
+    "Cardiology",
+    "Orthopedics",
+    "Gynecology",
+    "Pediatrics",
+    "Dermatology",
+    "ENT",
+    "Ophthalmology",
+    "Neurology",
+    "Urology",
+    "Psychiatry",
+    "Emergency"
+  ];
+
+  const timeSlots = [
+    "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+    "12:00 PM", "12:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
+    "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM"
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <SEOHead {...seoData} />
       <Header />
       
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-green-700/20 to-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-400/15 to-pink-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 mb-12">
-            <h1 className="text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              <span className="block mb-4">Book Your</span>
-              <span className="bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent animate-text-glow">
-                Appointment
-              </span>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Book Your Appointment
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              Schedule your consultation with our expert doctors at Maiya Hospital
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Schedule your visit with our expert doctors at Maiya Hospital, Jayanagar, Bangalore. 
+              Quick and easy online booking for consultations and check-ups.
             </p>
-            <div className="flex justify-center gap-4 pt-4">
-              <Button 
-                className="bg-green-700 hover:bg-green-800 text-white px-8 py-6 text-lg rounded-full flex items-center gap-2 transform hover:scale-105 transition-all duration-300"
-                onClick={() => window.open('https://maiyahospital.com', '_blank')}
-              >
-                Visit Our Website
-                <ExternalLink className="w-5 h-5" />
-              </Button>
-              <Button 
-                className="bg-blue-400 hover:bg-blue-500 text-white px-8 py-6 text-lg rounded-full flex items-center gap-2 transform hover:scale-105 transition-all duration-300"
-                onClick={() => document.getElementById('appointment-form')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Book Now
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
           </div>
 
-          {/* Why Choose Maiya Hospital Section */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Why Choose <span className="text-green-700">Maiya Hospital</span>
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Excellence in healthcare, backed by decades of experience
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  icon: Building2,
-                  title: "State-of-the-Art Facility",
-                  description: "Modern equipment and comfortable environment"
-                },
-                {
-                  icon: Stethoscope,
-                  title: "Expert Doctors",
-                  description: "Highly qualified and experienced medical professionals"
-                },
-                {
-                  icon: Trophy,
-                  title: "Award-Winning Care",
-                  description: "Recognized for excellence in healthcare services"
-                },
-                {
-                  icon: ThumbsUp,
-                  title: "Patient Satisfaction",
-                  description: "98% patient satisfaction rate"
-                }
-              ].map((item, index) => (
-                <Card key={index} className="glass border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                  <CardContent className="p-6 text-center">
-                    <div className="mb-4 flex justify-center">
-                      <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center">
-                        <item.icon className="w-6 h-6 text-white" />
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">{item.title}</h3>
-                    <p className="text-muted-foreground">{item.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Next Steps Section */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                What to <span className="text-green-700">Expect</span>
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Your journey to better health starts here
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: "1",
-                  title: "Book Appointment",
-                  description: "Fill out the form below with your details"
-                },
-                {
-                  step: "2",
-                  title: "Confirmation",
-                  description: "Receive confirmation via email and SMS"
-                },
-                {
-                  step: "3",
-                  title: "Visit Hospital",
-                  description: "Meet our expert doctors at scheduled time"
-                }
-              ].map((item, index) => (
-                <div key={index} className="relative">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-green-700 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    {item.step}
-                  </div>
-                  <Card className="pt-8 glass border-none shadow-lg">
-                    <CardContent className="p-6 text-center">
-                      <h3 className="text-xl font-semibold mb-2 text-foreground">{item.title}</h3>
-                      <p className="text-muted-foreground">{item.description}</p>
-                    </CardContent>
-                  </Card>
-                  {index < 2 && (
-                    <div className="hidden md:block absolute top-1/2 left-full w-full h-0.5 bg-gradient-to-r from-green-700 to-transparent -translate-x-4"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* About Maiya Hospital Section */}
-          <div className="mb-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                About <span className="text-green-700">Maiya Hospital</span>
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                With over 45 years of excellence in healthcare, Maiya Hospital has been at the forefront of medical innovation and patient care in Bangalore.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-700/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users className="w-6 h-6 text-green-700" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Expert Team</h3>
-                    <p className="text-muted-foreground">Our team of experienced doctors and staff are committed to providing the best care.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-400/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Building2 className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Modern Facilities</h3>
-                    <p className="text-muted-foreground">State-of-the-art equipment and comfortable environment for better patient care.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Heart className="w-6 h-6 text-red-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Patient-Centric Care</h3>
-                    <p className="text-muted-foreground">Focused on providing personalized care and attention to every patient.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-green-700/20 to-blue-400/20 rounded-3xl transform rotate-3"></div>
-                <div className="grid grid-cols-2 gap-4">
-                  <img 
-                    src="/doctor-profiles/DR-G L-MAIYA.png" 
-                    alt="Dr. G L Maiya" 
-                    className="rounded-2xl shadow-xl relative z-10 transform hover:scale-105 transition-all duration-500"
-                  />
-                  <img 
-                    src="/doctor-profiles/DR-GEETHA-B V.png" 
-                    alt="Dr. Geetha B V" 
-                    className="rounded-2xl shadow-xl relative z-10 transform hover:scale-105 transition-all duration-500"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Appointment Form */}
-          <div className="max-w-4xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Appointment Form */}
             <Card className="glass shadow-2xl border border-white/80">
-              <CardHeader className="bg-gradient-to-r from-green-700/10 via-blue-400/10 to-red-500/10 rounded-t-2xl">
-                <CardTitle className="text-3xl text-foreground text-center font-extrabold tracking-tight">
-                  Appointment Details
+              <CardHeader>
+                <CardTitle className="text-2xl text-foreground flex items-center">
+                  <Calendar className="w-6 h-6 mr-2 text-green-600" />
+                  Schedule Your Visit
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {successDetails ? (
-                  <div className="flex flex-col items-center justify-center min-h-[350px]">
-                    <CheckCircle className="w-16 h-16 text-green-700 mb-4 animate-bounce" />
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Your Appointment is Scheduled!</h3>
-                    <p className="text-foreground/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-green-700">{successDetails.patientName}</span>!<br/>Your appointment has been booked. Our team will contact you soon.</p>
-                    <div className="w-full max-w-xs glass p-4 border border-white/80 shadow-lg mb-4">
-                      <div className="text-foreground/90 mb-1"><b>Name:</b> {successDetails.patientName}</div>
-                      <div className="text-foreground/90 mb-1"><b>Email:</b> {successDetails.email}</div>
-                      <div className="text-foreground/90 mb-1"><b>Phone:</b> {successDetails.phone}</div>
-                      <div className="text-foreground/90 mb-1"><b>Date:</b> {successDetails.date}</div>
-                      <div className="text-foreground/90 mb-1"><b>Time:</b> {successDetails.time}</div>
-                      {successDetails.reason && <div className="text-foreground/90"><b>Reason:</b> {successDetails.reason}</div>}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name *</Label>
+                      <Input 
+                        id="firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        placeholder="Enter your first name"
+                        required
+                      />
                     </div>
-                    <div className="text-foreground/60 text-xs">A confirmation will be sent to your email/phone.</div>
-                  </div>
-                ) : (
-                <form onSubmit={handleSubmit} className="space-y-8 p-6" id="appointment-form">
-                  <div className="bg-white/80 rounded-3xl p-8 shadow-xl border border-white/80">
-                    {/* Form Header */}
-                    <div className="text-center mb-8">
-                      <h3 className="text-2xl font-bold text-foreground">Book Your Appointment</h3>
-                      <p className="text-muted-foreground mt-2">Fill in your details below</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      {/* Left Column */}
-                      <div className="space-y-6">
-                        {/* Patient Name */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <User className="w-4 h-4 text-green-700" />
-                            Patient Name
-                          </label>
-                          <Input
-                            name="patientName"
-                            placeholder="Enter your full name"
-                            value={formData.patientName}
-                            onChange={handleInputChange}
-                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-green-700 focus:ring-green-700 transition-all duration-300"
-                            required
-                          />
-                        </div>
-
-                        {/* Email */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <Mail className="w-4 h-4 text-blue-400" />
-                            Email Address
-                          </label>
-                          <Input
-                            name="email"
-                            type="email"
-                            placeholder="your.email@example.com"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-blue-400 focus:ring-blue-400 transition-all duration-300"
-                            required
-                          />
-                        </div>
-
-                        {/* Phone */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-red-500" />
-                            Phone Number
-                          </label>
-                          <Input
-                            name="phone"
-                            placeholder="+91 98765 43210"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-red-500 focus:ring-red-500 transition-all duration-300"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      {/* Right Column */}
-                      <div className="space-y-6">
-                        {/* Date */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-green-700" />
-                            Preferred Date
-                          </label>
-                          <Input
-                            name="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            className="h-12 rounded-xl bg-white border-gray-200 focus:border-green-700 focus:ring-green-700 transition-all duration-300"
-                            required
-                          />
-                        </div>
-
-                        {/* Time */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-blue-400" />
-                            Preferred Time
-                          </label>
-                          <select
-                            name="time"
-                            value={formData.time}
-                            onChange={handleInputChange}
-                            className="w-full h-12 rounded-xl bg-white border-gray-200 focus:border-blue-400 focus:ring-blue-400 transition-all duration-300"
-                            required
-                          >
-                            <option value="">Select a time slot</option>
-                            {Array.from({ length: 9 }, (_, i) => {
-                              const hour = i + 9; // Start from 9 AM
-                              const time = `${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`;
-                              return (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </div>
-
-                        {/* Reason */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <Stethoscope className="w-4 h-4 text-red-500" />
-                            Reason for Visit
-                          </label>
-                          <textarea
-                            name="reason"
-                            placeholder="Please describe your symptoms or reason for visit"
-                            value={formData.reason}
-                            onChange={handleInputChange}
-                            className="w-full p-3 rounded-xl bg-white border-gray-200 focus:border-red-500 focus:ring-red-500 transition-all duration-300 resize-none h-24"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Submit Button */}
-                    <div className="mt-8 text-center">
-                      <Button 
-                        type="submit"
-                        className="bg-gradient-to-r from-green-700 to-blue-400 hover:from-blue-400 hover:to-green-700 text-white px-12 py-6 rounded-full text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center gap-2 mx-auto"
-                      >
-                        <Calendar className="w-5 h-5" />
-                        Book Appointment
-                        <ArrowRight className="w-5 h-5" />
-                      </Button>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name *</Label>
+                      <Input 
+                        id="lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        placeholder="Enter your last name"
+                        required
+                      />
                     </div>
                   </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input 
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="Enter your email"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number *</Label>
+                      <Input 
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="Enter your phone number"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Preferred Date *</Label>
+                      <Input 
+                        id="date"
+                        name="date"
+                        type="date"
+                        value={formData.date}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="time">Preferred Time *</Label>
+                      <Select name="time" value={formData.time} onValueChange={(value) => setFormData({...formData, time: value})}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select time slot" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {timeSlots.map((time) => (
+                            <SelectItem key={time} value={time}>{time}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="department">Department *</Label>
+                      <Select name="department" value={formData.department} onValueChange={(value) => setFormData({...formData, department: value})}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select department" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departments.map((dept) => (
+                            <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="doctor">Preferred Doctor (Optional)</Label>
+                      <Input 
+                        id="doctor"
+                        name="doctor"
+                        value={formData.doctor}
+                        onChange={handleInputChange}
+                        placeholder="Enter doctor's name"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Additional Notes</Label>
+                    <Textarea 
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Any specific concerns or notes for the doctor..."
+                      className="min-h-[100px]"
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Book Appointment
+                  </Button>
                 </form>
-                )}
               </CardContent>
             </Card>
+
+            {/* Information Section */}
+            <div className="space-y-8">
+              {/* Quick Contact */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground flex items-center">
+                    <Phone className="w-6 h-6 mr-2 text-blue-600" />
+                    Quick Contact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Phone className="w-5 h-5 text-green-600" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Phone Booking</h4>
+                      <p className="text-muted-foreground">070223 16149</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Mail className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Email Booking</h4>
+                      <p className="text-muted-foreground">appointments@maiyahospital.in</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Clock className="w-5 h-5 text-orange-600" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Booking Hours</h4>
+                      <p className="text-muted-foreground">9:00 AM - 7:00 PM</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* What to Bring */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground flex items-center">
+                    <CheckCircle className="w-6 h-6 mr-2 text-green-600" />
+                    What to Bring
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                    <p className="text-muted-foreground text-sm">Valid ID proof (Aadhar, PAN, Driving License)</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                    <p className="text-muted-foreground text-sm">Previous medical records (if any)</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                    <p className="text-muted-foreground text-sm">List of current medications</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                    <p className="text-muted-foreground text-sm">Insurance card (if applicable)</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+                    <p className="text-muted-foreground text-sm">Payment method (cash/card)</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Hospital Location */}
+              <Card className="glass shadow-2xl border border-white/80">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground flex items-center">
+                    <MapPin className="w-6 h-6 mr-2 text-purple-600" />
+                    Hospital Location
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-muted-foreground">
+                    Maiya Multi Speciality Hospital<br />
+                    Jayanagar, Bangalore<br />
+                    Karnataka, India
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-green-600 text-green-600 hover:bg-green-50"
+                    onClick={() => window.open('https://maps.google.com/?q=Maiya+Hospital+Jayanagar+Bangalore', '_blank')}
+                  >
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Get Directions
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Emergency Contact */}
+              <Card className="glass shadow-2xl border border-white/80 bg-gradient-to-r from-red-50 to-orange-50">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground flex items-center">
+                    <Phone className="w-6 h-6 mr-2 text-red-600" />
+                    Emergency Contact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-muted-foreground text-sm">
+                    For medical emergencies, please call our emergency hotline immediately.
+                  </p>
+                  <div className="bg-white/80 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-red-600 mb-2">070223 16149</div>
+                    <div className="text-sm text-muted-foreground">24/7 Emergency Hotline</div>
+                  </div>
+                  <Button 
+                    className="w-full bg-red-600 hover:bg-red-700 text-white"
+                    onClick={() => window.location.href = 'tel:07022316149'}
+                  >
+                    Call Emergency Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
-          {/* Contact Info */}
-          <div className="mt-12 text-center">
-            <Card className="glass shadow-2xl max-w-2xl mx-auto">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-foreground mb-6">Need Help?</h3>
-                <div className="grid md:grid-cols-2 gap-6 text-muted-foreground">
-                  <div className="flex items-center space-x-3">
-                    <Phone className="w-5 h-5 text-green-700" />
-                    <span>070223 16149</span>
+          {/* Benefits Section */}
+          <div className="max-w-4xl mx-auto mt-16">
+            <Card className="glass shadow-2xl border border-white/80">
+              <CardHeader>
+                <CardTitle className="text-2xl text-foreground text-center">Why Book Online?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                      <Clock className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">Quick & Convenient</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Book your appointment in minutes from anywhere, anytime.
+                    </p>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-5 h-5 text-blue-400" />
-                    <span>info@maiyahospital.in</span>
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center">
+                      <CalendarDays className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">Flexible Scheduling</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Choose from multiple time slots and dates that suit your schedule.
+                    </p>
                   </div>
-                </div>
-                <div className="mt-4 flex items-center justify-center space-x-3 text-muted-foreground">
-                  <MapPin className="w-5 h-5 text-purple-400" />
-                  <span className="text-center">34, 10th Main Rd, Jayanagar 1st Block, Bengaluru</span>
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                      <MessageSquare className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">Instant Confirmation</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Receive immediate confirmation and reminders for your appointment.
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full opacity-10">
-            <div className="absolute top-20 left-20 w-32 h-32 bg-green-700 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute bottom-20 right-20 w-40 h-40 bg-blue-400 rounded-full blur-xl animate-pulse delay-1000"></div>
-            <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-purple-400 rounded-full blur-xl animate-pulse delay-500"></div>
-          </div>
-          <div className="absolute inset-0 opacity-10">
-            <div className="w-full h-full bg-gradient-to-r from-transparent via-blue-100/30 to-transparent"></div>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Why Choose <span className="bg-gradient-to-r from-green-700 to-blue-400 bg-clip-text text-transparent">Maiya Hospital</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Excellence in healthcare, backed by numbers
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
-              const { count, ref } = useCountAnimation(stat.number);
-              const displayNumber = stat.number === 15000 ? `${Math.floor(count / 1000)}k` : count;
-              return (
-                <div 
-                  key={index}
-                  ref={ref}
-                  className="group relative glass p-8 text-center hover:bg-white/80 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 animate-fade-in shadow-lg border border-white/80"
-                  style={{ animationDelay: `${index * 150}ms` }}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
-                  <div className="relative z-10">
-                    <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-500 shadow-md`}>
-                      <IconComponent className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="text-4xl lg:text-5xl font-bold mb-2 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
-                      {displayNumber}{stat.suffix}
-                    </div>
-                    <div className="text-lg font-semibold text-foreground mb-2 group-hover:text-green-700 transition-colors duration-300">
-                      {stat.label}
-                    </div>
-                    <div className="text-sm text-muted-foreground group-hover:text-blue-400 transition-colors duration-300">
-                      {stat.description}
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-transparent to-blue-100/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>
