@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getPhysicianSchema } from "@/utils/schema";
+import NotFound from "./NotFound";
 
 // Import the doctors data - Updated to match current structure
 const doctorsData = [
@@ -60,25 +61,18 @@ const DoctorDetail = () => {
   const { id } = useParams();
 
   // Find the doctor based on the ID
-  const doctor = doctorsData.find(doc => doc.id === id) || {
-    id: "not-found",
-    name: "Doctor Not Found",
-    specialty: "N/A",
-    degrees: "N/A",
-    experience: "N/A",
-    visitingDays: "N/A",
-    timings: "N/A",
-    consultationFee: "N/A",
-    image: "/placeholder.svg",
-    slug: "not-found"
-  };
+  const doctor = doctorsData.find(doc => doc.id === id);
+
+  if (!doctor) {
+    return <NotFound />;
+  }
 
   // Generate SEO data for the doctor
   const seoData = {
     title: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
     description: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience. Book consultation for ${doctor.specialty.toLowerCase()} treatment in Jayanagar, Bangalore.`,
     keywords: `${doctor.name}, ${doctor.specialty} jayanagar, ${doctor.specialty.toLowerCase()} doctor bangalore, best ${doctor.specialty.toLowerCase()} jayanagar, ${doctor.specialty.toLowerCase()} specialist bangalore`,
-    canonical: `https://maiyahospital.in/doctor/${doctor.slug}`,
+    canonical: `https://maiyahospital.in/doctor/${id}`,
     ogTitle: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
     ogDescription: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience.`,
     ogImage: `https://maiyahospital.in${doctor.image}`,

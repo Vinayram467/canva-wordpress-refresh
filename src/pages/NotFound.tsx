@@ -10,6 +10,7 @@ const NotFound = () => {
     description: "The page you are looking for could not be found. Please check the URL or return to the homepage of Maiya Hospital Bangalore.",
     keywords: "page not found, 404 error, maiya hospital bangalore, hospital website",
     canonical: "https://maiyahospital.in/404",
+    robots: "noindex, nofollow",
     ogTitle: "Page Not Found | Maiya Hospital Bangalore",
     ogDescription: "The page you are looking for could not be found. Please check the URL or return to the homepage.",
     ogImage: "https://maiyahospital.in/404-og.jpg",
