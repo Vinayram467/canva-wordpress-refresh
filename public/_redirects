@@ -3,6 +3,10 @@ http://maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 http://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 https://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 
+# Serve static SEO files explicitly
+/sitemap.xml	/sitemap.xml	200!
+/robots.txt	/robots.txt	200!
+
 # Trailing slash normalization -> no trailing slash
 /:page/	/:page	301!
 /:page/:sub/	/:page/:sub	301!
@@ -38,4 +42,4 @@ https://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 /deluxe-surgeries/turp	/deluxe-surgeries/9	301
 /deluxe-surgeries/modified-radical-mastectomy	/deluxe-surgeries/10	301
 
-   /*    /index.html   200
+/*	/index.html	200
