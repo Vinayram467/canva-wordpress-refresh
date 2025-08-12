@@ -323,9 +323,11 @@ export const getEventSchema = (event: any) => ({
   "description": event.description,
   "startDate": event.date,
   "endDate": event.date,
+  "image": event.image || "https://maiyahospital.in/events-og.jpg",
+  "url": `https://maiyahospital.in/event/${event.id}`,
   "location": {
     "@type": "Place",
-    "name": "Maiya Hospital",
+    "name": event.location || "Maiya Hospital",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Jayanagar",
@@ -335,7 +337,19 @@ export const getEventSchema = (event: any) => ({
   },
   "organizer": {
     "@type": "MedicalOrganization",
-    "name": "Maiya Multi Speciality Hospital"
+    "name": "Maiya Multi Speciality Hospital",
+    "url": "https://maiyahospital.in"
+  },
+  "performer": {
+    "@type": "Organization",
+    "name": event.performer || "Maiya Hospital Medical Team"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": event.price || 0,
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock",
+    "url": `https://maiyahospital.in/event/${event.id}`
   },
   "eventStatus": "https://schema.org/EventScheduled",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"

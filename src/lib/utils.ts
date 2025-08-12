@@ -71,7 +71,10 @@ export const sampleEvents = [
     date: 'January 15, 2025',
     time: '9:00 AM - 4:00 PM',
     location: 'Main Hospital Lobby',
-    description: 'Join us for a comprehensive health screening camp. Free checkups and consultations for all attendees.'
+    description: 'Join us for a comprehensive health screening camp. Free checkups and consultations for all attendees.',
+    image: '/lovable-uploads/04886a89-4380-4ad3-b37a-fda3e60c23db.png',
+    performer: 'Maiya Hospital Medical Team',
+    price: 0
   },
   {
     id: '2',
@@ -80,7 +83,10 @@ export const sampleEvents = [
     date: 'January 20, 2025',
     time: '10:00 AM - 3:00 PM',
     location: 'Pediatric Wing',
-    description: 'Vaccination drive for children aged 6 months to 5 years. Protect your child from preventable diseases.'
+    description: 'Vaccination drive for children aged 6 months to 5 years. Protect your child from preventable diseases.',
+    image: '/lovable-uploads/7554cf5d-a7c8-4cc7-b0e0-ce8ad3e060e3.png',
+    performer: 'Pediatric Department',
+    price: 0
   },
   {
     id: '3',
@@ -89,6 +95,9 @@ export const sampleEvents = [
     date: 'January 25, 2025',
     time: '2:00 PM - 4:00 PM',
     location: 'Conference Hall',
-    description: 'Learn about heart disease prevention, healthy lifestyle choices, and the latest treatments from our experts.'
+    description: 'Learn about heart disease prevention, healthy lifestyle choices, and the latest treatments from our experts.',
+    image: '/lovable-uploads/04886a89-4380-4ad3-b37a-fda3e60c23db.png',
+    performer: 'Cardiology Team',
+    price: 0
   }
 ];
