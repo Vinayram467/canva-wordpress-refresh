@@ -4,7 +4,7 @@ Allow: /
 # Sitemap
 Sitemap: https://maiyahospital.in/sitemap.xml
 
-# Disallow admin areas
+# Disallow admin and internal areas
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_next/
@@ -12,7 +12,7 @@ Disallow: /static/
 Disallow: /private/
 Disallow: /temp/
 
-# Allow important pages
+# Allow main listings
 Allow: /doctors/
 Allow: /services/
 Allow: /specialties/
@@ -23,10 +23,18 @@ Allow: /blogs/
 Allow: /events/
 Allow: /contact/
 
-# Crawl delay for respectful crawling
+# Allow all detail subpages
+Allow: /doctor/
+Allow: /service/
+Allow: /specialty/
+Allow: /deluxe-surgeries/
+Allow: /blog/
+Allow: /event/
+
+# Respectful crawling
 Crawl-delay: 1
 
-# Allow all images and assets
+# Assets
 Allow: /*.jpg$
 Allow: /*.jpeg$
 Allow: /*.png$
