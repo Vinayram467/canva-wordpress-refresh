@@ -4,19 +4,32 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { getMedicalOrganizationSchema, getEventSchema } from '@/utils/schema';
 
 export default function Events() {
-  // Generate SEO data for the events listing page
+  // Generate SEO data for the events page
   const seoData = {
-    title: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
-    description: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings, medical awareness programs, and community health initiatives.",
-    keywords: "medical events jayanagar, health camps bangalore, wellness programs jayanagar, health screenings bangalore, medical awareness jayanagar, community health bangalore, maiya hospital events",
+    title: "Medical Events & Health Camps | Maiya Hospital Bangalore",
+    description: "Stay updated with medical events, health camps, and wellness programs at Maiya Hospital Bangalore. Join our community health initiatives in Jayanagar.",
+    keywords: "medical events bangalore, health camps jayanagar, wellness programs, medical workshops, health awareness, maiya hospital events",
     canonical: "https://maiyahospital.in/events",
-    ogTitle: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
-    ogDescription: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings and medical awareness programs.",
+    ogTitle: "Medical Events & Health Camps | Maiya Hospital Bangalore",
+    ogDescription: "Stay updated with medical events, health camps, and wellness programs at Maiya Hospital Bangalore. Join our community health initiatives.",
     ogImage: "https://maiyahospital.in/events-og.jpg",
-    twitterTitle: "Medical Events & Health Camps in Jayanagar | Maiya Hospital Bangalore",
-    twitterDescription: "Attend medical events, health camps, and wellness programs at Maiya Hospital in Jayanagar. Free health screenings and medical awareness programs.",
+    twitterTitle: "Medical Events & Health Camps | Maiya Hospital Bangalore",
+    twitterDescription: "Stay updated with medical events, health camps, and wellness programs at Maiya Hospital Bangalore. Join our community health initiatives.",
     twitterImage: "https://maiyahospital.in/events-twitter.jpg",
-    structuredData: getMedicalOrganizationSchema()
+    structuredData: [
+      getMedicalOrganizationSchema(),
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Medical Events at Maiya Hospital",
+        "description": "Upcoming medical events, health camps, and wellness programs at Maiya Hospital",
+        "itemListElement": sampleEvents.map((event, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": getEventSchema(event)
+        }))
+      }
+    ]
   };
 
   return (
@@ -44,21 +57,6 @@ export default function Events() {
           ))}
         </div>
       </div>
-      
-      {/* Event Schema for Rich Results */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": "Medical Events at Maiya Hospital",
-          "description": "Upcoming medical events, health camps, and wellness programs at Maiya Hospital",
-          "itemListElement": sampleEvents.map((event, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "item": getEventSchema(event)
-          }))
-        })}
-      </script>
     </div>
   );
 } 

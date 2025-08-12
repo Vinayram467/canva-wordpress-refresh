@@ -1,6 +1,8 @@
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams } from "react-router-dom";
 import { blogApi, Blog } from '@/services/api';
 import { SEOHead } from '@/components/seo/SEOHead';
+import Footer from "@/components/Footer";
 import { getMedicalOrganizationSchema, getArticleSchema } from '@/utils/schema';
 import { useState, useEffect } from 'react';
 
@@ -77,7 +79,14 @@ export default function BlogDetail() {
     twitterTitle: `${blog.title} | Maiya Hospital Health Blog, Jayanagar`,
     twitterDescription: blog.excerpt || blog.content.substring(0, 160) + '...',
     twitterImage: blog.image || 'https://maiyahospital.in/blog-default-twitter.jpg',
-    structuredData: getMedicalOrganizationSchema(),
+    structuredData: [getMedicalOrganizationSchema(), getArticleSchema({
+      title: blog.title,
+      description: blog.excerpt || blog.content.substring(0, 160),
+      image: blog.image || 'https://maiyahospital.in/blog-default-og.jpg',
+      publishedDate: blog.createdAt,
+      modifiedDate: blog.updatedAt || blog.createdAt,
+      url: `https://maiyahospital.in/blog/${id}`
+    })],
     articlePublishedTime: blog.createdAt,
     articleModifiedTime: blog.updatedAt || blog.createdAt,
     articleAuthor: "Maiya Hospital",
@@ -163,10 +172,7 @@ export default function BlogDetail() {
         </article>
       </div>
       
-      {/* Article Schema for Rich Results */}
-      <script type="application/ld+json">
-        {JSON.stringify(articleSchema)}
-      </script>
+      <Footer />
     </div>
   );
 } 

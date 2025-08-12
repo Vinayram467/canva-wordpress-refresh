@@ -282,17 +282,20 @@ const SpecialtyDetail = () => {
 
   // Generate SEO data for the specialty detail page
   const seoData = {
-    title: `${specialty.name} in Jayanagar | Expert ${specialty.name} Treatment | Maiya Hospital Bangalore`,
-    description: `Expert ${specialty.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced ${specialty.name} specialists, comprehensive care. Book consultation today.`,
-    keywords: `${specialty.name.toLowerCase()} jayanagar, ${specialty.name.toLowerCase()} treatment bangalore, ${specialty.name.toLowerCase()} specialist jayanagar, ${specialty.name.toLowerCase()} hospital bangalore, maiya hospital ${specialty.name.toLowerCase()}, best ${specialty.name.toLowerCase()} doctor jayanagar`,
+    title: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
+    description: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care in Jayanagar. Book consultation today.`,
+    keywords: `${specialty.name.toLowerCase()} bangalore, ${specialty.name.toLowerCase()} specialist jayanagar, best ${specialty.name.toLowerCase()} doctor, ${specialty.name.toLowerCase()} treatment bangalore, ${specialty.name.toLowerCase()} hospital`,
     canonical: `https://maiyahospital.in/specialty/${id}`,
-    ogTitle: `${specialty.name} in Jayanagar | Expert Treatment | Maiya Hospital`,
-    ogDescription: `Expert ${specialty.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care.`,
-    ogImage: `https://maiyahospital.in${specialty.image}`,
-    twitterTitle: `${specialty.name} in Jayanagar | Expert Treatment | Maiya Hospital`,
-    twitterDescription: `Expert ${specialty.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care.`,
-    twitterImage: `https://maiyahospital.in${specialty.image}`,
-    structuredData: getMedicalOrganizationSchema()
+    ogTitle: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
+    ogDescription: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care.`,
+    ogImage: `https://maiyahospital.in/specialty-${id}-og.jpg`,
+    twitterTitle: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
+    twitterDescription: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care.`,
+    twitterImage: `https://maiyahospital.in/specialty-${id}-twitter.jpg`,
+    structuredData: [
+      getMedicalOrganizationSchema(),
+      getFAQPageSchema(specialty.faqs)
+    ]
   };
 
   const IconComponent = specialty.icon;
@@ -407,11 +410,6 @@ const SpecialtyDetail = () => {
               </CardContent>
             </Card>
           </div>
-
-          {/* FAQ Schema */}
-          <script type="application/ld+json">
-            {JSON.stringify(getFAQPageSchema(specialty.faqs))}
-          </script>
         </div>
       </section>
       

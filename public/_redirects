@@ -1,1 +1,41 @@
+# Force HTTPS and non-www
+http://maiyahospital.in/*	https://maiyahospital.in/:splat	301!
+http://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
+https://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
+
+# Trailing slash normalization -> no trailing slash
+/:page/	/:page	301!
+/:page/:sub/	/:page/:sub	301!
+
+# Legacy doctor slugs → numeric IDs
+/doctor/dr-abhey-vasudev	/doctor/7	301
+/doctor/dr-akshay-dhanda	/doctor/3	301
+/doctor/dr-hrishikesh-vemula	/doctor/6	301
+/doctor/dr-ananth-krishna	/doctor/14	301
+/doctor/dr-sujay-rao	/doctor/8	301
+/doctor/dr-n-t-babu	/doctor/10	301
+/doctor/dr-b-g-mahesh	/doctor/1	301
+/doctor/dr-murali-p	/doctor/12	301
+/doctor/dr-ishwarya-bhandari	/doctor/9	301
+/doctor/dr-varsha-manohar	/doctors	301
+/doctor/dr-g-l-maiya	/doctor/5	301
+/doctor/dr-geetha-b-v	/doctor/15	301
+/doctor/dr-gopal-m-g	/doctors	301
+/doctor/dr-chinmay-nagesh	/doctor/11	301
+/doctor/dr-chandrashekar-h-s	/doctor/2	301
+/doctor/dr-krishnappa-r	/doctor/4	301
+/doctor/dr-lakshmi-v-pandit	/doctor/13	301
+
+# Legacy surgery slugs → numeric IDs
+/deluxe-surgeries/laparoscopic-hernia-repair	/deluxe-surgeries/1	301
+/deluxe-surgeries/laparoscopic-gallbladder-removal	/deluxe-surgeries/2	301
+/deluxe-surgeries/laparoscopic-hysterectomy	/deluxe-surgeries/3	301
+/deluxe-surgeries/arthroscopy	/deluxe-surgeries/4	301
+/deluxe-surgeries/total-knee-replacement	/deluxe-surgeries/5	301
+/deluxe-surgeries/total-hip-replacement	/deluxe-surgeries/6	301
+/deluxe-surgeries/kidney-stone-removal	/deluxe-surgeries/7	301
+/deluxe-surgeries/dj-stenting	/deluxe-surgeries/8	301
+/deluxe-surgeries/turp	/deluxe-surgeries/9	301
+/deluxe-surgeries/modified-radical-mastectomy	/deluxe-surgeries/10	301
+
    /*    /index.html   200

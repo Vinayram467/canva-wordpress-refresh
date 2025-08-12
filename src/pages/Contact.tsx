@@ -14,15 +14,18 @@ const Contact = () => {
   const seoData = {
     title: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
     description: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
-    keywords: "contact maiya hospital, hospital address bangalore, maiya hospital phone number, hospital location jayanagar, get directions hospital, maiya hospital contact",
+    keywords: "contact maiya hospital, hospital address bangalore, maiya hospital phone number, hospital location jayanagar, get directions hospital, emergency contact hospital",
     canonical: "https://maiyahospital.in/contact",
     ogTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
-    ogDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    ogDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions and emergency contact.",
     ogImage: "https://maiyahospital.in/contact-og.jpg",
     twitterTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
-    twitterDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    twitterDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions and emergency contact.",
     twitterImage: "https://maiyahospital.in/contact-twitter.jpg",
-    structuredData: getMedicalOrganizationSchema()
+    structuredData: [
+      getMedicalOrganizationSchema(),
+      getLocalBusinessSchema()
+    ]
   };
 
   return (
@@ -177,11 +180,6 @@ const Contact = () => {
       </section>
       
       <Footer />
-      
-      {/* LocalBusiness Schema for Rich Results */}
-      <script type="application/ld+json">
-        {JSON.stringify(getLocalBusinessSchema())}
-      </script>
     </div>
   );
 };
