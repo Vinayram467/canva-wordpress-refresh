@@ -41,7 +41,7 @@ const specialtiesData = [
     description: "Comprehensive bone and joint care with advanced surgical techniques",
     longDescription: "Our orthopedics department specializes in the diagnosis, treatment, and prevention of disorders of the bones, joints, ligaments, tendons, muscles, and nerves. We offer both surgical and non-surgical treatments.",
     icon: Bone,
-    doctors: ["Dr. Chinmay Nagesh"],
+    doctors: ["Dr. Chandrashekar HS", "Dr. Abhey Vasudev", "Dr. Akshay Dhanda"],
     services: ["Joint Replacement", "Fracture Treatment", "Sports Injury", "Arthroscopy", "Spine Surgery", "Hand Surgery"],
     color: "from-blue-500 to-blue-600",
     image: "/orthopedics-banner.jpg",
