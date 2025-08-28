@@ -17,8 +17,8 @@ const doctorsData = [
   // Orthopedics
   { id: "2", name: "Dr. Chandrashekar HS", specialty: "Orthopedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg", slug: "dr-chandrashekar-h-s" },
   
-  // Anaesthesia
-  { id: "3", name: "Dr. Akshay Dhanda", specialty: "Anaesthesia", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg", slug: "dr-akshay-dhanda" },
+  // Orthopedics
+  { id: "3", name: "Dr. Akshay Dhanda", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg", slug: "dr-akshay-dhanda" },
   
   // Surgical Oncology
   { id: "4", name: "Dr. Krishnappa R", specialty: "Surgical Oncology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg", slug: "dr-krishnappa-r" },

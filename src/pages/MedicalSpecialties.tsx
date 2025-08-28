@@ -40,7 +40,7 @@ const specialtiesData = [
     name: "Orthopaedics",
     description: "Comprehensive bone and joint care with advanced surgical techniques",
     icon: Bone,
-    doctors: ["Dr. Chandrashekar HS", "Dr. Abhey Vasudev"],
+    doctors: ["Dr. Chandrashekar HS", "Dr. Abhey Vasudev", "Dr. Akshay Dhanda"],
     services: ["Joint Replacement", "Fracture Treatment", "Sports Injury", "Arthroscopy"],
     color: "from-purple-500 to-purple-600"
   },
@@ -175,7 +175,7 @@ const specialtiesData = [
     name: "Anaesthesia",
     description: "Expert anaesthesia services for surgical procedures",
     icon: Shield,
-    doctors: ["Dr. Akshay Dhanda"],
+    doctors: [],
     services: ["General Anaesthesia", "Regional Anaesthesia", "Pain Management", "Critical Care"],
     color: "from-slate-600 to-slate-700"
   },
