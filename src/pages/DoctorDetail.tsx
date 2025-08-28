@@ -12,7 +12,7 @@ import NotFound from "./NotFound";
 // Import the doctors data - Updated to match current structure
 const doctorsData = [
   // Radiology
-  { id: "1", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png", slug: "dr-b-g-mahesh" },
+  { id: "1", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "4 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png", slug: "dr-b-g-mahesh" },
   
   // Orthopedics
   { id: "2", name: "Dr. Chandrashekar HS", specialty: "Orthopedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg", slug: "dr-chandrashekar-h-s" },
