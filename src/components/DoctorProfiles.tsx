@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 // Import the doctors data
 const doctorsData = [
-  { id: "7", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png" },
+  { id: "7", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "4 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png" },
   { id: "13", name: "Dr. Chandrashekar H S", specialty: "Orthopaedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg" },
   { id: "2", name: "Dr. Akshay Dhanda", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg" },
   { id: "14", name: "Dr. Krishnappa R", specialty: "Surgical Oncology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg" },
