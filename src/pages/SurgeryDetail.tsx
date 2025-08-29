@@ -371,8 +371,9 @@ const toSlug = (text: string) =>
   text
     .toLowerCase()
     .replace(/&/g, ' and ')
-    .replace(/\./g, '')
-    .replace(/\s+/g, '-');
+    .replace(/[()]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 const SurgeryDetail = () => {
   const { slug } = useParams();
