@@ -48,10 +48,29 @@ https://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 /deluxe-surgeries/10	/deluxe-surgeries/modified-radical-mastectomy	301
 
 # Legacy specialty numeric IDs → slugs
-/specialty/1	/specialty/cardiology	301
-/specialty/2	/specialty/orthopedics	301
-/specialty/3	/specialty/neurology	301
-/specialty/4	/specialty/gynecology	301
-/specialty/5	/specialty/general-medicine	301
+# Legacy specialty numeric IDs → slugs
+/specialty/1	/specialty/general-surgery	301
+/specialty/2	/specialty/general-medicine	301
+/specialty/3	/specialty/obstetrics-and-gynaecology	301
+/specialty/4	/specialty/orthopaedics	301
+/specialty/5	/specialty/urology	301
+/specialty/6	/specialty/cardiology	301
+/specialty/7	/specialty/e.n.t	301
+/specialty/8	/specialty/plastic-surgery	301
+/specialty/9	/specialty/radiology	301
+/specialty/10	/specialty/pulmonology	301
+/specialty/11	/specialty/ophthalmology	301
+/specialty/12	/specialty/neurology	301
+/specialty/13	/specialty/cardiology-2	301
+/specialty/14	/specialty/dermatology	301
+/specialty/15	/specialty/dentistry	301
+/specialty/16	/specialty/paediatrics	301
+/specialty/17	/specialty/physiotherapy	301
+/specialty/18	/specialty/psychiatry	301
+/specialty/19	/specialty/anaesthesia	301
+/specialty/20	/specialty/surgical-gastroenterology	301
+/specialty/21	/specialty/medical-oncology	301
+/specialty/22	/specialty/vascular-surgery	301
+/specialty/23	/specialty/surgical-oncology	301
 
 /*	/index.html	200
