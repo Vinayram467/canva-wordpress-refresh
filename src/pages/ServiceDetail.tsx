@@ -7,39 +7,123 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { getMedicalOrganizationSchema } from '@/utils/schema';
+import NotFound from './NotFound';
 
 const ServiceDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
 
-  // Mock service data - in real app, this would come from API
-  const serviceData = {
-    id: id,
-    name: "ICU (Intensive Care Unit)",
-    description: "State-of-the-art intensive care unit with 24/7 monitoring and expert critical care team.",
-    icon: Heart,
-    features: ["24/7 Monitoring", "Expert Intensivists", "Advanced Life Support", "Critical Care"],
-    image: "/icu-banner.jpg",
-    longDescription: "Our Intensive Care Unit (ICU) is equipped with state-of-the-art medical equipment and staffed by experienced intensivists who provide round-the-clock critical care. We offer advanced life support systems, continuous monitoring, and specialized treatment for critically ill patients.",
-    benefits: [
-      "24/7 expert medical supervision",
-      "Advanced monitoring equipment",
-      "Specialized critical care team",
-      "Family support and counseling"
-    ],
-    equipment: [
-      "Ventilators",
-      "Cardiac monitors",
-      "Infusion pumps",
-      "Defibrillators"
-    ]
+  const servicesBySlug: Record<string, {
+    name: string;
+    description: string;
+    icon: any;
+    image: string;
+    longDescription: string;
+    benefits: string[];
+    equipment: string[];
+  }> = {
+    'icu-intensive-care-unit': {
+      name: 'ICU (Intensive Care Unit)',
+      description: 'State-of-the-art intensive care unit with 24/7 monitoring and expert critical care team.',
+      icon: Heart,
+      image: '/icu-banner.jpg',
+      longDescription: 'Our Intensive Care Unit (ICU) is equipped with state-of-the-art medical equipment and staffed by experienced intensivists who provide round-the-clock critical care. We offer advanced life support systems, continuous monitoring, and specialized treatment for critically ill patients.',
+      benefits: ['24/7 expert medical supervision', 'Advanced monitoring equipment', 'Specialized critical care team', 'Family support and counseling'],
+      equipment: ['Ventilators', 'Cardiac monitors', 'Infusion pumps', 'Defibrillators']
+    },
+    'emergency-services': {
+      name: 'Emergency Services',
+      description: '24/7 emergency care with immediate response team and trauma management facilities.',
+      icon: Ambulance,
+      image: '/emergency-banner.jpg',
+      longDescription: 'Our Emergency Department operates 24/7 with rapid triage, stabilization, and definitive care for trauma and medical emergencies.',
+      benefits: ['Rapid response', 'Trauma management', '24/7 availability', 'Experienced emergency team'],
+      equipment: ['Defibrillators', 'Ventilators', 'Trauma kits', 'Monitors']
+    },
+    'laboratory-services': {
+      name: 'Laboratory Services',
+      description: 'Comprehensive diagnostic laboratory with advanced testing equipment and quick results.',
+      icon: Microscope,
+      image: '/lab-banner.jpg',
+      longDescription: 'Our diagnostic lab offers comprehensive pathology services with accurate reporting and quick turnaround times.',
+      benefits: ['Accurate reports', 'Quick TAT', 'Advanced analyzers', 'Quality control'],
+      equipment: ['Hematology analyzers', 'Biochemistry analyzers', 'Immunoassay systems', 'Microscopes']
+    },
+    'digital-x-ray': {
+      name: 'Digital X-Ray',
+      description: 'High-resolution digital X-ray services with low radiation and instant results.',
+      icon: Eye,
+      image: '/xray-banner.jpg',
+      longDescription: 'High-resolution digital radiography with minimized radiation exposure and instant image availability.',
+      benefits: ['Low radiation', 'Instant images', 'High clarity', 'Expert reporting'],
+      equipment: ['Digital radiography systems', 'PACS', 'Lead protection', 'Positioning aids']
+    },
+    'modular-ot': {
+      name: 'Modular OT',
+      description: 'State-of-the-art modular operation theaters ensuring highest standards of safety and sterility.',
+      icon: Shield,
+      image: '/ot-banner.jpg',
+      longDescription: 'Modern modular operation theatres with laminar airflow and HEPA filtration ensure surgical safety.',
+      benefits: ['Sterile environment', 'Advanced equipment', 'Dedicated OT staff', 'Infection control'],
+      equipment: ['Anesthesia workstations', 'Surgical lights', 'HEPA filters', 'Electrosurgical units']
+    },
+    'gynecology-ot': {
+      name: 'Gynecology OT',
+      description: "Specialized operation theater for gynecological procedures with women's health focus.",
+      icon: Baby,
+      image: '/gyn-ot-banner.jpg',
+      longDescription: 'Dedicated gynecology OT designed for minimally invasive and obstetric procedures.',
+      benefits: ['Specialized setup', 'Privacy and comfort', 'Expert gynecologists', 'Minimally invasive options'],
+      equipment: ['Laparoscopic towers', 'Anesthesia workstations', 'Fetal monitors', 'Surgical instruments']
+    },
+    'ambulance-services': {
+      name: 'Ambulance Services',
+      description: '24/7 fully-equipped ambulance service with trained paramedics for patient transport.',
+      icon: Ambulance,
+      image: '/ambulance-banner.jpg',
+      longDescription: 'Round-the-clock ambulance support with Basic and Advanced Life Support vehicles and trained paramedics.',
+      benefits: ['24/7 availability', 'ALS/BLS units', 'Trained paramedics', 'Rapid transport'],
+      equipment: ['Ventilators', 'Monitors', 'Defibrillators', 'Stretchers']
+    },
+    'ultrasound-services': {
+      name: 'Ultrasound Services',
+      description: 'Comprehensive ultrasound scanning services including pregnancy scans and doppler studies.',
+      icon: Eye,
+      image: '/ultrasound-banner.jpg',
+      longDescription: 'Advanced sonography services including obstetric, abdominal, and vascular ultrasound studies.',
+      benefits: ['Expert radiologists', 'Doppler studies', 'High-resolution imaging', 'Patient comfort'],
+      equipment: ['High-end ultrasound machines', 'Transducers', 'Doppler modules', 'Reporting systems']
+    },
+    'labour-room': {
+      name: 'Labour Room',
+      description: 'Modern labour room facilities with comfortable delivery rooms for expectant mothers.',
+      icon: Baby,
+      image: '/labour-room-banner.jpg',
+      longDescription: 'Comfortable labour, delivery, and recovery rooms with continuous maternal and fetal monitoring.',
+      benefits: ['Comfort and privacy', 'Experienced nursing', 'Fetal monitoring', 'Postpartum care'],
+      equipment: ['LDR beds', 'Fetal monitors', 'Infant warmers', 'Emergency kits']
+    },
+    'wards': {
+      name: 'Wards',
+      description: 'Comfortable hospital wards with well-equipped patient rooms and nursing care.',
+      icon: Bed,
+      image: '/wards-banner.jpg',
+      longDescription: 'Clean, comfortable wards with attentive nursing care and essential amenities for recovery.',
+      benefits: ['Comfortable rooms', 'Nursing care', 'Clean environment', 'Visitor access'],
+      equipment: ['Hospital beds', 'Monitoring devices', 'Nursing stations', 'Call systems']
+    }
   };
+
+  const serviceData = slug ? servicesBySlug[slug] : undefined;
+  if (!serviceData) {
+    return <NotFound />;
+  }
 
   // Generate SEO data for the service detail page
   const seoData = {
     title: `${serviceData.name} in Jayanagar | Expert ${serviceData.name} Treatment | Maiya Hospital`,
     description: `Expert ${serviceData.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care. Book consultation today.`,
     keywords: `${serviceData.name.toLowerCase()} jayanagar, ${serviceData.name.toLowerCase()} treatment bangalore, ${serviceData.name.toLowerCase()} specialist jayanagar, ${serviceData.name.toLowerCase()} hospital bangalore, maiya hospital ${serviceData.name.toLowerCase()}`,
-    canonical: `https://maiyahospital.in/service/${id}`,
+    canonical: `https://maiyahospital.in/service/${slug}`,
     ogTitle: `${serviceData.name} in Jayanagar | Expert Treatment | Maiya Hospital`,
     ogDescription: `Expert ${serviceData.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care.`,
     ogImage: `https://maiyahospital.in${serviceData.image}`,

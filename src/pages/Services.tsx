@@ -7,6 +7,13 @@ import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
 
+const toSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-');
+
 const servicesData = [
   {
     id: "1",
@@ -156,7 +163,7 @@ const Services = () => {
                     </div>
                     <Button 
                       className="w-full bg-green-600 hover:bg-green-700 text-white"
-                      onClick={() => window.location.href = `/service/${service.id}`}
+                      onClick={() => window.location.href = `/service/${toSlug(service.name)}`}
                     >
                       Learn More
                     </Button>

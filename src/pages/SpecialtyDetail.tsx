@@ -262,9 +262,16 @@ const specialtiesData = [
   }
 ];
 
+const toSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-');
+
 const SpecialtyDetail = () => {
-  const { id } = useParams();
-  const specialty = specialtiesData.find(s => s.id === id);
+  const { slug } = useParams();
+  const specialty = specialtiesData.find(s => toSlug(s.name) === slug) || specialtiesData.find(s => s.id === slug);
 
   if (!specialty) {
     return (
@@ -285,13 +292,13 @@ const SpecialtyDetail = () => {
     title: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
     description: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care in Jayanagar. Book consultation today.`,
     keywords: `${specialty.name.toLowerCase()} bangalore, ${specialty.name.toLowerCase()} specialist jayanagar, best ${specialty.name.toLowerCase()} doctor, ${specialty.name.toLowerCase()} treatment bangalore, ${specialty.name.toLowerCase()} hospital`,
-    canonical: `https://maiyahospital.in/specialty/${id}`,
+    canonical: `https://maiyahospital.in/specialty/${toSlug(specialty.name)}`,
     ogTitle: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
     ogDescription: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care.`,
-    ogImage: `https://maiyahospital.in/specialty-${id}-og.jpg`,
+    ogImage: `https://maiyahospital.in/specialty-${toSlug(specialty.name)}-og.jpg`,
     twitterTitle: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
     twitterDescription: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care.`,
-    twitterImage: `https://maiyahospital.in/specialty-${id}-twitter.jpg`,
+    twitterImage: `https://maiyahospital.in/specialty-${toSlug(specialty.name)}-twitter.jpg`,
     structuredData: [
       getMedicalOrganizationSchema(),
       getFAQPageSchema(specialty.faqs)

@@ -367,9 +367,20 @@ const surgeryData = {
   }
 };
 
+const toSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-');
+
 const SurgeryDetail = () => {
   const { slug } = useParams();
-  const surgery = surgeryData[slug as keyof typeof surgeryData];
+  const surgeries = Object.values(surgeryData);
+  let surgery = surgeries.find((s) => toSlug(s.name) === slug);
+  if (!surgery && slug && surgeryData[slug as keyof typeof surgeryData]) {
+    surgery = surgeryData[slug as keyof typeof surgeryData];
+  }
 
   if (!surgery) {
     return (
@@ -390,13 +401,13 @@ const SurgeryDetail = () => {
     title: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
     description: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons. Best ${surgery.name.toLowerCase()} treatment available.`,
     keywords: `${surgery.name.toLowerCase()} bangalore, minimally invasive surgery, ${surgery.name.toLowerCase()} jayanagar, best ${surgery.name.toLowerCase()} surgeon, ${surgery.name.toLowerCase()} treatment bangalore`,
-    canonical: `https://maiyahospital.in/deluxe-surgeries/${slug}`,
+    canonical: `https://maiyahospital.in/deluxe-surgeries/${toSlug(surgery.name)}`,
     ogTitle: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
     ogDescription: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons.`,
-    ogImage: `https://maiyahospital.in/surgery-${slug}-og.jpg`,
+    ogImage: `https://maiyahospital.in/surgery-${toSlug(surgery.name)}-og.jpg`,
     twitterTitle: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
     twitterDescription: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons.`,
-    twitterImage: `https://maiyahospital.in/surgery-${slug}-twitter.jpg`,
+    twitterImage: `https://maiyahospital.in/surgery-${toSlug(surgery.name)}-twitter.jpg`,
     structuredData: getMedicalOrganizationSchema()
   };
 
