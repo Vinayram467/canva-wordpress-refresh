@@ -48,23 +48,23 @@ const Footer = () => {
           <div>
             <h4 className="text-xl font-bold mb-6 text-foreground">Quick Links</h4>
             <ul className="space-y-3">
-              <li><a href="#home" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Home
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#about" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/#about" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 About Us
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#services" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/services" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Our Services
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#doctors" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/doctors" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Our Doctors
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#contact" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/contact" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Contact Us
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
@@ -75,23 +75,23 @@ const Footer = () => {
           <div>
             <h4 className="text-xl font-bold mb-6 text-foreground">Medical Services</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/specialty/cardiology" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Cardiology
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/specialty/neurology" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Neurology
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/specialty/pediatrics" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Pediatrics
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/specialty/orthopedics" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Orthopedics
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
+              <li><a href="/service/emergency-services" className="text-muted-foreground hover:text-green-700 transition-colors duration-300 relative group">
                 Emergency Care
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-green-700 to-blue-400 group-hover:w-full transition-all duration-300"></div>
               </a></li>
