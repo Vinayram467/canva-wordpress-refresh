@@ -269,9 +269,49 @@ const toSlug = (text: string) =>
     .replace(/\./g, '')
     .replace(/\s+/g, '-');
 
+const slugAliasMap: Record<string, string> = {
+  'orthopaedics': 'orthopedics',
+  'obstetrics-and-gynaecology': 'gynecology',
+  'paediatrics': 'pediatrics'
+};
+
+const fallbackSpecialtyNames: string[] = [
+  'General Surgery',
+  'Urology',
+  'Plastic Surgery',
+  'Radiology',
+  'Pulmonology',
+  'Dentistry',
+  'Physiotherapy',
+  'Anaesthesia',
+  'Surgical Gastroenterology',
+  'Medical Oncology',
+  'Vascular Surgery',
+  'Surgical Oncology'
+];
+
 const SpecialtyDetail = () => {
   const { slug } = useParams();
-  const specialty = specialtiesData.find(s => toSlug(s.name) === slug) || specialtiesData.find(s => s.id === slug);
+  const effectiveSlug = slug ? (slugAliasMap[slug] || slug) : undefined;
+  let specialty = specialtiesData.find(s => toSlug(s.name) === effectiveSlug) || specialtiesData.find(s => s.id === effectiveSlug);
+
+  if (!specialty && effectiveSlug) {
+    const matchedFallbackName = fallbackSpecialtyNames.find(name => toSlug(name) === effectiveSlug);
+    if (matchedFallbackName) {
+      specialty = {
+        id: effectiveSlug,
+        name: matchedFallbackName,
+        description: `Specialized ${matchedFallbackName.toLowerCase()} care and treatments at Maiya Hospital.`,
+        longDescription: `Our ${matchedFallbackName.toLowerCase()} department provides comprehensive evaluation and treatment with experienced specialists and modern facilities at Maiya Hospital, Jayanagar, Bangalore.`,
+        icon: Shield,
+        doctors: [],
+        services: [],
+        color: "from-blue-500 to-blue-600",
+        image: "",
+        faqs: []
+      } as any;
+    }
+  }
 
   if (!specialty) {
     return (

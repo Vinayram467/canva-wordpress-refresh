@@ -62,27 +62,9 @@
     <priority>0.6</priority>
   </url>
   
-  <!-- Specialty Detail Pages - Slug URLs -->
+  <!-- Specialty Detail Pages - Slug URLs (deduplicated and aligned with app slugs) -->
   <url>
-    <loc>https://maiyahospital.in/specialty/cardiology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/orthopedics</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/neurology</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/gynecology</loc>
+    <loc>https://maiyahospital.in/specialty/general-surgery</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -94,13 +76,25 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/ophthalmology</loc>
+    <loc>https://maiyahospital.in/specialty/obstetrics-and-gynaecology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/dermatology</loc>
+    <loc>https://maiyahospital.in/specialty/orthopaedics</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/urology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/cardiology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -112,7 +106,55 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/pediatrics</loc>
+    <loc>https://maiyahospital.in/specialty/plastic-surgery</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/radiology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/pulmonology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/ophthalmology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/neurology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/dermatology</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/dentistry</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/paediatrics</loc>
+    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maiyahospital.in/specialty/physiotherapy</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -124,79 +166,31 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/11</loc>
+    <loc>https://maiyahospital.in/specialty/anaesthesia</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/12</loc>
+    <loc>https://maiyahospital.in/specialty/surgical-gastroenterology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/13</loc>
+    <loc>https://maiyahospital.in/specialty/medical-oncology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/14</loc>
+    <loc>https://maiyahospital.in/specialty/vascular-surgery</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/15</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/16</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/17</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/18</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/19</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/20</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/21</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/22</loc>
-    <lastmod>2025-01-15T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://maiyahospital.in/specialty/23</loc>
+    <loc>https://maiyahospital.in/specialty/surgical-oncology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
