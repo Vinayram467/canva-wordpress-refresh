@@ -62,33 +62,33 @@
     <priority>0.6</priority>
   </url>
   
-  <!-- Specialty Detail Pages - All 23 Specialties -->
+  <!-- Specialty Detail Pages - Slug URLs -->
   <url>
-    <loc>https://maiyahospital.in/specialty/1</loc>
+    <loc>https://maiyahospital.in/specialty/cardiology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/2</loc>
+    <loc>https://maiyahospital.in/specialty/orthopedics</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/3</loc>
+    <loc>https://maiyahospital.in/specialty/neurology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/4</loc>
+    <loc>https://maiyahospital.in/specialty/gynecology</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/specialty/5</loc>
+    <loc>https://maiyahospital.in/specialty/general-medicine</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -202,21 +202,21 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- Doctor Detail Pages - All 15 Doctors -->
+  <!-- Doctor Detail Pages - Slug URLs -->
   <url>
-    <loc>https://maiyahospital.in/doctor/1</loc>
+    <loc>https://maiyahospital.in/doctor/dr-b-g-mahesh</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/doctor/2</loc>
+    <loc>https://maiyahospital.in/doctor/dr-chandrashekar-h-s</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/doctor/3</loc>
+    <loc>https://maiyahospital.in/doctor/dr-akshay-dhanda</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -294,15 +294,15 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- Surgery Detail Pages - All 10 Surgeries -->
+  <!-- Surgery Detail Pages - Slug URLs -->
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/1</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/laparoscopic-hernia-repair</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://maiyahospital.in/deluxe-surgeries/2</loc>
+    <loc>https://maiyahospital.in/deluxe-surgeries/laparoscopic-gall-bladder-removal</loc>
     <lastmod>2025-01-15T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

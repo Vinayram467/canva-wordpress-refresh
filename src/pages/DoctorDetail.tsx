@@ -58,10 +58,10 @@ const doctorsData = [
 ];
 
 const DoctorDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
 
-  // Find the doctor based on the ID
-  const doctor = doctorsData.find(doc => doc.id === id);
+  // Find the doctor based on the slug
+  const doctor = doctorsData.find(doc => doc.slug === slug);
 
   if (!doctor) {
     return <NotFound />;
@@ -72,7 +72,7 @@ const DoctorDetail = () => {
     title: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
     description: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience. Book consultation for ${doctor.specialty.toLowerCase()} treatment in Jayanagar, Bangalore.`,
     keywords: `${doctor.name}, ${doctor.specialty} jayanagar, ${doctor.specialty.toLowerCase()} doctor bangalore, best ${doctor.specialty.toLowerCase()} jayanagar, ${doctor.specialty.toLowerCase()} specialist bangalore`,
-    canonical: `https://maiyahospital.in/doctor/${id}`,
+    canonical: `https://maiyahospital.in/doctor/${doctor.slug}`,
     ogTitle: `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`,
     ogDescription: `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience.`,
     ogImage: `https://maiyahospital.in${doctor.image}`,

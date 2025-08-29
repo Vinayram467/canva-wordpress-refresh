@@ -9,11 +9,11 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { getMedicalOrganizationSchema } from '@/utils/schema';
 
 const ServiceDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   // Mock service data - in real app, this would come from API
   const serviceData = {
-    id: id,
+    id: slug,
     name: "ICU (Intensive Care Unit)",
     description: "State-of-the-art intensive care unit with 24/7 monitoring and expert critical care team.",
     icon: Heart,
@@ -39,7 +39,7 @@ const ServiceDetail = () => {
     title: `${serviceData.name} in Jayanagar | Expert ${serviceData.name} Treatment | Maiya Hospital`,
     description: `Expert ${serviceData.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care. Book consultation today.`,
     keywords: `${serviceData.name.toLowerCase()} jayanagar, ${serviceData.name.toLowerCase()} treatment bangalore, ${serviceData.name.toLowerCase()} specialist jayanagar, ${serviceData.name.toLowerCase()} hospital bangalore, maiya hospital ${serviceData.name.toLowerCase()}`,
-    canonical: `https://maiyahospital.in/service/${id}`,
+    canonical: `https://maiyahospital.in/service/${slug}`,
     ogTitle: `${serviceData.name} in Jayanagar | Expert Treatment | Maiya Hospital`,
     ogDescription: `Expert ${serviceData.name} treatment in Jayanagar at Maiya Hospital. Advanced facilities, experienced specialists, comprehensive care.`,
     ogImage: `https://maiyahospital.in${serviceData.image}`,

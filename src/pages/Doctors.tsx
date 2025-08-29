@@ -183,7 +183,7 @@ const Doctors = () => {
                          <Button 
                            size="sm" 
                            className="bg-green-600 hover:bg-green-700 text-white"
-                           onClick={() => window.location.href = `/doctor/${doctor.id}`}
+                           onClick={() => window.location.href = `/doctor/${doctor.slug}`}
                          >
                            View Profile
                          </Button>

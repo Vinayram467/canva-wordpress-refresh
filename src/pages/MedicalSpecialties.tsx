@@ -7,6 +7,13 @@ import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
 
+const toSlug = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-');
+
 const specialtiesData = [
   {
     id: "1",
@@ -297,7 +304,7 @@ const MedicalSpecialties = () => {
                                          <div className="flex gap-2">
                        <Button 
                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                         onClick={() => window.location.href = `/specialty/${specialty.id}`}
+                         onClick={() => window.location.href = `/specialty/${toSlug(specialty.name)}`}
                        >
                          Learn More
                        </Button>
