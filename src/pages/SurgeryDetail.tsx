@@ -8,7 +8,7 @@ import { ArrowLeft, Phone, Clock, Shield, Award, Heart, Users, Activity, Scissor
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { getMedicalOrganizationSchema } from "@/utils/schema";
+import { getMedicalOrganizationSchema, getFAQPageSchema } from "@/utils/schema";
 
 // Surgery data - this would normally come from an API
 const surgeryData = {
@@ -371,9 +371,8 @@ const toSlug = (text: string) =>
   text
     .toLowerCase()
     .replace(/&/g, ' and ')
-    .replace(/[()]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-');
 
 const SurgeryDetail = () => {
   const { slug } = useParams();
@@ -398,6 +397,11 @@ const SurgeryDetail = () => {
   }
 
   // Generate SEO data for the surgery detail page
+  const structuredData = [
+    getMedicalOrganizationSchema(),
+    ...(surgery.faqs && surgery.faqs.length > 0 ? [getFAQPageSchema(surgery.faqs)] : [])
+  ];
+
   const seoData = {
     title: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
     description: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons. Best ${surgery.name.toLowerCase()} treatment available.`,
@@ -409,7 +413,7 @@ const SurgeryDetail = () => {
     twitterTitle: `${surgery.name} | Minimally Invasive Surgery - Maiya Hospital`,
     twitterDescription: `Advanced ${surgery.name.toLowerCase()} at Maiya Hospital Bangalore. Minimally invasive surgery, faster recovery, expert surgeons.`,
     twitterImage: `https://maiyahospital.in/surgery-${toSlug(surgery.name)}-twitter.jpg`,
-    structuredData: getMedicalOrganizationSchema()
+    structuredData
   };
 
   return (

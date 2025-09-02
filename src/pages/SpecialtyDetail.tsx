@@ -329,6 +329,11 @@ const SpecialtyDetail = () => {
   }
 
   // Generate SEO data for the specialty detail page
+  const structuredData = [
+    getMedicalOrganizationSchema(),
+    ...(specialty.faqs && specialty.faqs.length > 0 ? [getFAQPageSchema(specialty.faqs)] : [])
+  ];
+
   const seoData = {
     title: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
     description: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care in Jayanagar. Book consultation today.`,
@@ -340,10 +345,7 @@ const SpecialtyDetail = () => {
     twitterTitle: `${specialty.name} Services | Expert Specialists - Maiya Hospital Bangalore`,
     twitterDescription: `Expert ${specialty.name.toLowerCase()} services at Maiya Hospital Bangalore. Experienced specialists, advanced treatments, comprehensive care.`,
     twitterImage: `https://maiyahospital.in/specialty-${toSlug(specialty.name)}-twitter.jpg`,
-    structuredData: [
-      getMedicalOrganizationSchema(),
-      getFAQPageSchema(specialty.faqs)
-    ]
+    structuredData
   };
 
   const IconComponent = specialty.icon;
