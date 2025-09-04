@@ -10,6 +10,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
+import { appointmentApi } from "@/services/api";
+import SuccessCard from "@/components/SuccessCard";
 
 const AppointmentBooking = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,16 @@ const AppointmentBooking = () => {
     doctor: "",
     message: ""
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successDetails, setSuccessDetails] = useState<null | {
+    patientName: string;
+    email: string;
+    phone: string;
+    date: string;
+    time: string;
+    message?: string;
+  }>(null);
 
   // Generate SEO data for the appointment booking page
   const seoData = {
@@ -46,10 +58,48 @@ const AppointmentBooking = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle appointment booking logic here
-    console.log("Appointment booking:", formData);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const payload = {
+      patientName: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email,
+      phone: formData.phone,
+      date: formData.date,
+      time: formData.time,
+      reason: formData.message,
+      doctorId: undefined,
+      notes: `${formData.department}${formData.doctor ? ` | Preferred: ${formData.doctor}` : ""}`,
+    };
+
+    try {
+      await appointmentApi.create(payload);
+      setSuccessDetails({
+        patientName: payload.patientName,
+        email: payload.email,
+        phone: payload.phone,
+        date: payload.date,
+        time: payload.time,
+        message: payload.reason,
+      });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        date: "",
+        time: "",
+        department: "",
+        doctor: "",
+        message: "",
+      });
+    } catch (error) {
+      alert("Failed to book appointment. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const departments = [
@@ -106,6 +156,19 @@ const AppointmentBooking = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                {successDetails ? (
+                  <SuccessCard 
+                    title="Appointment Requested!"
+                    message={`Thank you, ${successDetails.patientName}. We have received your request for ${successDetails.date} at ${successDetails.time}. A confirmation email has been sent to ${successDetails.email}.`}
+                    details={[
+                      { label: "Name", value: successDetails.patientName },
+                      { label: "Email", value: successDetails.email },
+                      { label: "Phone", value: successDetails.phone },
+                      { label: "Date", value: successDetails.date },
+                      { label: "Time", value: successDetails.time },
+                    ]}
+                  />
+                ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -224,11 +287,12 @@ const AppointmentBooking = () => {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={isSubmitting}>
                     <Calendar className="w-4 h-4 mr-2" />
-                    Book Appointment
+                    {isSubmitting ? 'Processing...' : 'Book Appointment'}
                   </Button>
                 </form>
+                )}
               </CardContent>
             </Card>
 

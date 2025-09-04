@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { consultationApi } from "@/services/api";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
+import SuccessCard from "@/components/SuccessCard";
 
 const VirtualConsultation = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -137,19 +138,17 @@ const VirtualConsultation = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 rounded-3xl blur-xl animate-pulse"></div>
                 <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 animate-fade-in-up">
                   {successDetails ? (
-                    <div className="flex flex-col items-center justify-center min-h-[350px]">
-                      <CheckCircle className="w-16 h-16 text-emerald-400 mb-4 animate-bounce" />
-                      <h3 className="text-2xl font-bold text-white mb-2">Your Consultation is Scheduled!</h3>
-                      <p className="text-white/80 mb-6 text-center max-w-xs">Thank you, <span className="font-semibold text-emerald-300">{successDetails.patientName}</span>!<br/>Your virtual consultation has been booked. Our team will contact you soon.</p>
-                      <div className="w-full max-w-xs bg-white/20 backdrop-blur-lg rounded-2xl p-4 border border-white/30 shadow-lg mb-4">
-                        <div className="text-white/90 mb-1"><b>Name:</b> {successDetails.patientName}</div>
-                        <div className="text-white/90 mb-1"><b>Email:</b> {successDetails.patientEmail}</div>
-                        <div className="text-white/90 mb-1"><b>Phone:</b> {successDetails.phone}</div>
-                        <div className="text-white/90 mb-1"><b>Date:</b> {successDetails.date}</div>
-                        <div className="text-white/90"><b>Concern:</b> {successDetails.description}</div>
-                      </div>
-                      <div className="text-white/60 text-xs">A confirmation will be sent to your email/phone.</div>
-                    </div>
+                    <SuccessCard 
+                      title="Your Consultation is Scheduled!"
+                      message={`Thank you, ${successDetails.patientName}! Your virtual consultation has been booked. A confirmation will be sent to your email/phone.`}
+                      details={[
+                        { label: "Name", value: successDetails.patientName },
+                        { label: "Email", value: successDetails.patientEmail },
+                        { label: "Phone", value: successDetails.phone },
+                        { label: "Date", value: successDetails.date },
+                        { label: "Concern", value: successDetails.description },
+                      ]}
+                    />
                   ) : (
                     <>
                       <h3 className="text-2xl font-bold text-white mb-6">Book Your Virtual Consultation</h3>
