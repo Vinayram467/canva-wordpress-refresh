@@ -52,22 +52,22 @@ router.post('/', async (req, res) => {
     const consultation = new Consultation(consultationData);
     const newConsultation = await consultation.save();
     
-    // Send confirmation email to user
-    try {
-      await emailService.sendUserConfirmation(consultationData, 'consultation');
-      console.log('User confirmation email sent successfully');
-    } catch (emailError) {
-      console.error('Error sending user confirmation email:', emailError);
-    }
-    
-    // Send notification email to admin
-    try {
-      await emailService.sendAdminNotification(consultationData, 'consultation');
-      console.log('Admin notification email sent successfully');
-    } catch (emailError) {
-      console.error('Error sending admin notification email:', emailError);
-    }
-    
+    // Fire-and-forget email sending
+    Promise.resolve().then(async () => {
+      try {
+        await emailService.sendUserConfirmation(consultationData, 'consultation');
+        console.log('User confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('Error sending user confirmation email:', emailError);
+      }
+      try {
+        await emailService.sendAdminNotification(consultationData, 'consultation');
+        console.log('Admin notification email sent successfully');
+      } catch (emailError) {
+        console.error('Error sending admin notification email:', emailError);
+      }
+    });
+
     res.status(201).json(newConsultation);
   } catch (error) {
     console.error('Error creating consultation:', error);

@@ -85,24 +85,22 @@ router.post('/', async (req, res) => {
     const appointment = new Appointment(appointmentData);
     const newAppointment = await appointment.save();
     
-    // Send confirmation email to user
-    try {
-      await emailService.sendUserConfirmation(appointmentData, 'appointment');
-      console.log('✅ User confirmation email sent successfully');
-    } catch (emailError) {
-      console.error('❌ Error sending user confirmation email:', emailError);
-      // Continue with admin notification even if user email fails
-    }
-    
-    // Send notification email to admin
-    try {
-      await emailService.sendAdminNotification(appointmentData, 'appointment');
-      console.log('✅ Admin notification email sent successfully');
-    } catch (emailError) {
-      console.error('❌ Error sending admin notification email:', emailError);
-      // Continue since appointment was created successfully
-    }
-    
+    // Fire-and-forget email sending so the API responds immediately
+    Promise.resolve().then(async () => {
+      try {
+        await emailService.sendUserConfirmation(appointmentData, 'appointment');
+        console.log('✅ User confirmation email sent successfully');
+      } catch (emailError) {
+        console.error('❌ Error sending user confirmation email:', emailError);
+      }
+      try {
+        await emailService.sendAdminNotification(appointmentData, 'appointment');
+        console.log('✅ Admin notification email sent successfully');
+      } catch (emailError) {
+        console.error('❌ Error sending admin notification email:', emailError);
+      }
+    });
+
     res.status(201).json({
       success: true,
       message: 'Appointment created successfully',
