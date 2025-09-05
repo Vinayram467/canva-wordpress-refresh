@@ -33,7 +33,30 @@ export default function Blogs() {
         setError(null);
       } catch (err) {
         console.error('Error fetching blogs:', err);
-        setError('Failed to load blogs. Please try again later.');
+        // Fallback: load bundled sample blog so the page isn't empty
+        try {
+          const sample = await import('@/content/blogs/sample-blog.json');
+          const mapped: Blog = {
+            _id: sample.default.id || 'sample-blog',
+            title: sample.default.title,
+            content: sample.default.content,
+            summary: sample.default.excerpt || sample.default.content?.slice(0, 140) || '',
+            excerpt: sample.default.excerpt,
+            author: sample.default.author || 'Maiya Hospital',
+            category: sample.default.category || 'General',
+            image: sample.default.featuredImage || '/placeholder.svg',
+            readTime: '5 min read',
+            date: sample.default.publishedAt || new Date().toISOString(),
+            tags: [],
+            createdAt: sample.default.publishedAt || new Date().toISOString(),
+            updatedAt: sample.default.publishedAt || new Date().toISOString(),
+          } as unknown as Blog;
+          setBlogs([mapped]);
+          setError(null);
+        } catch (fallbackErr) {
+          console.error('Fallback blog load failed:', fallbackErr);
+          setError('Failed to load blogs. Please try again later.');
+        }
       } finally {
         setLoading(false);
       }

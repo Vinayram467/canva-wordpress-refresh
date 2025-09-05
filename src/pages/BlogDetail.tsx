@@ -1,9 +1,12 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { blogApi, Blog } from '@/services/api';
+import { sampleBlogs } from '@/lib/utils';
 import { SEOHead } from '@/components/seo/SEOHead';
 import Footer from "@/components/Footer";
-import { getMedicalOrganizationSchema, getArticleSchema } from '@/utils/schema';
+import Header from "@/components/Header";
+import Comments from "@/components/Comments";
+import { getMedicalOrganizationSchema, getArticleSchema, getBlogPostingSchema, getBestPostsSidebarSchema, getWebsiteSchema, getWebPageSchema, getPersonSchema, getShareAction, getBreadcrumbSchema } from '@/utils/schema';
 import { useState, useEffect } from 'react';
 
 export default function BlogDetail() {
@@ -21,7 +24,52 @@ export default function BlogDetail() {
         setError(null);
       } catch (err) {
         console.error('Error fetching blog:', err);
-        setError('Failed to load blog. Please try again later.');
+        // Fallback 1: try sampleBlogs from homepage by numeric/string id
+        const local = sampleBlogs.find(b => b.id === id);
+        if (local) {
+          const mapped: Blog = {
+            _id: local.id,
+            title: local.title,
+            content: local.content,
+            summary: local.summary,
+            excerpt: local.summary,
+            author: local.author,
+            category: local.category,
+            image: local.image,
+            readTime: local.readTime,
+            date: new Date().toISOString(),
+            tags: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          } as unknown as Blog;
+          setBlog(mapped);
+          setError(null);
+        } else {
+          // Fallback 2: load bundled sample JSON if available
+          try {
+            const sample = await import('@/content/blogs/sample-blog.json');
+            const mapped: Blog = {
+              _id: sample.default.id || 'sample-blog',
+              title: sample.default.title,
+              content: sample.default.content,
+              summary: sample.default.excerpt || sample.default.content?.slice(0, 140) || '',
+              excerpt: sample.default.excerpt,
+              author: sample.default.author || 'Maiya Hospital',
+              category: sample.default.category || 'General',
+              image: sample.default.featuredImage || '/placeholder.svg',
+              readTime: '5 min read',
+              date: sample.default.publishedAt || new Date().toISOString(),
+              tags: [],
+              createdAt: sample.default.publishedAt || new Date().toISOString(),
+              updatedAt: sample.default.publishedAt || new Date().toISOString(),
+            } as unknown as Blog;
+            setBlog(mapped);
+            setError(null);
+          } catch (fallbackErr) {
+            console.error('Fallback blog load failed:', fallbackErr);
+            setError('Failed to load blog. Please try again later.');
+          }
+        }
       } finally {
         setLoading(false);
       }
@@ -104,74 +152,158 @@ export default function BlogDetail() {
     url: `https://maiyahospital.in/blog/${id}`
   });
 
+  const bestPosts = sampleBlogs.slice(0, 5);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
-      <SEOHead {...seoData} />
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-10">
+      <SEOHead
+        {...seoData}
+        structuredData={[
+          getWebsiteSchema({ name: 'Maiya Hospital', url: 'https://maiyahospital.in', searchUrl: 'https://maiyahospital.in/search?q=' }),
+          getWebPageSchema({ name: blog.title, url: `https://maiyahospital.in/blog/${id}`, description: blog.excerpt || blog.content.substring(0, 160) }),
+          getPersonSchema(blog.author || 'Maiya Hospital'),
+          getBreadcrumbSchema([
+            { name: 'Home', url: 'https://maiyahospital.in/' },
+            { name: 'Blogs', url: 'https://maiyahospital.in/blogs' },
+            { name: blog.title, url: `https://maiyahospital.in/blog/${id}` }
+          ]),
+          ...(seoData.structuredData as any),
+          getBlogPostingSchema({
+            title: blog.title,
+            description: blog.excerpt || blog.content.substring(0, 160),
+            image: (blog as any).image || (blog as any).imageUrl,
+            url: `https://maiyahospital.in/blog/${id}`,
+            publishedDate: (blog as any).createdAt || (blog as any).publishedAt,
+            modifiedDate: (blog as any).updatedAt || (blog as any).createdAt,
+            author: blog.author || 'Maiya Hospital'
+          }),
+          getBestPostsSidebarSchema(bestPosts.map(p => ({
+            title: p.title,
+            url: `https://maiyahospital.in/blog/${p.id}`,
+            image: p.image
+          }))),
+          getShareAction(`https://maiyahospital.in/blog/${id}`)
+        ]}
+      />
+      <Header />
       <div className="container mx-auto px-4">
-        <article className="max-w-4xl mx-auto">
-          {/* Blog Header */}
-          <header className="mb-8">
-            <div className="flex items-center text-sm text-muted-foreground mb-4">
-              <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
-              <span className="mx-2">•</span>
-              <span>5 min read</span>
-              <span className="mx-2">•</span>
-              <span>Health Tips</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 leading-tight">
-              {blog.title}
-            </h1>
-            {blog.excerpt && (
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {blog.excerpt}
-              </p>
-            )}
-          </header>
-
-          {/* Blog Image */}
-          {blog.image && (
-            <div className="mb-8">
-              <img 
-                src={blog.image} 
-                alt={blog.title}
-                className="w-full h-96 object-cover rounded-2xl shadow-2xl"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder.svg';
-                }}
-              />
-            </div>
-          )}
-
-          {/* Blog Content */}
-          <div className="prose prose-lg max-w-none">
-            <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-              {blog.content}
-            </div>
+        {/* Breadcrumbs and Top Back Nav */}
+        <nav className="py-4 text-sm text-muted-foreground flex items-center justify-between">
+          <div className="flex flex-wrap gap-1">
+            <Link to="/" className="hover:text-foreground">Home</Link>
+            <span>/</span>
+            <Link to="/blogs" className="hover:text-foreground">Blogs</Link>
+            <span>/</span>
+            <span className="text-foreground font-medium line-clamp-1 max-w-[60vw]">{blog.title}</span>
           </div>
-
-          {/* Blog Footer */}
-          <footer className="mt-12 pt-8 border-t border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-muted-foreground">Share this article:</span>
-                <button className="text-blue-600 hover:text-blue-700">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6 3a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2H6zM4 5a4 4 0 014-4h8a4 4 0 014 4v8a4 4 0 01-4 4H8a4 4 0 01-4-4V5z"/>
-                  </svg>
-                </button>
+          <Link to="/blogs" className="text-green-700 hover:text-green-800 font-semibold">← Back</Link>
+        </nav>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <article className="lg:col-span-12">
+            <header className="mb-6">
+              <div className="flex items-center text-sm text-muted-foreground mb-3">
+                <span>{new Date((blog as any).createdAt || Date.now()).toLocaleDateString()}</span>
+                <span className="mx-2">•</span>
+                <span>5 min read</span>
               </div>
-              <button 
-                onClick={() => window.history.back()} 
-                className="text-green-600 hover:text-green-700 font-semibold"
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 leading-tight">
+                {blog.title}
+              </h1>
+              {blog.excerpt && (
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {blog.excerpt}
+                </p>
+              )}
+            </header>
+
+            { (blog as any).image || (blog as any).imageUrl ? (
+              <div className="mb-6">
+                <img 
+                  src={(blog as any).image || (blog as any).imageUrl} 
+                  alt={blog.title}
+                  className="w-full h-[420px] object-cover rounded-2xl shadow-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder.svg';
+                  }}
+                />
+              </div>
+            ) : null }
+
+            <div className="prose prose-lg max-w-none">
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {blog.content}
+              </div>
+            </div>
+
+            {/* Share bar */}
+            <div className="mt-10 flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">Share:</span>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`https://maiyahospital.in/blog/${id}`)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1 rounded-full bg-green-600 text-white text-sm hover:opacity-90"
               >
-                ← Back to Blogs
+                WhatsApp
+              </a>
+              <a
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://maiyahospital.in/blog/${id}`)}&text=${encodeURIComponent(blog.title)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1 rounded-full bg-blue-400 text-white text-sm hover:opacity-90"
+              >
+                X/Twitter
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://maiyahospital.in/blog/${id}`)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1 rounded-full bg-blue-600 text-white text-sm hover:opacity-90"
+              >
+                Facebook
+              </a>
+              <button
+                onClick={() => navigator.clipboard.writeText(`https://maiyahospital.in/blog/${id}`)}
+                className="px-3 py-1 rounded-full bg-gray-800 text-white text-sm hover:opacity-90"
+              >
+                Copy link
               </button>
             </div>
-          </footer>
-        </article>
+
+            <Comments threadId={id!} />
+
+            {/* Compact Recent Posts list (image left, text right) */}
+            <section className="mt-12">
+              <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
+              <div className="space-y-4">
+                {bestPosts.slice(0, 5).map((p) => (
+                  <Link to={`/blog/${p.id}`} key={`recent-inline-${p.id}`} className="flex items-center gap-4 group">
+                    <img src={p.image} alt={p.title} className="h-20 w-28 object-cover rounded" />
+                    <div className="min-w-0">
+                      <div className="text-xs text-muted-foreground mb-1">{p.date}</div>
+                      <div className="text-base font-semibold line-clamp-2 group-hover:text-green-700">{p.title}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <footer className="mt-12 pt-8 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-muted-foreground">
+                  Category: Health Tips
+                </div>
+                <Link to="/blogs" className="text-green-600 hover:text-green-700 font-semibold">
+                  ← Back to Blogs
+                </Link>
+              </div>
+            </footer>
+          </article>
+          {/* Sidebar removed as per request */}
+        </div>
       </div>
-      
+
       <Footer />
     </div>
   );

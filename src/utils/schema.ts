@@ -467,3 +467,95 @@ export const getVideoSchema = (video: any) => ({
     "name": "Maiya Multi Speciality Hospital"
   }
 }); 
+
+// Blog/Article specific schemas
+export const getBlogPostingSchema = (post: any) => ({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.title,
+  "description": post.description,
+  "image": Array.isArray(post.image) ? post.image : [post.image].filter(Boolean),
+  "datePublished": post.publishedDate,
+  "dateModified": post.modifiedDate || post.publishedDate,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": post.url
+  },
+  "author": post.author
+    ? { "@type": "Person", "name": post.author }
+    : { "@type": "Organization", "name": "Maiya Hospital" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Maiya Multi Speciality Hospital",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://maiyahospital.in/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png"
+    }
+  }
+});
+
+export const getBestPostsSidebarSchema = (posts: Array<{ title: string; url: string; image?: string }>) => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Best Blog Posts",
+  "itemListElement": posts.map((p, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "url": p.url,
+    "name": p.title,
+    ...(p.image ? { "image": p.image } : {})
+  }))
+});
+
+export const getBlogListSchema = (opts: { name: string; url: string; posts: Array<{ title: string; url: string; image?: string; date?: string }> }) => ({
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": opts.name,
+  "url": opts.url,
+  "hasPart": [{
+    "@type": "Blog",
+    "blogPost": opts.posts.map(p => ({
+      "@type": "BlogPosting",
+      "headline": p.title,
+      "url": p.url,
+      ...(p.image ? { "image": p.image } : {}),
+      ...(p.date ? { "datePublished": p.date } : {})
+    }))
+  }]
+});
+
+// Additional schemas to mirror comprehensive article pages (header/footer/navigation/share)
+export const getWebsiteSchema = (site: { name: string; url: string; searchUrl?: string }) => ({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": site.name,
+  "url": site.url,
+  ...(site.searchUrl
+    ? {
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${site.searchUrl}{search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
+      }
+    : {})
+});
+
+export const getWebPageSchema = (page: { name: string; url: string; description?: string }) => ({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": page.name,
+  "url": page.url,
+  ...(page.description ? { description: page.description } : {})
+});
+
+export const getPersonSchema = (name: string) => ({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": name
+});
+
+export const getShareAction = (url: string) => ({
+  "@type": "ShareAction",
+  target: url
+});
