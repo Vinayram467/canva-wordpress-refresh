@@ -51,5 +51,46 @@
   .glass-dark {
     @apply bg-opacity-15 bg-black backdrop-blur-md saturate-150 border border-white border-opacity-10 shadow-lg;
   }
+
+  .spiral-glow {
+    /* Static by default - no rotation */
+  }
+
+  .group:hover .spiral-glow {
+    animation: rotate-gradient-fast 2s linear infinite;
+  }
+}
+
+@keyframes rotate-gradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-gradient-fast {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shape-change {
+  0% { 
+    border-radius: 0.5rem; /* rounded-lg */
+    transform: translate(-50%, -50%) scale(1);
+  }
+  25% { 
+    border-radius: 1rem; /* rounded-2xl */
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  50% { 
+    border-radius: 2rem; /* rounded-3xl */
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  75% { 
+    border-radius: 1rem; /* rounded-2xl */
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% { 
+    border-radius: 0.5rem; /* rounded-lg */
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 

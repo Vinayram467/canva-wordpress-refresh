@@ -34,23 +34,21 @@ const Header = () => {
           {/* Decorative blurred orb behind logo/text, using theme color */}
           <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-100/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
         </div>
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-start gap-4 animate-fade-in-up relative z-10">
-          {/* Animated logo container */}
-          <div className="relative group shadow-2xl">
-            {/* Rotating border effect with theme colors */}
-            <div className="absolute -inset-2 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
-            <div className="w-28 h-28 md:w-32 md:h-32 bg-white/80 backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
-              {/* Shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none"></div>
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-4 animate-fade-in-up relative z-10">
+          {/* Floating logo without background card - enlarged to match spiral */}
+          <div className="relative group w-48 h-48 md:w-56 md:h-56">
+            {/* Rotating glow effect - positioned behind logo only */}
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-600 via-red-500 to-green-600 blur-sm opacity-20 group-hover:opacity-40 transition-opacity duration-300 spiral-glow" style={{zIndex: 1}}></div>
+            <div className="relative w-full h-full" style={{zIndex: 2}}>
               <img 
                 src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
                 alt="Maiya Hospital Logo" 
-                className="w-full h-full object-cover scale-110 transition-all duration-500 animate-pulse-subtle"
+                className="w-full h-full object-contain drop-shadow-2xl animate-float-subtle"
               />
             </div>
           </div>
           {/* Animated text content */}
-          <div className="flex flex-col items-start md:items-start gap-1 flex-1 min-w-0">
+          <div className="flex flex-col items-center gap-1 min-w-0 text-center">
             <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold leading-tight tracking-tight relative whitespace-normal">
               <span className="bg-gradient-to-r from-green-600 via-red-500 to-green-600 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
                 Maiya Multi Speciality Hospital
@@ -59,7 +57,7 @@ const Header = () => {
                 <span className="absolute -bottom-2 -left-2 w-2 h-2 bg-red-500 rounded-full animate-ping-slow delay-300"></span>
               </span>
               {/* Decorative accent underline */}
-              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-full opacity-60 animate-fade-in-up"></span>
+              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-full opacity-60 animate-fade-in-up mx-auto"></span>
             </h1>
             <p className="text-foreground text-sm md:text-base mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
               Excellence in Healthcare
