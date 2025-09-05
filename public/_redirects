@@ -91,6 +91,5 @@ https://www.maiyahospital.in/*	https://maiyahospital.in/:splat	301!
 /specialty/obstetrics-and-gynaecology	/specialty/gynecology	301
 /specialty/paediatrics	/specialty/pediatrics	301
 
-# Removed broad catch-alls that interfered with slug routes
-
+# SPA fallback for client-side routes (kept last so earlier rules take precedence)
 /*	/index.html	200
