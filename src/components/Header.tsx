@@ -36,10 +36,10 @@ const Header = () => {
         </div>
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-4 animate-fade-in-up relative z-10">
           {/* Floating logo without background card - enlarged to match spiral */}
-          <div className="relative group w-48 h-48 md:w-56 md:h-56">
+          <div className="relative group w-48 h-48 md:w-56 md:h-56 cursor-pointer">
             {/* Rotating glow effect - positioned behind logo only */}
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-600 via-red-500 to-green-600 blur-sm opacity-20 group-hover:opacity-40 transition-opacity duration-300 spiral-glow" style={{zIndex: 1}}></div>
-            <div className="relative w-full h-full" style={{zIndex: 2}}>
+            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-300" style={{zIndex: 2}}>
               <img 
                 src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
                 alt="Maiya Hospital Logo" 

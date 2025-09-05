@@ -57,7 +57,7 @@
   }
 
   .group:hover .spiral-glow {
-    animation: rotate-gradient-fast 2s linear infinite;
+    animation: rotate-gradient-fast 2s linear infinite !important;
   }
 }
 
