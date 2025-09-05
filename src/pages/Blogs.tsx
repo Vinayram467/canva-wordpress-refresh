@@ -109,7 +109,7 @@ export default function Blogs() {
                 <div className="rounded-2xl overflow-hidden glass hover:shadow-green-700/20 transition-all duration-300 flex flex-col h-full">
                   <div className="relative">
                     <img 
-                      src={blog.image || '/placeholder.svg'} 
+                      src={(blog as any).image || (blog as any).imageUrl || '/placeholder.svg'} 
                       alt={blog.title} 
                       className="w-full h-48 object-cover"
                       onError={(e) => {
@@ -123,7 +123,7 @@ export default function Blogs() {
                   </div>
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex items-center text-sm text-muted-foreground mb-3">
-                      <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                      <span>{new Date((blog as any).createdAt || (blog as any).publishedAt || Date.now()).toLocaleDateString()}</span>
                       <span className="mx-2">•</span>
                       <span>5 min read</span>
                     </div>

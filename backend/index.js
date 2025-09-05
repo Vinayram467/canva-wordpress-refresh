@@ -66,6 +66,20 @@ mongoose.connect(MONGODB_URI, {
 .then(() => {
   console.log('✅ Connected to MongoDB successfully');
   console.log('📊 Database:', mongoose.connection.name);
+  // Auto-seed blogs if collection is empty (non-destructive for existing data)
+  const Blog = require('./models/Blog');
+  Blog.estimatedDocumentCount().then(async (count) => {
+    if (count === 0) {
+      console.log('📝 No blogs found. Seeding sample blogs...');
+      try {
+        const sampleBlogs = require('./scripts/sampleBlogs');
+        await Blog.insertMany(sampleBlogs);
+        console.log(`✅ Seeded ${sampleBlogs.length} sample blogs`);
+      } catch (seedErr) {
+        console.error('⚠️  Failed to seed sample blogs:', seedErr);
+      }
+    }
+  }).catch(err => console.error('Error checking blog count:', err));
 })
 .catch(err => {
   throw new AppError(
