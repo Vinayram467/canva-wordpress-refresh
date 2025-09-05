@@ -36,12 +36,16 @@
     @apply bg-background text-foreground min-h-screen;
     @apply bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)];
     @apply bg-[length:400%_400%] animate-gradient;
+    /* Subtle site-wide border framing */
+    box-shadow: 0 0 0 1px rgba(16,24,40,0.06) inset, 0 0 0 6px rgba(255,255,255,0.6) inset;
+    border-radius: 16px;
+    margin: 8px;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-opacity-80 bg-white backdrop-blur-md saturate-150 border border-white border-opacity-80 shadow-lg;
+    @apply bg-opacity-80 bg-white backdrop-blur-md saturate-150 border border-white border-opacity-60 shadow-[0_10px_25px_rgba(2,6,23,0.06),inset_0_1px_0_rgba(255,255,255,0.6)];
   }
 
   .glass-dark {

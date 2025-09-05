@@ -18,40 +18,13 @@ const Header = () => {
 
   return (
     <header className="relative z-50">
-      {/* Modern top bar with enhanced gradient */}
-      <div className="glass text-foreground py-4 relative overflow-hidden">
-        {/* Animated background elements */}
-                  <div className="absolute inset-0">
-            <div className="absolute top-0 left-20 w-32 h-32 bg-green-600/10 rounded-full blur-2xl animate-pulse"></div>
-          <div className="absolute top-0 right-40 w-24 h-24 bg-pink-400/10 rounded-full blur-xl animate-pulse delay-700"></div>
-        </div>
-        
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center space-x-6">
-            <div className="group flex items-center space-x-2 glass rounded-full px-4 py-2 hover:bg-white/80 transition-all duration-300 transform hover:scale-105">
-              <Phone className="w-4 h-4 text-green-600 group-hover:animate-pulse" />
-              <span className="font-medium">Emergency: +91 98450 12345</span>
-            </div>
-            <div className="group flex items-center space-x-2 glass rounded-full px-4 py-2 hover:bg-white/80 transition-all duration-300 transform hover:scale-105">
-              <Clock className="w-4 h-4 text-red-500 group-hover:animate-pulse" />
-              <span className="font-medium">24/7, 365 Days Open</span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 bg-gradient-to-r from-green-600 to-red-500 rounded-lg flex items-center justify-center animate-pulse">
-              <Shield className="w-4 h-4 text-white" />
-            </div>
-            <div className="text-sm bg-gradient-to-r from-green-600 to-red-500 bg-clip-text text-transparent font-bold animate-text-glow">
-              Quality Healthcare for Everyone
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Top info bar removed per request */}
 
-      {/* Logo Section */}
-      <div className="relative py-10 md:py-16 flex items-center justify-center overflow-visible">
+      {/* Decorative border above logo section */}
+      <div className="w-full h-px bg-gradient-to-r from-green-600/30 via-red-500/30 to-green-600/30"></div>
+
+      {/* Logo Section - compact height and aligned left */}
+      <div className="relative py-4 md:py-6 overflow-visible">
         {/* Enhanced background animations */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-green-100 via-red-100 to-green-100 opacity-80"></div>
@@ -61,12 +34,12 @@ const Header = () => {
           {/* Decorative blurred orb behind logo/text, using theme color */}
           <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-100/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
         </div>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 animate-fade-in-up relative z-10">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-start gap-4 animate-fade-in-up relative z-10">
           {/* Animated logo container */}
           <div className="relative group shadow-2xl">
             {/* Rotating border effect with theme colors */}
             <div className="absolute -inset-2 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300 animate-rotate-gradient"></div>
-            <div className="w-48 h-48 bg-white/80 backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
+            <div className="w-28 h-28 md:w-32 md:h-32 bg-white/80 backdrop-blur-md border border-blue-100/30 rounded-3xl flex items-center justify-center overflow-hidden group-hover:shadow-2xl group-hover:shadow-blue-400/20 animate-float-subtle">
               {/* Shine effect */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none"></div>
               <img 
@@ -77,8 +50,8 @@ const Header = () => {
             </div>
           </div>
           {/* Animated text content */}
-          <div className="flex flex-col items-start md:items-start gap-2">
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight relative">
+          <div className="flex flex-col items-start md:items-start gap-1 flex-1 min-w-0">
+            <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold leading-tight tracking-tight relative whitespace-normal">
               <span className="bg-gradient-to-r from-green-600 via-red-500 to-green-600 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
                 Maiya Multi Speciality Hospital
                 {/* Floating dots decoration */}
@@ -88,7 +61,7 @@ const Header = () => {
               {/* Decorative accent underline */}
               <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-full opacity-60 animate-fade-in-up"></span>
             </h1>
-            <p className="text-foreground text-lg md:text-xl mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
+            <p className="text-foreground text-sm md:text-base mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
               Excellence in Healthcare
             </p>
           </div>

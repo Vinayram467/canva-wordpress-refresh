@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { blogApi, Blog } from '@/services/api';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { getMedicalOrganizationSchema } from '@/utils/schema';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getMedicalOrganizationSchema, getBreadcrumbSchema } from '@/utils/schema';
+import { sampleBlogs } from '@/lib/utils';
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -33,30 +36,24 @@ export default function Blogs() {
         setError(null);
       } catch (err) {
         console.error('Error fetching blogs:', err);
-        // Fallback: load bundled sample blog so the page isn't empty
-        try {
-          const sample = await import('@/content/blogs/sample-blog.json');
-          const mapped: Blog = {
-            _id: sample.default.id || 'sample-blog',
-            title: sample.default.title,
-            content: sample.default.content,
-            summary: sample.default.excerpt || sample.default.content?.slice(0, 140) || '',
-            excerpt: sample.default.excerpt,
-            author: sample.default.author || 'Maiya Hospital',
-            category: sample.default.category || 'General',
-            image: sample.default.featuredImage || '/placeholder.svg',
-            readTime: '5 min read',
-            date: sample.default.publishedAt || new Date().toISOString(),
-            tags: [],
-            createdAt: sample.default.publishedAt || new Date().toISOString(),
-            updatedAt: sample.default.publishedAt || new Date().toISOString(),
-          } as unknown as Blog;
-          setBlogs([mapped]);
-          setError(null);
-        } catch (fallbackErr) {
-          console.error('Fallback blog load failed:', fallbackErr);
-          setError('Failed to load blogs. Please try again later.');
-        }
+        // Fallback: use homepage sampleBlogs so all homepage blogs are visible
+        const mappedBlogs: Blog[] = sampleBlogs.map(blog => ({
+          _id: blog.id,
+          title: blog.title,
+          content: blog.content,
+          summary: blog.summary,
+          excerpt: blog.summary,
+          author: blog.author,
+          category: blog.category,
+          image: blog.image,
+          readTime: blog.readTime,
+          date: new Date().toISOString(),
+          tags: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as unknown as Blog));
+        setBlogs(mappedBlogs);
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -114,51 +111,77 @@ export default function Blogs() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
-      <SEOHead {...seoData} />
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)]">
+      <Header />
+      <SEOHead
+        {...seoData}
+        structuredData={[
+          getMedicalOrganizationSchema(),
+          getBreadcrumbSchema([
+            { name: 'Home', url: 'https://maiyahospital.in/' },
+            { name: 'Blogs', url: 'https://maiyahospital.in/blogs' }
+          ])
+        ]}
+      />
+      <div className="container mx-auto px-4 py-8">
+        {/* Breadcrumbs */}
+        <nav className="py-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Link to="/" className="hover:text-foreground">Home</Link>
+            <span>/</span>
+            <span className="text-foreground font-medium">Blogs</span>
+          </div>
+        </nav>
+
+        <h1 className="text-4xl font-extrabold mb-8 bg-gradient-to-r from-green-700 via-blue-400 to-red-500 bg-clip-text text-transparent">
           Maiya Blogs
         </h1>
+
         {blogs.length === 0 ? (
-          <div className="text-center text-muted-foreground">
+          <div className="text-center text-muted-foreground py-16">
             <p className="text-lg">No blogs available at the moment.</p>
             <p className="text-sm mt-2">Check back soon for new content!</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="space-y-6">
             {blogs.map(blog => (
               <Link to={`/blog/${blog._id}`} key={blog._id} className="block group">
-                <div className="rounded-2xl overflow-hidden glass hover:shadow-green-700/20 transition-all duration-300 flex flex-col h-full">
-                  <div className="relative">
+                <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="md:w-56 flex-shrink-0">
                     <img 
-                      src={(blog as any).image || (blog as any).imageUrl || '/placeholder.svg'} 
+                        src={(blog as any).image || (blog as any).imageUrl || '/placeholder.svg'} 
                       alt={blog.title} 
-                      className="w-full h-48 object-cover"
+                        className="w-full h-32 md:h-32 object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/placeholder.svg';
                       }}
                     />
-                    <span className="absolute top-4 left-4 bg-green-700 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">
-                      Health Tips
+                    </div>
+                    <div className="p-6 flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+                          {(blog as any).category || 'Health Tips'}
                     </span>
                   </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center text-sm text-muted-foreground mb-3">
-                      <span>{new Date((blog as any).createdAt || (blog as any).publishedAt || Date.now()).toLocaleDateString()}</span>
+                      <h2 className="text-2xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
+                        {blog.title}
+                      </h2>
+                      <p className="text-muted-foreground mb-4 line-clamp-3">
+                        {blog.excerpt || blog.content.substring(0, 200) + '...'}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-muted-foreground">
+                          <span>{new Date((blog as any).createdAt || (blog as any).publishedAt || Date.now()).toLocaleDateString()}</span>
                       <span className="mx-2">•</span>
                       <span>5 min read</span>
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
-                      {blog.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-4 flex-1 line-clamp-3">
-                      {blog.excerpt || blog.content.substring(0, 150) + '...'}
-                    </p>
-                    <span className="text-green-600 font-semibold hover:underline group-hover:text-green-700 transition-colors duration-300">
-                      Read More &rarr;
+                        <span className="text-green-600 font-semibold group-hover:text-green-700 transition-colors duration-300">
+                          Read More →
                     </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -166,6 +189,7 @@ export default function Blogs() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 } 

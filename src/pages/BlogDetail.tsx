@@ -273,16 +273,41 @@ export default function BlogDetail() {
 
             <Comments threadId={id!} />
 
-            {/* Compact Recent Posts list (image left, text right) */}
+            {/* Recent Posts with horizontal card layout matching main blogs page */}
             <section className="mt-12">
-              <h2 className="text-xl font-semibold mb-4">Recent Posts</h2>
-              <div className="space-y-4">
+              <h2 className="text-xl font-semibold mb-6">Recent Posts</h2>
+              <div className="space-y-6">
                 {bestPosts.slice(0, 5).map((p) => (
-                  <Link to={`/blog/${p.id}`} key={`recent-inline-${p.id}`} className="flex items-center gap-4 group">
-                    <img src={p.image} alt={p.title} className="h-20 w-28 object-cover rounded" />
-                    <div className="min-w-0">
-                      <div className="text-xs text-muted-foreground mb-1">{p.date}</div>
-                      <div className="text-base font-semibold line-clamp-2 group-hover:text-green-700">{p.title}</div>
+                  <Link to={`/blog/${p.id}`} key={`recent-inline-${p.id}`} className="block group">
+                    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                      <div className="flex flex-col md:flex-row">
+                        <div className="md:w-56 flex-shrink-0">
+                          <img src={p.image} alt={p.title} className="w-full h-32 md:h-32 object-cover" />
+                        </div>
+                        <div className="p-6 flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+                              {p.category}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
+                            {p.title}
+                          </h3>
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                            {p.summary}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <div className="text-sm text-muted-foreground">
+                              <span>{p.date}</span>
+                              <span className="mx-2">•</span>
+                              <span>{p.readTime}</span>
+                            </div>
+                            <span className="text-green-600 font-semibold group-hover:text-green-700 transition-colors duration-300">
+                              Read More →
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))}
