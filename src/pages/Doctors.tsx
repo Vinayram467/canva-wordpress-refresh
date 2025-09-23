@@ -8,54 +8,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
+import doctorsData from "@/content/doctors";
 
-// Import the doctors data
-const doctorsData = [
-  // Radiology
-  { id: "1", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "4 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png", slug: "dr-b-g-mahesh" },
-  
-  // Orthopedics
-  { id: "2", name: "Dr. Chandrashekar HS", specialty: "Orthopedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg", slug: "dr-chandrashekar-h-s" },
-  
-  // Orthopedics
-  { id: "3", name: "Dr. Akshay Dhanda", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg", slug: "dr-akshay-dhanda" },
-  
-  // Surgical Oncology
-  { id: "4", name: "Dr. Krishnappa R", specialty: "Surgical Oncology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg", slug: "dr-krishnappa-r" },
-  
-  // General Surgery
-  { id: "5", name: "Dr. G L Maiya", specialty: "General Surgery", degrees: "MBBS, MS", experience: "35 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹1000", image: "/doctor-profiles/DR-G L-MAIYA.png", slug: "dr-g-l-maiya" },
-  
-  // Cardiology
-  { id: "6", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/doctor-profiles/DR-HRISHIKESH- VEMULA.jpg", slug: "dr-hrishikesh-vemula" },
-  
-  // Orthopedics
-  { id: "7", name: "Dr. Abhey Vasudev", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/dr-abhey-vasudev.jpg", slug: "dr-abhey-vasudev" },
-  
-  // Neurology
-  { id: "8", name: "Dr. Sujay Rao", specialty: "Neurology", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/doctor-profiles/DR-SUJAY- RAO.png", slug: "dr-sujay-rao" },
-  
-  // Obstetrics & Gynaecology
-  { id: "9", name: "Dr. Ishwarya Bhandari", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "10 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹500", image: "/doctor-profiles/DR-ISHWARYA- BHANDARI.jpg", slug: "dr-ishwarya-bhandari" },
-  
-  // Ophthalmology
-  { id: "10", name: "Dr. N T Babu", specialty: "Ophthalmology", degrees: "MBBS, DOMS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "10AM – 12PM", consultationFee: "₹600", image: "/doctor-profiles/DR-N T-BABU.jpg", slug: "dr-n-t-babu" },
-  
-  // Vascular Surgery
-  { id: "11", name: "Dr. Chinmay Nagesh", specialty: "Vascular Surgery", degrees: "MBBS, MS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-CHINMAY- NAGESH.jpeg", slug: "dr-chinmay-nagesh" },
-  
-  // Medical Oncology
-  { id: "12", name: "Dr. Murali P", specialty: "Medical Oncology", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "2PM – 8PM", consultationFee: "₹600", image: "/doctor-profiles/DR-MURALI-P.jpeg", slug: "dr-murali-p" },
-  
-  // Psychiatry
-  { id: "13", name: "Dr. Lakshmi V Pandit", specialty: "Psychiatry", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹700", image: "/doctor-profiles/DR-LAKSHMI-V-PANDIT.jpg", slug: "dr-lakshmi-v-pandit" },
-  
-  // Surgical Gastroenterology
-  { id: "14", name: "Dr. Ananth Krishna", specialty: "Surgical Gastroenterology", degrees: "MBBS, MD, DM", experience: "30 Years", visitingDays: "Mon–Sat", timings: "2PM – 4PM", consultationFee: "₹800", image: "/doctor-profiles/DR-ANANTH-KRISHNA.jpeg", slug: "dr-ananth-krishna" },
-  
-  // General Medicine
-  { id: "15", name: "Dr. Geetha B V", specialty: "General Medicine", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-GEETHA-B V.png", slug: "dr-geetha-b-v" }
-];
+// Data imported from shared content module
 
 const Doctors = () => {
   const [searchTerm, setSearchTerm] = useState("");

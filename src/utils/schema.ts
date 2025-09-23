@@ -134,8 +134,8 @@ export const getPhysicianSchema = (doctor: any) => ({
   "@context": "https://schema.org",
   "@type": "Physician",
   "name": doctor.name,
-  "description": doctor.specialization,
-  "medicalSpecialty": doctor.specialization,
+  "description": doctor.specialty,
+  "medicalSpecialty": doctor.specialty,
   "image": doctor.image,
   "url": `https://maiyahospital.in/doctor/${doctor.slug}`,
   "worksFor": {

@@ -23,15 +23,15 @@ export interface PageSEOConfig {
 export const SEO_CONFIG: PageSEOConfig = {
   // Homepage
   home: {
-    title: "Maiya Hospital: Best Multi Speciality Hospital in Jayanagar, Bangalore",
-    description: "Experience comprehensive healthcare at Maiya Hospital, Jayanagar's leading multi-specialty facility. Offering 24/7 emergency care, expert doctors & advanced technology. Book your appointment today.",
+    title: "Maiya Hospital Jayanagar Bangalore | Multi-Specialty Healthcare",
+    description: "Maiya Hospital in Jayanagar, Bangalore offers trusted multi-specialty care, 24/7 emergency services, advanced CT scans, laparoscopic surgery & cashless insurance.",
     keywords: "multi speciality hospital jayanagar, best hospital jayanagar, emergency hospital bangalore, maiya hospital jayanagar, hospital near me, medical center jayanagar",
     canonical: "https://maiyahospital.in/",
-    ogTitle: "Maiya Hospital: Best Multi Speciality Hospital in Jayanagar, Bangalore",
-    ogDescription: "Experience comprehensive healthcare at Maiya Hospital, Jayanagar's leading multi-specialty facility. Offering 24/7 emergency care, expert doctors & advanced technology.",
+    ogTitle: "Maiya Hospital Jayanagar Bangalore | Multi-Specialty Healthcare",
+    ogDescription: "Maiya Hospital in Jayanagar, Bangalore offers trusted multi-specialty care, 24/7 emergency services, advanced CT scans, laparoscopic surgery & cashless insurance.",
     ogImage: "https://maiyahospital.in/og-image.jpg",
-    twitterTitle: "Maiya Hospital: Best Multi Speciality Hospital in Jayanagar, Bangalore",
-    twitterDescription: "Experience comprehensive healthcare at Maiya Hospital, Jayanagar's leading multi-specialty facility. Offering 24/7 emergency care, expert doctors & advanced technology.",
+    twitterTitle: "Maiya Hospital Jayanagar Bangalore | Multi-Specialty Healthcare",
+    twitterDescription: "Maiya Hospital in Jayanagar, Bangalore offers trusted multi-specialty care, 24/7 emergency services, advanced CT scans, laparoscopic surgery & cashless insurance.",
     twitterImage: "https://maiyahospital.in/twitter-image.jpg"
   },
 

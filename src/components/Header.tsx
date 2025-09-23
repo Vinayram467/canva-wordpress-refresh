@@ -23,23 +23,25 @@ const Header = () => {
       {/* Decorative border above logo section */}
       <div className="w-full h-px bg-gradient-to-r from-green-600/30 via-red-500/30 to-green-600/30"></div>
 
-      {/* Logo Section - compact height and aligned left */}
+      {/* Logo Section - compact height with gradient glow backdrop */}
       <div className="relative py-4 md:py-6 overflow-visible">
         {/* Enhanced background animations */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-green-100 via-red-100 to-green-100 opacity-80"></div>
-          {/* Floating orbs with new animations, using theme colors */}
-          <div className="absolute top-1/4 left-1/4 w-40 h-40 bg-green-200/20 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-red-200/20 rounded-full blur-3xl animate-float-delay"></div>
-          {/* Decorative blurred orb behind logo/text, using theme color */}
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-100/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+          {/* Subtle radial gradient glow background replacing solid square */}
+          <div className="absolute inset-0 opacity-80">
+            <div className="w-full h-full" style={{
+              backgroundImage: 'radial-gradient(1200px 600px at 20% 50%, rgba(16,185,129,0.10), rgba(34,211,238,0.08) 35%, rgba(59,130,246,0.06) 60%, transparent 75%)'
+            }}></div>
+          </div>
+          {/* Slow, subtle glow animation layers */}
+          <div className="absolute -top-16 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none gradient-glow" style={{background: 'conic-gradient(from 180deg, rgba(16,185,129,0.12), rgba(34,211,238,0.12), rgba(59,130,246,0.12), rgba(16,185,129,0.12))'}}></div>
+          <div className="absolute -bottom-24 right-0 w-[32rem] h-[32rem] rounded-full blur-3xl pointer-events-none gradient-glow delay-1000" style={{background: 'conic-gradient(from 0deg, rgba(34,211,238,0.10), rgba(59,130,246,0.10), rgba(16,185,129,0.10), rgba(34,211,238,0.10))'}}></div>
         </div>
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-4 animate-fade-in-up relative z-10">
-          {/* Floating logo without background card - enlarged to match spiral */}
+          {/* Floating logo with subtle pulse/fade glow */}
           <div className="relative group w-48 h-48 md:w-56 md:h-56 cursor-pointer">
-            {/* Rotating glow effect - positioned behind logo only */}
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-600 via-red-500 to-green-600 blur-sm opacity-20 group-hover:opacity-40 transition-opacity duration-300 spiral-glow" style={{zIndex: 1}}></div>
-            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-300" style={{zIndex: 2}}>
+            <div className="absolute inset-0 w-full h-full rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-700 glow-pulse" style={{zIndex: 1}}></div>
+            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500" style={{zIndex: 2}}>
               <img 
                 src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
                 alt="Maiya Hospital Logo" 
@@ -164,6 +166,17 @@ const Header = () => {
       </nav>
 
       <style>{`
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.25; filter: blur(28px); }
+          50% { opacity: 0.45; filter: blur(36px); }
+        }
+        .glow-pulse {
+          background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.35), rgba(34,211,238,0.28) 40%, rgba(59,130,246,0.22) 70%, transparent 75%);
+          animation: glowPulse 8s ease-in-out infinite;
+        }
+        .gradient-glow {
+          animation: glowPulse 12s ease-in-out infinite;
+        }
         @keyframes rotate-gradient {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
