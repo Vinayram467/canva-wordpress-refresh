@@ -16,14 +16,14 @@ const Contact = () => {
   // Generate SEO data for the contact page
   const seoData = {
     title: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
-    description: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
+    description: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: +91 7406007777, Email: info@maiyahospital.in. Get directions, emergency contact, and hospital visiting hours.",
     keywords: "contact maiya hospital, hospital address bangalore, maiya hospital phone number, hospital location jayanagar, get directions hospital, emergency contact hospital",
     canonical: "https://maiyahospital.in/contact",
     ogTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
-    ogDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions and emergency contact.",
+    ogDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: +91 7406007777, Email: info@maiyahospital.in. Get directions and emergency contact.",
     ogImage: "https://maiyahospital.in/contact-og.jpg",
     twitterTitle: "Contact Maiya Hospital Bangalore | Location, Phone & Directions",
-    twitterDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: 070223 16149, Email: info@maiyahospital.in. Get directions and emergency contact.",
+    twitterDescription: "Contact Maiya Hospital Bangalore - Address: Jayanagar, Phone: +91 7406007777, Email: info@maiyahospital.in. Get directions and emergency contact.",
     twitterImage: "https://maiyahospital.in/contact-twitter.jpg",
     structuredData: [
       getMedicalOrganizationSchema(),
@@ -181,7 +181,7 @@ const Contact = () => {
                     <div>
                       <h4 className="font-semibold text-foreground">Phone Numbers</h4>
                       <p className="text-muted-foreground">
-                        Emergency: 070223 16149<br />
+                        Emergency: +91 7406007777<br />
                         Ambulance: 74060 07777<br />
                         General: +91 98450 12345
                       </p>
@@ -221,7 +221,7 @@ const Contact = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4" />
-                      <span className="font-semibold">Emergency: 070223 16149</span>
+                      <span className="font-semibold">Emergency: +91 7406007777</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Phone className="w-4 h-4" />

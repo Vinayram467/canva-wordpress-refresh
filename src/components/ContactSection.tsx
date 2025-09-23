@@ -46,8 +46,8 @@ const ContactSection = () => {
                 icon: Phone,
                 color: "from-red-500 to-red-600",
                 content: [
-                  { label: "Landline", value: "080-41000980", highlight: false },
-                  { label: "Reception", value: "70223 16149 / 74060 07777", highlight: true },
+                  { label: "Emergency", value: "+91 7406007777", highlight: true },
+                  { label: "Reception", value: "70223 16149 / 74060 07777", highlight: false },
                   { label: "Email", value: "info@maiyahospital.com", highlight: false }
                 ]
               },

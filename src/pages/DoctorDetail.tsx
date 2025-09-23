@@ -120,7 +120,7 @@ const DoctorDetail = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3">
                       <span className="text-lg font-semibold text-green-700">Consultation Fee:</span>
                       <span className="text-lg text-foreground">{doctor.consultationFee}</span>
                     </div>
@@ -225,7 +225,7 @@ const DoctorDetail = () => {
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-3 text-muted-foreground">
                     <Phone className="w-5 h-5 text-green-700" />
-                    <span>070223 16149 / 74060 07777</span>
+                    <span>+91 7406007777 / 74060 07777</span>
                   </div>
                   <div className="flex items-center space-x-3 text-muted-foreground">
                     <Mail className="w-5 h-5 text-blue-400" />

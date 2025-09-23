@@ -190,7 +190,7 @@ const Services = () => {
                 <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-6">
                   <div className="flex items-center space-x-2 text-muted-foreground">
                     <Phone className="w-5 h-5 text-red-600" />
-                    <span className="font-semibold">Emergency: 070223 16149</span>
+                    <span className="font-semibold">Emergency: +91 7406007777</span>
                   </div>
                   <div className="flex items-center space-x-2 text-muted-foreground">
                     <Ambulance className="w-5 h-5 text-orange-600" />
