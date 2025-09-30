@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
               excerpt
               content { json }
               heroImage { url }
-              attachmentsCollection { items { url } }
+              attachments { url }
               sourceName
               sourceUrl
               externalLinksCollection { items { ... on ExternalLink { label url } } }
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
+        attachments: it.attachments?.url ? [it.attachments.url] : [],
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
         externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
@@ -93,7 +93,7 @@ router.get('/:id', async (req, res) => {
             excerpt
             content { json }
             heroImage { url }
-            attachmentsCollection { items { url } }
+            attachments { url }
             sourceName
             sourceUrl
             externalLinksCollection { items { ... on ExternalLink { label url } } }
@@ -115,7 +115,7 @@ router.get('/:id', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
+        attachments: it.attachments?.url ? [it.attachments.url] : [],
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
         externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
