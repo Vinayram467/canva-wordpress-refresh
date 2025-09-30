@@ -19,10 +19,10 @@ router.get('/', async (req, res) => {
               excerpt
               content { json }
               heroImage { url }
-              attachments (limit: 50) { url }
+              attachmentsCollection { items { url } }
               sourceName
               sourceUrl
-              externalLinks (limit: 50) { ... on ExternalLink { label url } }
+              externalLinksCollection { items { ... on ExternalLink { label url } } }
               publishedAt
               isFeatured
             }
@@ -39,13 +39,10 @@ router.get('/', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachments || []).map(a => a.url).filter(Boolean),
+        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
-        externalLinks: (it.externalLinks || []).filter(Boolean).map((l) => ({
-          label: l?.label || 'Read article',
-          url: l?.url || ''
-        })).filter(l => !!l.url),
+        externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
         publishedAt: it.publishedAt || new Date().toISOString(),
         isFeatured: !!it.isFeatured,
         category: 'News',
@@ -91,15 +88,15 @@ router.get('/:id', async (req, res) => {
           newsArticle(id: $id) {
             sys { id }
             title
-              metaTitle
-              metaDescription
+            metaTitle
+            metaDescription
             excerpt
             content { json }
             heroImage { url }
-            attachments (limit: 50) { url }
+            attachmentsCollection { items { url } }
             sourceName
             sourceUrl
-            externalLinks (limit: 50) { ... on ExternalLink { label url } }
+            externalLinksCollection { items { ... on ExternalLink { label url } } }
             publishedAt
             isFeatured
           }
@@ -118,13 +115,10 @@ router.get('/:id', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachments || []).map(a => a.url).filter(Boolean),
+        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
-        externalLinks: (it.externalLinks || []).filter(Boolean).map((l) => ({
-          label: l?.label || 'Read article',
-          url: l?.url || ''
-        })).filter(l => !!l.url),
+        externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
         publishedAt: it.publishedAt || new Date().toISOString(),
         isFeatured: !!it.isFeatured,
         category: 'News',
@@ -141,5 +135,25 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+// Helper: fetch optional attachments and external links using a follow-up query
+async function fetchOptionalFields(id) {
+  const data = await contentfulGraphQL(`
+    query GetNewsOptional($id: String!) {
+      newsArticle(id: $id) {
+        attachmentsCollection: linkedFrom {
+          entriesCollection {
+            items {
+              __typename
+            }
+          }
+        }
+      }
+    }
+  `, { id });
+  // The above is a placeholder; if Contentful schema exposes attachments/externalLinks as fields without collections,
+  // you can extend this helper with specific follow-up queries as needed.
+  return { attachments: [], externalLinks: [] };
+}
 
 
