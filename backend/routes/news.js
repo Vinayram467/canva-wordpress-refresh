@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios');
-const { isContentfulEnabled, contentfulGraphQL } = require('../services/contentful');
+const { isContentfulEnabled, contentfulGraphQL, richTextToPlainText } = require('../services/contentful');
 
 const router = express.Router();
 
@@ -17,12 +17,12 @@ router.get('/', async (req, res) => {
               metaTitle
               metaDescription
               excerpt
-              content
+              content { json }
               heroImage { url }
-              attachmentsCollection { items { url } }
+              attachments (limit: 50) { url }
               sourceName
               sourceUrl
-              externalLinksCollection { items { label url } }
+              externalLinks (limit: 50) { ... on ExternalLink { label url } }
               publishedAt
               isFeatured
             }
@@ -37,12 +37,12 @@ router.get('/', async (req, res) => {
         metaTitle: it.metaTitle || null,
         metaDescription: it.metaDescription || null,
         excerpt: it.excerpt || '',
-        content: it.content || '',
+        content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
+        attachments: (it.attachments || []).map(a => a.url).filter(Boolean),
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
-        externalLinks: (it.externalLinksCollection?.items || []).filter(Boolean).map((l) => ({
+        externalLinks: (it.externalLinks || []).filter(Boolean).map((l) => ({
           label: l?.label || 'Read article',
           url: l?.url || ''
         })).filter(l => !!l.url),
@@ -94,12 +94,12 @@ router.get('/:id', async (req, res) => {
               metaTitle
               metaDescription
             excerpt
-            content
+            content { json }
             heroImage { url }
-            attachmentsCollection { items { url } }
+            attachments (limit: 50) { url }
             sourceName
             sourceUrl
-            externalLinksCollection { items { label url } }
+            externalLinks (limit: 50) { ... on ExternalLink { label url } }
             publishedAt
             isFeatured
           }
@@ -116,12 +116,12 @@ router.get('/:id', async (req, res) => {
         metaTitle: it.metaTitle || null,
         metaDescription: it.metaDescription || null,
         excerpt: it.excerpt || '',
-        content: it.content || '',
+        content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: (it.attachmentsCollection?.items || []).map(a => a.url).filter(Boolean),
+        attachments: (it.attachments || []).map(a => a.url).filter(Boolean),
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
-        externalLinks: (it.externalLinksCollection?.items || []).filter(Boolean).map((l) => ({
+        externalLinks: (it.externalLinks || []).filter(Boolean).map((l) => ({
           label: l?.label || 'Read article',
           url: l?.url || ''
         })).filter(l => !!l.url),

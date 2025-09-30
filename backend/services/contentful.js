@@ -35,6 +35,18 @@ async function contentfulGraphQL(query, variables = {}) {
 module.exports = {
   isContentfulEnabled,
   contentfulGraphQL,
+  richTextToPlainText,
 };
+
+function richTextToPlainText(node) {
+  if (!node) return '';
+  if (Array.isArray(node)) return node.map(richTextToPlainText).join(' ');
+  const { nodeType, value, content } = node;
+  if (typeof value === 'string') return value;
+  if (content && Array.isArray(content)) {
+    return content.map(richTextToPlainText).join(' ');
+  }
+  return '';
+}
 
 
