@@ -3,16 +3,44 @@
 ## Overview
 This plan outlines the implementation of a Content Management System (CMS) to manage SEO-optimized content for your medical website, including blogs, service pages, doctor profiles, and meta information.
 
-## Recommended CMS: Strapi (Headless CMS)
+## Recommended CMS: Contentful (hosted) with optional Strapi notes
 
-### Why Strapi?
-- **Self-hosted**: Full control over data and security
-- **API-first**: Perfect for React applications
-- **SEO-friendly**: Built-in SEO tools and plugins
-- **Customizable**: Medical-specific content types
-- **Free**: Open-source with enterprise options
+We will integrate Contentful without changing your existing React UI by swapping the data source in the backend routes.
 
-## Phase 1: CMS Setup & Configuration
+### Backend (Render) environment variables
+- CONTENTFUL_USE=true
+- CONTENTFUL_SPACE_ID=xxxx
+- CONTENTFUL_ENVIRONMENT=master
+- CONTENTFUL_CDA_TOKEN=xxxx
+- (optional) CONTENTFUL_CPA_TOKEN=xxxx
+
+### Frontend (Netlify) environment variables
+- VITE_CONTENTFUL_SPACE_ID=xxxx
+- VITE_CONTENTFUL_ENVIRONMENT=master
+- VITE_CONTENTFUL_CDA_TOKEN=xxxx
+- (optional) VITE_CONTENTFUL_PREVIEW_TOKEN=xxxx
+
+### Data sourcing strategy
+- Backend routes `/api/blogs` and `/api/events` will fetch from MongoDB by default.
+- When `CONTENTFUL_USE=true`, they fetch from Contentful GraphQL and map to the same response shape your UI already uses (no UI changes).
+
+### Webhooks
+- Contentful → Netlify build hook on publish/unpublish/archive.
+- Contentful → Render webhook (optional) for cache purge/search indexing.
+
+### Preview
+- Set Contentful entry Preview URL to Netlify preview domain with `?preview=1`.
+- Frontend uses preview token when `preview=1`.
+
+### Content model (high level)
+- BlogPost, Event, Author, Topic, Seo as outlined in earlier plan docs.
+
+### Testing checklist
+- Toggle `CONTENTFUL_USE` and verify `/api/blogs` and `/api/events` response parity.
+- Publish an entry in Contentful and verify Netlify build hook updates the site.
+- Validate SEO metadata and sitemaps reflect new content.
+
+## Phase 1: CMS Setup & Configuration (Strapi alternative - optional)
 
 ### 1.1 Installation & Basic Setup
 ```bash

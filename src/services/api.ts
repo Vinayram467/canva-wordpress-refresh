@@ -46,6 +46,7 @@ export interface Blog {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  isFeatured?: boolean;
 }
 
 export interface Doctor {
@@ -71,6 +72,22 @@ export interface Event {
   image: string;
   category: string;
   isFeatured: boolean;
+}
+
+export interface NewsItem {
+  _id: string;
+  title: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  excerpt: string;
+  content: string;
+  image?: string;
+  attachments?: string[];
+  sourceName?: string;
+  sourceUrl?: string;
+  externalLinks?: { label: string; url: string }[];
+  publishedAt?: string;
+  isFeatured?: boolean;
 }
 
 export interface Appointment {
@@ -193,6 +210,12 @@ export const eventApi = {
   delete: (id: string) => apiCall(`/events/${id}`, {
     method: 'DELETE',
   }),
+};
+
+// News API functions
+export const newsApi = {
+  getAll: () => apiCall('/news'),
+  getById: (id: string) => apiCall(`/news/${id}`),
 };
 
 // Appointment API functions
