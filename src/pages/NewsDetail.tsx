@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { newsApi, type NewsItem } from '@/services/api';
 
 export default function NewsDetail() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
+  const navigate = useNavigate();
   const [item, setItem] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,10 +29,29 @@ export default function NewsDetail() {
     load();
   }, [id]);
 
+  // slugify helper
+  const toSlug = (text: string) =>
+    (text || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+
+  // Redirect to pretty URL if slug missing or mismatched
+  useEffect(() => {
+    if (item && id) {
+      const preferred = toSlug(item.metaTitle || item.title);
+      if (preferred && slug !== preferred) {
+        navigate(`/news/${id}/${preferred}`, { replace: true });
+      }
+    }
+  }, [item, id, slug, navigate]);
+
   const seoData = item ? {
     title: item.metaTitle || `${item.title} | Maiya Hospital News`,
     description: item.metaDescription || item.excerpt || item.content?.slice(0,160),
-    canonical: `https://maiyahospital.in/news/${id}`,
+    canonical: `https://maiyahospital.in/news/${id}/${toSlug(item.metaTitle || item.title)}`,
     ogTitle: item.metaTitle || item.title,
     ogDescription: item.metaDescription || item.excerpt || item.content?.slice(0,160),
     ogImage: item.image,

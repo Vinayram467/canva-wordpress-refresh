@@ -64,7 +64,7 @@ export default function NewsEvents() {
         ) : (
           <div className="grid md:grid-cols-3 gap-8">
             {news.map(item => (
-              <Link key={item._id} to={`/news/${item._id}`} className="block group">
+              <Link key={item._id} to={`/news/${item._id}/${(item as any).metaTitle ? (item as any).metaTitle.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-') : (item.title || '').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-')}`} className="block group">
                 <div className="relative rounded-2xl overflow-hidden bg-white/90 border border-white/50 shadow-lg transition-all duration-300 group-hover:shadow-emerald-500/30 group-hover:shadow-2xl group-hover:-translate-y-1">
                   <div className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute -inset-1 rounded-3xl blur-2xl bg-gradient-to-r from-emerald-400/30 via-blue-400/30 to-purple-400/30"></div>

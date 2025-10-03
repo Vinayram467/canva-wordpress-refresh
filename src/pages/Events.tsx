@@ -69,7 +69,7 @@ export default function Events() {
         ) : (
           <div className="grid md:grid-cols-3 gap-8">
             {news.map(item => (
-              <Link to={`/news/${item._id}`} key={item._id} className="block group">
+              <Link to={`/news/${item._id}/${(item as any).metaTitle ? (item as any).metaTitle.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-') : (item.title || '').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-')}`} key={item._id} className="block group">
                 <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-xl hover:shadow-emerald-500/20 transition-all duration-300 flex flex-col h-full">
                   <div className="p-6 flex flex-col flex-1">
                     <span className="inline-block mb-3 px-4 py-1 rounded-full text-xs font-bold shadow bg-blue-600 text-white">News</span>
