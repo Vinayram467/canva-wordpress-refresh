@@ -155,6 +155,22 @@ app.get('/api/health', asyncHandler(async (req, res) => {
   });
 }));
 
+// Convenience: handle GET /api to avoid 404s from base API pings
+app.get('/api', asyncHandler(async (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Maiya Hospital API base',
+    docs: '/api/docs',
+    health: '/api/health',
+    endpoints: {
+      news: '/api/news',
+      events: '/api/events',
+      blogs: '/api/blogs'
+    },
+    timestamp: new Date().toISOString()
+  });
+}));
+
 // Root endpoint with error handling
 app.get('/', asyncHandler(async (req, res) => {
   res.json({
