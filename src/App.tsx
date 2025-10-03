@@ -16,6 +16,7 @@ import VirtualConsultation from "./pages/VirtualConsultation";
 import NotFound from "./pages/NotFound";
 import BlogDetail from "./pages/BlogDetail";
 import EventDetail from "./pages/EventDetail";
+import NewsDetail from "./pages/NewsDetail";
 import Blogs from "./pages/Blogs";
 import Events from "./pages/Events";
 import ServiceDetail from "./pages/ServiceDetail";
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/virtual-consultation" element={<VirtualConsultation />} />
               <Route path="/blog/:id" element={<BlogDetail />} />
               <Route path="/event/:id" element={<EventDetail />} />
+              <Route path="/news/:id" element={<NewsDetail />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/events" element={<Events />} />
               <Route path="/service/:slug" element={<ServiceDetail />} />

@@ -4,16 +4,24 @@ const cors = require('cors');
 const { ipKeyGenerator } = require('express-rate-limit');
 
 // Security configurations
+// Allow dynamic origins via env for deployments (e.g., Netlify site URL)
+const DEFAULT_ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://maiyahospital.com',
+  'https://www.maiyahospital.com',
+  'https://maiyahospital.in',
+  'https://www.maiyahospital.in',
+  'https://canva-wordpress-refresh.onrender.com'
+];
+const EXTRA_ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+const COMBINED_ALLOWED_ORIGINS = Array.from(new Set([...DEFAULT_ALLOWED_ORIGINS, ...EXTRA_ALLOWED_ORIGINS]));
+
 const SECURITY_CONFIG = {
-  ALLOWED_ORIGINS: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://maiyahospital.com',
-    'https://www.maiyahospital.com',
-    'https://maiyahospital.in',
-    'https://www.maiyahospital.in',
-    'https://canva-wordpress-refresh.onrender.com'
-  ],
+  ALLOWED_ORIGINS: COMBINED_ALLOWED_ORIGINS,
   RATE_LIMIT: {
     WINDOW_MS: 15 * 60 * 1000, // 15 minutes
     MAX_REQUESTS: 100, // limit each IP to 100 requests per windowMs
@@ -74,7 +82,14 @@ const helmetConfig = {
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", ...SECURITY_CONFIG.ALLOWED_ORIGINS],
+      connectSrc: [
+        "'self'",
+        ...SECURITY_CONFIG.ALLOWED_ORIGINS,
+        // Allow server-to-client CSP for Contentful assets/GraphQL when viewed in browser
+        'https://graphql.contentful.com',
+        'https://images.ctfassets.net',
+        'https://assets.ctfassets.net'
+      ],
       fontSrc: ["'self'", "https:", "data:"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],

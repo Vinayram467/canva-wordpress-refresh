@@ -14,9 +14,11 @@ export default function NewsEvents() {
         setLoading(true);
         // Try backend first
         let items: any[] = [];
+        let backendFailed = false;
         try {
           items = await newsApi.getAll();
-        } catch (_) {
+        } catch (e) {
+          backendFailed = true;
           items = [];
         }
         // Fallback to Contentful directly if backend empty/unavailable
@@ -24,7 +26,11 @@ export default function NewsEvents() {
           try {
             const cf = await fetchLatestNewsCards(3);
             items = cf.map(c => ({ _id: c._id, title: c.title, image: c.image, excerpt: c.excerpt, publishedAt: c.publishedAt }));
-          } catch (_) {
+          } catch (e) {
+            if (backendFailed) {
+              // Both sources failed → show explicit error
+              throw e;
+            }
             items = [];
           }
         }
