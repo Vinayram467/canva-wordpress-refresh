@@ -65,16 +65,17 @@ export default function NewsEvents() {
           <div className="grid md:grid-cols-3 gap-8">
             {news.map(item => (
               <Link key={item._id} to={`/news/${item._id}`} className="block group">
-                <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <div className="relative rounded-2xl overflow-hidden bg-white/90 border border-white/50 shadow-lg transition-all duration-300 group-hover:shadow-emerald-500/30 group-hover:shadow-2xl group-hover:-translate-y-1">
+                  <div className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute -inset-1 rounded-3xl blur-2xl bg-gradient-to-r from-emerald-400/30 via-blue-400/30 to-purple-400/30"></div>
+                  </div>
                   <div className="flex flex-col md:flex-row">
-                    <div className="md:w-56 flex-shrink-0">
-                      <img src={(item as any).image || '/placeholder.svg'} alt={item.title} className="w-full h-32 md:h-32 object-cover" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                    <div className="md:w-56 flex-shrink-0 relative">
+                      <img src={(item as any).image || '/placeholder.svg'} alt={item.title} className="w-full h-32 md:h-32 object-cover transition-transform duration-300 group-hover:scale-105" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                      <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md">News</span>
                     </div>
                     <div className="p-6 flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">News</span>
-                      </div>
-                      <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">{item.title}</h3>
+                      <h3 className="text-2xl font-extrabold text-foreground mb-2 group-hover:text-emerald-600 transition-colors duration-300 line-clamp-2">{item.title}</h3>
                       <p className="text-muted-foreground mb-4 line-clamp-3">{(item as any).excerpt || (item as any).content?.slice(0,200)}</p>
                       <div className="flex items-center justify-between">
                         <div className="text-sm text-muted-foreground">
@@ -82,7 +83,10 @@ export default function NewsEvents() {
                           <span className="mx-2">•</span>
                           <span>Read</span>
                         </div>
-                        <span className="text-green-600 font-semibold group-hover:text-green-700 transition-colors duration-300">Read More →</span>
+                        <span className="inline-flex items-center text-emerald-700 font-semibold group-hover:text-emerald-800 transition-colors duration-300">
+                          Read More
+                          <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+                        </span>
                       </div>
                     </div>
                   </div>

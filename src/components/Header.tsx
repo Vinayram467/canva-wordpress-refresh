@@ -12,6 +12,7 @@ const Header = () => {
     { name: 'Deluxe Surgeries', path: '/deluxe-surgeries', icon: Activity },
     { name: 'Specialties', path: '/specialties', icon: HeartPulse },
     { name: 'Doctors', path: '/doctors', icon: Users },
+    { name: 'News & Events', path: '/events', icon: Award },
     { name: 'Blogs', path: '/blogs', icon: BookOpen },
     { name: 'Contact', path: '/contact', icon: MessageSquare }
   ];

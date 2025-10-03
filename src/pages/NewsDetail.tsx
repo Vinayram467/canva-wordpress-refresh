@@ -63,7 +63,7 @@ export default function NewsDetail() {
                 <span>/</span>
                 <span className="text-foreground font-medium line-clamp-1 max-w-[60vw]">{item.title}</span>
               </div>
-              <Link to="/events" className="text-green-700 hover:text-green-800 font-semibold">← Back</Link>
+              <Link to="/events" className="text-emerald-700 hover:text-emerald-800 font-semibold">← Back to News & Events</Link>
             </nav>
 
             <header className="mb-6">
@@ -116,6 +116,10 @@ export default function NewsDetail() {
                 </ul>
               </section>
             )}
+            <div className="mt-10 flex justify-between">
+              <Link to="/events" className="inline-flex items-center text-emerald-700 hover:text-emerald-800 font-semibold">← Back to News & Events</Link>
+              <Link to="/" className="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold">← Back to Home</Link>
+            </div>
           </article>
         )}
       </div>
