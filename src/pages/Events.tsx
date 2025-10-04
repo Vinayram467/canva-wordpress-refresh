@@ -30,9 +30,26 @@ export default function Events() {
     const load = async () => {
       try {
         setLoading(true);
-        const items = await newsApi.getAll();
+        const [backendRes, contentfulRes] = await Promise.allSettled([
+          newsApi.getAll(),
+          (async () => {
+            try {
+              const mod = await import('@/services/contentful');
+              const cf = await mod.fetchLatestNewsCards(9);
+              return cf.map(c => ({ _id: c._id, title: c.title, image: c.image, excerpt: c.excerpt, publishedAt: c.publishedAt }));
+            } catch {
+              return [] as any[];
+            }
+          })()
+        ]);
+        let items: any[] = [];
+        if (backendRes.status === 'fulfilled' && Array.isArray(backendRes.value) && backendRes.value.length > 0) {
+          items = backendRes.value;
+        } else if (contentfulRes.status === 'fulfilled' && Array.isArray(contentfulRes.value) && contentfulRes.value.length > 0) {
+          items = contentfulRes.value;
+        }
         setNews(items);
-        setError(null);
+        setError(items.length === 0 ? 'No news available yet.' : null);
       } catch (e: any) {
         setError('Failed to load news');
       } finally {

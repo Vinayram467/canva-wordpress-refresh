@@ -117,15 +117,25 @@ const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   console.log(`Making API call to: ${url}`);
   
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
+    const isGet = !options.method || options.method === 'GET';
+    const headers: Record<string, string> = {
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(options.headers as Record<string, string> | undefined),
+    };
+    if (!isGet) {
+      headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    }
+
     const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        ...options.headers,
-      },
-      credentials: 'include',
+      headers,
+      credentials: options.credentials || (isGet ? 'omit' : 'include'),
+      signal: controller.signal,
       ...options,
     });
+    clearTimeout(timeout);
 
     console.log(`Response status: ${response.status} ${response.statusText}`);
 
