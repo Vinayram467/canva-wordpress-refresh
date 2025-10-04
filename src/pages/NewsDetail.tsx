@@ -96,28 +96,6 @@ export default function NewsDetail() {
               )}
             </header>
 
-            {/* Print Media / Attachments Gallery */}
-            {(item.attachments && item.attachments.length > 0) && (
-              <section className="mt-6">
-                <h2 className="text-lg font-semibold mb-3">Print Media</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {item.attachments.map((url, idx) => (
-                    <a key={idx} href={url} target="_blank" rel="noreferrer" className="group block">
-                      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow p-2">
-                        <img
-                          loading="lazy"
-                          src={url}
-                          alt={`Print media ${idx+1}`}
-                          className="w-full max-h-[520px] object-contain transition-transform duration-300 group-hover:scale-[1.01]"
-                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                        />
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
-
             <div className="prose prose-lg max-w-none">
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {item.content}
@@ -127,16 +105,18 @@ export default function NewsDetail() {
             {(item.attachments && item.attachments.length > 0) && (
               <section className="mt-10">
                 <h2 className="text-xl font-semibold mb-4">Gallery & Attachments</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {item.attachments!.map((url, idx) => (
-                    <a key={idx} href={url} target="_blank" rel="noreferrer">
-                      <img
-                        loading="lazy"
-                        src={url}
-                        alt={`Attachment ${idx+1}`}
-                        className="w-full max-h-[420px] object-contain rounded-xl bg-white p-2 border border-gray-200"
-                        onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                      />
+                    <a key={idx} href={url} target="_blank" rel="noreferrer" className="group block">
+                      <div className="h-[520px] rounded-xl border border-gray-200 bg-white shadow overflow-hidden flex items-center justify-center p-2">
+                        <img
+                          loading="lazy"
+                          src={url}
+                          alt={`Attachment ${idx+1}`}
+                          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-[1.01]"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                        />
+                      </div>
                     </a>
                   ))}
                 </div>
