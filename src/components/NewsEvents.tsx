@@ -12,28 +12,19 @@ export default function NewsEvents() {
     const load = async () => {
       try {
         setLoading(true);
-        // Try backend first
+        // Fetch backend and Contentful in parallel and pick fastest non-empty
+        const [backendRes, contentfulRes] = await Promise.allSettled([
+          newsApi.getAll(),
+          fetchLatestNewsCards(3)
+        ]);
+
         let items: any[] = [];
-        let backendFailed = false;
-        try {
-          items = await newsApi.getAll();
-        } catch (e) {
-          backendFailed = true;
-          items = [];
+        if (backendRes.status === 'fulfilled' && Array.isArray(backendRes.value) && backendRes.value.length > 0) {
+          items = backendRes.value;
+        } else if (contentfulRes.status === 'fulfilled' && Array.isArray(contentfulRes.value) && contentfulRes.value.length > 0) {
+          items = contentfulRes.value.map(c => ({ _id: c._id, title: c.title, image: c.image, excerpt: c.excerpt, publishedAt: c.publishedAt }));
         }
-        // Fallback to Contentful directly if backend empty/unavailable
-        if (!Array.isArray(items) || items.length === 0) {
-          try {
-            const cf = await fetchLatestNewsCards(3);
-            items = cf.map(c => ({ _id: c._id, title: c.title, image: c.image, excerpt: c.excerpt, publishedAt: c.publishedAt }));
-          } catch (e) {
-            if (backendFailed) {
-              // Both sources failed → show explicit error
-              throw e;
-            }
-            items = [];
-          }
-        }
+
         setNews(items.slice(0, 3));
         setError(null);
       } catch (e: any) {
@@ -71,7 +62,7 @@ export default function NewsEvents() {
                   </div>
                   <div className="flex flex-col md:flex-row">
                     <div className="md:w-56 flex-shrink-0 relative">
-                      <img src={(item as any).image || '/placeholder.svg'} alt={item.title} className="w-full h-32 md:h-32 object-cover transition-transform duration-300 group-hover:scale-105" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                      <img loading="lazy" src={(item as any).image || '/placeholder.svg'} alt={item.title} className="w-full h-32 md:h-32 object-cover transition-transform duration-300 group-hover:scale-105" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
                       <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white shadow-md">News</span>
                     </div>
                     <div className="p-6 flex-1">

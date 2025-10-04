@@ -96,6 +96,28 @@ export default function NewsDetail() {
               )}
             </header>
 
+            {/* Print Media / Attachments Gallery */}
+            {(item.attachments && item.attachments.length > 0) && (
+              <section className="mt-6">
+                <h2 className="text-lg font-semibold mb-3">Print Media</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {item.attachments.map((url, idx) => (
+                    <a key={idx} href={url} target="_blank" rel="noreferrer" className="group block">
+                      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow">
+                        <img
+                          loading="lazy"
+                          src={url}
+                          alt={`Print media ${idx+1}`}
+                          className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                        />
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
             <div className="prose prose-lg max-w-none">
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {item.content}

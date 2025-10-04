@@ -4,9 +4,17 @@ const { isContentfulEnabled, contentfulGraphQL, richTextToPlainText } = require(
 
 const router = express.Router();
 
+// Simple in-memory cache for list results to reduce latency
+let newsCache = { items: [], ts: 0 };
+const NEWS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 // GET all news articles
 router.get('/', async (req, res) => {
   try {
+    // Serve from cache when fresh
+    if (newsCache.items.length > 0 && Date.now() - newsCache.ts < NEWS_CACHE_TTL_MS) {
+      return res.json(newsCache.items);
+    }
     if (isContentfulEnabled()) {
       const data = await contentfulGraphQL(`
         query GetNews($limit: Int = 50) {
@@ -20,6 +28,7 @@ router.get('/', async (req, res) => {
               content { json }
               heroImage { url }
               attachments { url }
+              printMediaCollection { items { url } }
               sourceName
               sourceUrl
               externalLinksCollection { items { ... on ExternalLink { label url } } }
@@ -39,7 +48,10 @@ router.get('/', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: it.attachments?.url ? [it.attachments.url] : [],
+        attachments: [
+          ...(it.attachments?.url ? [it.attachments.url] : []),
+          ...((it.printMediaCollection?.items || []).map(pm => pm?.url).filter(Boolean))
+        ],
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
         externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
@@ -47,6 +59,7 @@ router.get('/', async (req, res) => {
         isFeatured: !!it.isFeatured,
         category: 'News',
       }));
+      newsCache = { items: mapped, ts: Date.now() };
       return res.json(mapped);
     }
 
@@ -69,6 +82,7 @@ router.get('/', async (req, res) => {
         isFeatured: false,
         category: 'News',
       }));
+      newsCache = { items: mapped, ts: Date.now() };
       return res.json(mapped);
     }
 
@@ -94,6 +108,7 @@ router.get('/:id', async (req, res) => {
             content { json }
             heroImage { url }
             attachments { url }
+            printMediaCollection { items { url } }
             sourceName
             sourceUrl
             externalLinksCollection { items { ... on ExternalLink { label url } } }
@@ -115,7 +130,10 @@ router.get('/:id', async (req, res) => {
         excerpt: it.excerpt || '',
         content: richTextToPlainText(it.content?.json) || '',
         image: it.heroImage?.url || null,
-        attachments: it.attachments?.url ? [it.attachments.url] : [],
+        attachments: [
+          ...(it.attachments?.url ? [it.attachments.url] : []),
+          ...((it.printMediaCollection?.items || []).map(pm => pm?.url).filter(Boolean))
+        ],
         sourceName: it.sourceName || '',
         sourceUrl: it.sourceUrl || '',
         externalLinks: (it.externalLinksCollection?.items || []).map((l) => ({ label: l?.label || 'Read article', url: l?.url || '' })).filter(l => !!l.url),
