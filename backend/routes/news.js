@@ -60,6 +60,7 @@ router.get('/', async (req, res) => {
         category: 'News',
       }));
       newsCache = { items: mapped, ts: Date.now() };
+      res.set('Cache-Control', 'public, max-age=120, s-maxage=300');
       return res.json(mapped);
     }
 
@@ -83,9 +84,11 @@ router.get('/', async (req, res) => {
         category: 'News',
       }));
       newsCache = { items: mapped, ts: Date.now() };
+      res.set('Cache-Control', 'public, max-age=120, s-maxage=300');
       return res.json(mapped);
     }
 
+    res.set('Cache-Control', 'public, max-age=60');
     return res.json([]);
   } catch (error) {
     console.error('Error fetching news:', error);
@@ -141,6 +144,7 @@ router.get('/:id', async (req, res) => {
         isFeatured: !!it.isFeatured,
         category: 'News',
       };
+      res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
       return res.json(mapped);
     }
 

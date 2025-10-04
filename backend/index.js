@@ -39,6 +39,13 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(requestLogger);
+// Enable gzip/brotli compression
+try {
+  const compression = require('compression');
+  app.use(compression({ threshold: 1024 }));
+} catch (_) {
+  console.warn('compression module not found; skipping compression');
+}
 
 // Apply rate limiting
 app.use('/api/', apiLimiter);

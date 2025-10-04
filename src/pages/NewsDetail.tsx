@@ -100,15 +100,15 @@ export default function NewsDetail() {
             {(item.attachments && item.attachments.length > 0) && (
               <section className="mt-6">
                 <h2 className="text-lg font-semibold mb-3">Print Media</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {item.attachments.map((url, idx) => (
                     <a key={idx} href={url} target="_blank" rel="noreferrer" className="group block">
-                      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow">
+                      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow p-2">
                         <img
                           loading="lazy"
                           src={url}
                           alt={`Print media ${idx+1}`}
-                          className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="w-full max-h-[520px] object-contain transition-transform duration-300 group-hover:scale-[1.01]"
                           onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
                         />
                       </div>
@@ -130,7 +130,13 @@ export default function NewsDetail() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   {item.attachments!.map((url, idx) => (
                     <a key={idx} href={url} target="_blank" rel="noreferrer">
-                      <img src={url} alt={`Attachment ${idx+1}`} className="w-full h-48 object-cover rounded-xl" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                      <img
+                        loading="lazy"
+                        src={url}
+                        alt={`Attachment ${idx+1}`}
+                        className="w-full max-h-[420px] object-contain rounded-xl bg-white p-2 border border-gray-200"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                      />
                     </a>
                   ))}
                 </div>
