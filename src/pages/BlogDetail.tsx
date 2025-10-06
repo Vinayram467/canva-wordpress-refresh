@@ -32,7 +32,13 @@ export default function BlogDetail() {
           const list = await blogApi.getAll();
           const match = Array.isArray(list) ? list.find((b: any) => toSlug(b.title) === slug) : null;
           if (match) {
-            setBlog(match);
+            // Fetch full blog by id to include sections
+            try {
+              const full = await blogApi.getById((match as any)._id || (match as any).id);
+              setBlog(full || match);
+            } catch {
+              setBlog(match);
+            }
             setError(null);
             return;
           }
