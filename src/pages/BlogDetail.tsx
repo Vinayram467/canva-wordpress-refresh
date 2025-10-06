@@ -199,7 +199,8 @@ export default function BlogDetail() {
           <Link to="/blogs" className="text-green-700 hover:text-green-800 font-semibold">← Back</Link>
         </nav>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <article className="lg:col-span-12">
+          {/* Main Article */}
+          <article className="lg:col-span-9">
             <header className="mb-6">
               <div className="flex items-center text-sm text-muted-foreground mb-3">
                 <span>{new Date((blog as any).createdAt || Date.now()).toLocaleDateString()}</span>
@@ -230,11 +231,69 @@ export default function BlogDetail() {
               </div>
             ) : null }
 
-            <div className="prose prose-lg max-w-none">
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {blog.content}
+            {/* Alternating sections if provided; else fallback to plain content */}
+            {Array.isArray((blog as any).sections) && (blog as any).sections.length > 0 ? (
+              <section className="space-y-8">
+                {(blog as any).sections.map((sec: any, idx: number) => (
+                  <div key={idx} className={`grid grid-cols-1 md:grid-cols-2 gap-6 items-center`}>
+                    {sec.alignment === 'imageRight' ? (
+                      <>
+                        <div className="order-2 md:order-1">
+                          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          </div>
+                        </div>
+                        <div className="order-1 md:order-2">
+                          {sec.image && (
+                            <img
+                              src={sec.image}
+                              alt="Section"
+                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                            />
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="order-2 md:order-2">
+                          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          </div>
+                        </div>
+                        <div className="order-1 md:order-1">
+                          {sec.image && (
+                            <img
+                              src={sec.image}
+                              alt="Section"
+                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                            />
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </section>
+            ) : (
+              <div className="prose prose-lg max-w-none">
+                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {blog.content}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Author box */}
+            <section className="mt-10 border border-gray-200 rounded-2xl bg-white p-6 shadow">
+              <div className="flex items-center gap-4">
+                <img src="/placeholder.svg" alt="Author" className="w-12 h-12 rounded-full" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                <div>
+                  <div className="text-foreground font-semibold">{blog.author || 'Maiya Hospital'}</div>
+                  <div className="text-sm text-muted-foreground">Sharing evidence‑based health insights</div>
+                </div>
+              </div>
+            </section>
 
             {/* Share bar */}
             <div className="mt-10 flex items-center gap-3">
@@ -273,40 +332,17 @@ export default function BlogDetail() {
 
             <Comments threadId={id!} />
 
-            {/* Recent Posts with horizontal card layout matching main blogs page */}
+            {/* Related Posts */}
             <section className="mt-12">
-              <h2 className="text-xl font-semibold mb-6">Recent Posts</h2>
-              <div className="space-y-6">
-                {bestPosts.slice(0, 5).map((p) => (
-                  <Link to={`/blog/${p.id}`} key={`recent-inline-${p.id}`} className="block group">
+              <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {bestPosts.slice(0, 4).map((p) => (
+                  <Link to={`/blog/${p.id}`} key={`related-${p.id}`} className="block group">
                     <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                      <div className="flex flex-col md:flex-row">
-                        <div className="md:w-56 flex-shrink-0">
-                          <img src={p.image} alt={p.title} className="w-full h-32 md:h-32 object-cover" />
-                        </div>
-                        <div className="p-6 flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
-                              {p.category}
-                            </span>
-                          </div>
-                          <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-green-600 transition-colors duration-300 line-clamp-2">
-                            {p.title}
-                          </h3>
-                          <p className="text-muted-foreground mb-4 line-clamp-3">
-                            {p.summary}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="text-sm text-muted-foreground">
-                              <span>{p.date}</span>
-                              <span className="mx-2">•</span>
-                              <span>{p.readTime}</span>
-                            </div>
-                            <span className="text-green-600 font-semibold group-hover:text-green-700 transition-colors duration-300">
-                              Read More →
-                            </span>
-                          </div>
-                        </div>
+                      <img src={p.image} alt={p.title} className="w-full h-32 object-cover" />
+                      <div className="p-4">
+                        <div className="text-xs text-muted-foreground mb-1">{p.category}</div>
+                        <h3 className="text-base font-semibold text-foreground group-hover:text-green-700 line-clamp-2">{p.title}</h3>
                       </div>
                     </div>
                   </Link>
@@ -325,7 +361,60 @@ export default function BlogDetail() {
               </div>
             </footer>
           </article>
-          {/* Sidebar removed as per request */}
+          {/* Sidebar */}
+          <aside className="lg:col-span-3 space-y-6">
+            {/* Promo/Ad widgets */}
+            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
+              <div className="h-40 bg-gray-100 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
+            </div>
+            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
+              <div className="h-40 bg-gray-100 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
+            </div>
+
+            {/* Social Media */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-4">Social Media</h3>
+              <div className="flex gap-3">
+                <a href="#" className="w-8 h-8 rounded bg-blue-600" aria-label="Facebook"></a>
+                <a href="#" className="w-8 h-8 rounded bg-sky-400" aria-label="Twitter"></a>
+                <a href="#" className="w-8 h-8 rounded bg-rose-600" aria-label="Instagram"></a>
+                <a href="#" className="w-8 h-8 rounded bg-red-600" aria-label="YouTube"></a>
+              </div>
+            </div>
+
+            {/* Most Popular */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-4">Most Popular</h3>
+              <div className="space-y-4">
+                {bestPosts.slice(0,4).map((p) => (
+                  <Link to={`/blog/${p.id}`} key={`popular-${p.id}`} className="flex gap-3 group">
+                    <img src={p.image} alt={p.title} className="w-16 h-16 object-cover rounded" />
+                    <div>
+                      <div className="text-xs text-muted-foreground">{p.category}</div>
+                      <div className="text-sm font-semibold text-foreground group-hover:text-green-700 line-clamp-2">{p.title}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Newsletter */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-3">Subscribe To Our Weekly Newsletter</h3>
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                <input type="email" placeholder="Your email" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-600" />
+                <button className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-semibold px-4 py-2 rounded-lg">Subscribe</button>
+              </form>
+            </div>
+
+            {/* Categories */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-3">Categories</h3>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">{blog.category || 'General'}</span>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
 

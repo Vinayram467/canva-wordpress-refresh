@@ -89,6 +89,34 @@ router.get('/:id', async (req, res) => {
         readTime: it.readTime ? `${it.readTime} min read` : '5 min read',
         isFeatured: !!it.isFeatured,
       };
+
+      // Try to fetch optional alternating sections; ignore if content model not present
+      try {
+        const secData = await contentfulGraphQL(`
+          query GetBlogSections($id: String!) {
+            blogPost(id: $id) {
+              sections: blogSectionsCollection(limit: 20) {
+                items {
+                  alignment
+                  image { url }
+                  body { json }
+                }
+              }
+            }
+          }
+        `, { id: req.params.id });
+        const items = secData?.blogPost?.sections?.items || [];
+        if (Array.isArray(items) && items.length > 0) {
+          const { richTextToPlainText } = require('../services/contentful');
+          mapped.sections = items.map((s) => ({
+            alignment: s.alignment === 'imageRight' ? 'imageRight' : 'imageLeft',
+            image: s.image?.url || null,
+            text: richTextToPlainText(s.body?.json) || ''
+          })).filter(sec => sec.text || sec.image);
+        }
+      } catch (ignored) {
+        // Silently ignore if sections are not modeled in Contentful yet
+      }
       return res.json(mapped);
     }
 
