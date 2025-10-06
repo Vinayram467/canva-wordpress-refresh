@@ -369,7 +369,7 @@ export default function BlogDetail() {
             </div>
 
             <div className="mt-10 rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/40 p-4">
-              <Comments threadId={id!} />
+            <Comments threadId={id!} />
             </div>
 
             {/* Related Posts */}
