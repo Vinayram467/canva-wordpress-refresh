@@ -115,6 +115,7 @@ const usersRouter = require('./routes/users');
 const healthNewsRouter = require('./routes/healthNews');
 const newsRouter = require('./routes/news');
 const testRouter = require('./routes/test');
+const promosRouter = require('./routes/promos');
 
 // Use routes
 console.log('🔗 Setting up API routes...');
@@ -132,6 +133,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/health-news', healthNewsRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/test', testRouter);
+app.use('/api/promos', promosRouter);
 console.log('✅ All API routes configured');
 
 // Health check endpoint with error handling

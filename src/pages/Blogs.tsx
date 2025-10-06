@@ -145,7 +145,7 @@ export default function Blogs() {
         ) : (
           <div className="space-y-6">
             {blogs.map(blog => (
-              <Link to={`/blog/${blog._id}`} key={blog._id} className="block group">
+              <Link to={`/blog/${blog._id}/${(blog.title || '').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-')}`} key={blog._id} className="block group">
                 <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                   <div className="flex flex-col md:flex-row">
                     <div className="md:w-56 flex-shrink-0">

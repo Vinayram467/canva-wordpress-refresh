@@ -1,6 +1,6 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
-import { blogApi, Blog } from '@/services/api';
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { blogApi, Blog, promosApi, type PromoWidget } from '@/services/api';
 import { sampleBlogs } from '@/lib/utils';
 import { SEOHead } from '@/components/seo/SEOHead';
 import Footer from "@/components/Footer";
@@ -8,12 +8,15 @@ import Header from "@/components/Header";
 import Comments from "@/components/Comments";
 import { getMedicalOrganizationSchema, getArticleSchema, getBlogPostingSchema, getBestPostsSidebarSchema, getWebsiteSchema, getWebPageSchema, getPersonSchema, getShareAction, getBreadcrumbSchema } from '@/utils/schema';
 import { useState, useEffect } from 'react';
+import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 
 export default function BlogDetail() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
+  const navigate = useNavigate();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [promos, setPromos] = useState<PromoWidget[]>([]);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -79,6 +82,37 @@ export default function BlogDetail() {
       fetchBlog();
     }
   }, [id]);
+  // slugify helper
+  const toSlug = (text: string) =>
+    (text || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+
+  // Redirect to pretty URL if slug missing or mismatched
+  useEffect(() => {
+    if (blog && id) {
+      const preferred = toSlug(blog.title);
+      if (preferred && slug !== preferred) {
+        navigate(`/blog/${id}/${preferred}`, { replace: true });
+      }
+    }
+  }, [blog, id, slug, navigate]);
+
+  // Load promo widgets for sidebar
+  useEffect(() => {
+    const loadPromos = async () => {
+      try {
+        const data = await promosApi.getAll();
+        if (Array.isArray(data)) setPromos(data);
+      } catch (_) {
+        setPromos([]);
+      }
+    };
+    loadPromos();
+  }, []);
 
   if (loading) {
     return (
@@ -120,7 +154,7 @@ export default function BlogDetail() {
     title: `${blog.title} | Maiya Hospital Health Blog, Jayanagar`,
     description: blog.excerpt || blog.content.substring(0, 160) + '...',
     keywords: `health blog bangalore, medical news, healthcare tips, ${blog.title.toLowerCase()}, maiya hospital blog, health information jayanagar`,
-    canonical: `https://maiyahospital.in/blog/${id}`,
+    canonical: `https://maiyahospital.in/blog/${id}/${toSlug(blog.title)}`,
     ogTitle: `${blog.title} | Maiya Hospital Health Blog, Jayanagar`,
     ogDescription: blog.excerpt || blog.content.substring(0, 160) + '...',
     ogImage: blog.image || 'https://maiyahospital.in/blog-default-og.jpg',
@@ -219,15 +253,17 @@ export default function BlogDetail() {
 
             { (blog as any).image || (blog as any).imageUrl ? (
               <div className="mb-6">
-                <img 
-                  src={(blog as any).image || (blog as any).imageUrl} 
-                  alt={blog.title}
-                  className="w-full h-[420px] object-cover rounded-2xl shadow-2xl"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = '/placeholder.svg';
-                  }}
-                />
+                <div className="w-full h-[420px] rounded-2xl border border-gray-200 bg-white shadow-2xl flex items-center justify-center p-3">
+                  <img 
+                    src={(blog as any).image || (blog as any).imageUrl} 
+                    alt={blog.title}
+                    className="max-w-full max-h-full object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg';
+                    }}
+                  />
+                </div>
               </div>
             ) : null }
 
@@ -239,36 +275,46 @@ export default function BlogDetail() {
                     {sec.alignment === 'imageRight' ? (
                       <>
                         <div className="order-2 md:order-1">
-                          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          <div className="rounded-2xl border border-gray-200 bg-transparent p-0">
+                            {sec.heading && <h2 className="text-2xl font-semibold text-foreground mb-3">{sec.heading}</h2>}
+                            <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow">
+                              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                            </div>
                           </div>
                         </div>
                         <div className="order-1 md:order-2">
                           {sec.image && (
-                            <img
-                              src={sec.image}
-                              alt="Section"
-                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                            />
+                            <div className="h-[360px] rounded-2xl border border-gray-200 bg-white shadow flex items-center justify-center p-3 hover:border-emerald-300 transition-colors overflow-hidden">
+                              <img
+                                src={sec.image}
+                                alt="Section"
+                                className="w-full h-full object-contain rounded-2xl"
+                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                              />
+                            </div>
                           )}
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="order-2 md:order-2">
-                          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          <div className="rounded-2xl border border-gray-200 bg-transparent p-0">
+                            {sec.heading && <h2 className="text-2xl font-semibold text-foreground mb-3">{sec.heading}</h2>}
+                            <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow">
+                              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                            </div>
                           </div>
                         </div>
                         <div className="order-1 md:order-1">
                           {sec.image && (
-                            <img
-                              src={sec.image}
-                              alt="Section"
-                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                            />
+                            <div className="h-[360px] rounded-2xl border border-gray-200 bg-white shadow flex items-center justify-center p-3 hover:border-emerald-300 transition-colors overflow-hidden">
+                              <img
+                                src={sec.image}
+                                alt="Section"
+                                className="w-full h-full object-contain rounded-2xl"
+                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                              />
+                            </div>
                           )}
                         </div>
                       </>
@@ -363,22 +409,40 @@ export default function BlogDetail() {
           </article>
           {/* Sidebar */}
           <aside className="lg:col-span-3 space-y-6">
-            {/* Promo/Ad widgets */}
-            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
-              <div className="h-40 bg-gray-100 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
-            </div>
-            <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
-              <div className="h-40 bg-gray-100 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
-            </div>
+            {/* Promo/Ad widgets from Contentful */}
+            {['sidebarTop','sidebarMiddle','sidebarBottom'].map((place) => {
+              const items = promos.filter(p => (p.placement || 'sidebarTop') === place);
+              return (
+                <div key={place} className="space-y-4">
+                  {items.length > 0 ? items.map((p) => (
+                    <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">
+                      <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow transition-all duration-300 group-hover:shadow-emerald-200 group-hover:border-emerald-300">
+                        <div className="w-full h-40 flex items-center justify-center bg-white p-3">
+                          <img src={p.image || '/placeholder.svg'} alt={p.title} className="max-w-full max-h-full object-contain" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                        </div>
+                        <div className="px-4 pb-4">
+                          <div className="text-sm font-semibold text-foreground group-hover:text-emerald-700">{p.title}</div>
+                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-1">{p.ctaLabel} →</div>}
+                        </div>
+                      </div>
+                    </a>
+                  )) : (
+                    <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
+                      <div className="h-40 bg-gray-50 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
             {/* Social Media */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
               <h3 className="text-sm font-semibold mb-4">Social Media</h3>
-              <div className="flex gap-3">
-                <a href="#" className="w-8 h-8 rounded bg-blue-600" aria-label="Facebook"></a>
-                <a href="#" className="w-8 h-8 rounded bg-sky-400" aria-label="Twitter"></a>
-                <a href="#" className="w-8 h-8 rounded bg-rose-600" aria-label="Instagram"></a>
-                <a href="#" className="w-8 h-8 rounded bg-red-600" aria-label="YouTube"></a>
+              <div className="flex gap-3 text-white">
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#1877F2] flex items-center justify-center hover:opacity-90" aria-label="Facebook"><Facebook size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#1DA1F2] flex items-center justify-center hover:opacity-90" aria-label="Twitter"><Twitter size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#E1306C] flex items-center justify-center hover:opacity-90" aria-label="Instagram"><Instagram size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#FF0000] flex items-center justify-center hover:opacity-90" aria-label="YouTube"><Youtube size={16} /></a>
               </div>
             </div>
 

@@ -47,6 +47,22 @@ export interface Blog {
   createdAt: string;
   updatedAt: string;
   isFeatured?: boolean;
+  sections?: { heading?: string; alignment: 'imageLeft' | 'imageRight'; image?: string | null; text: string }[];
+}
+
+export interface PromoWidget {
+	_id: string;
+	title: string;
+	image?: string | null;
+	url: string;
+	ctaLabel?: string;
+	placement?: 'sidebarTop' | 'sidebarMiddle' | 'sidebarBottom';
+	isActive?: boolean;
+	priority?: number;
+	startAt?: string | null;
+	endAt?: string | null;
+	openInNewTab?: boolean;
+	nofollow?: boolean;
 }
 
 export interface Doctor {
@@ -226,6 +242,11 @@ export const eventApi = {
 export const newsApi = {
   getAll: () => apiCall('/news'),
   getById: (id: string) => apiCall(`/news/${id}`),
+};
+
+// Promos API functions
+export const promosApi = {
+	getAll: (placement?: string) => apiCall(`/promos${placement ? `?placement=${encodeURIComponent(placement)}` : ''}`)
 };
 
 // Appointment API functions

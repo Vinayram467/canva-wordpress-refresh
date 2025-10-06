@@ -98,6 +98,7 @@ router.get('/:id', async (req, res) => {
               sections: blogSectionsCollection(limit: 20) {
                 items {
                   alignment
+                  heading
                   image { url }
                   body { json }
                 }
@@ -110,6 +111,7 @@ router.get('/:id', async (req, res) => {
           const { richTextToPlainText } = require('../services/contentful');
           mapped.sections = items.map((s) => ({
             alignment: s.alignment === 'imageRight' ? 'imageRight' : 'imageLeft',
+            heading: s.heading || '',
             image: s.image?.url || null,
             text: richTextToPlainText(s.body?.json) || ''
           })).filter(sec => sec.text || sec.image);
