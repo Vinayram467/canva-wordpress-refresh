@@ -93,10 +93,12 @@ export default function BlogDetail() {
 
   // Redirect to pretty URL if slug missing or mismatched
   useEffect(() => {
-    if (blog && id) {
+    if (blog) {
       const preferred = toSlug(blog.title);
-      if (preferred && slug !== preferred) {
-        navigate(`/blog/${id}/${preferred}`, { replace: true });
+      if (!id && slug !== preferred) {
+        navigate(`/blogs/${preferred}`, { replace: true });
+      } else if (id && slug !== preferred) {
+        navigate(`/blogs/${preferred}`, { replace: true });
       }
     }
   }, [blog, id, slug, navigate]);
@@ -189,7 +191,7 @@ export default function BlogDetail() {
   const bestPosts = sampleBlogs.slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-10 text-[18px] md:text-[19px] leading-8 tracking-[0.005em]">
       <SEOHead
         {...seoData}
         structuredData={[
@@ -315,8 +317,8 @@ export default function BlogDetail() {
                 ))}
               </section>
             ) : (
-            <div className="prose prose-lg max-w-none">
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              <div className="max-w-[85ch] md:max-w-none">
+                <div className="text-muted-foreground whitespace-pre-wrap">
                 {blog.content}
               </div>
             </div>
@@ -368,8 +370,8 @@ export default function BlogDetail() {
               </button>
             </div>
 
-            <div className="mt-10 rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/40 p-4">
-            <Comments threadId={id!} />
+            <div className="mt-10 rounded-2xl border border-emerald-200 p-4">
+              <Comments threadId={id!} />
             </div>
 
             {/* Related Posts */}
@@ -378,12 +380,12 @@ export default function BlogDetail() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {bestPosts.slice(0, 4).map((p) => (
                   <Link to={`/blog/${p.id}`} key={`related-${p.id}`} className="block group">
-                    <div className="bg-white rounded-2xl shadow-lg hover:shadow-emerald-200 transition-all duration-300 overflow-hidden flex flex-col h-full">
-                      <img src={p.image} alt={p.title} className="w-full h-44 object-cover" />
-                      <div className="p-5 flex flex-col flex-1">
+                    <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50 shadow-lg hover:shadow-emerald-200 transition-all duration-300 overflow-hidden flex flex-col h-full">
+                      <img src={p.image} alt={p.title} className="w-full h-56 object-cover" />
+                      <div className="p-6 flex flex-col flex-1">
                         <div className="text-xs text-emerald-700 font-semibold mb-1">{p.category}</div>
-                        <h3 className="text-lg font-bold text-foreground group-hover:text-emerald-700 line-clamp-2 flex-1">{p.title}</h3>
-                        <span className="mt-3 inline-flex items-center text-emerald-700 font-semibold">Read More <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span></span>
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-emerald-700 line-clamp-2 flex-1">{p.title}</h3>
+                        <span className="mt-4 inline-flex items-center text-emerald-700 font-semibold">Read More <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span></span>
                       </div>
                     </div>
                   </Link>
@@ -404,31 +406,30 @@ export default function BlogDetail() {
           </article>
           {/* Sidebar */}
           <aside className="lg:col-span-3 space-y-6">
-            {/* Promo/Ad widgets from Contentful */}
-            {['sidebarTop','sidebarMiddle','sidebarBottom'].map((place) => {
-              const items = promos.filter(p => (p.placement || 'sidebarTop') === place);
+            {(() => {
+              const items = (promos || []).filter(p => !!p.image);
+              if (items.length === 0) return null;
               return (
-                <div key={place} className="space-y-4">
-                  {items.length > 0 ? items.map((p) => (
-                    <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">
-                      <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow transition-all duration-300 group-hover:shadow-emerald-200 group-hover:border-emerald-300">
-                        <div className="w-full h-40 flex items-center justify-center bg-white p-3">
-                          <img src={p.image || '/placeholder.svg'} alt={p.title} className="max-w-full max-h-full object-contain" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
-                        </div>
-                        <div className="px-4 pb-4">
-                          <div className="text-sm font-semibold text-foreground group-hover:text-emerald-700">{p.title}</div>
-                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-1">{p.ctaLabel} →</div>}
+                <div className="space-y-4">
+                  {items.map((p) => {
+                    const content = (
+                      <div className="rounded-2xl overflow-hidden border border-emerald-200 shadow transition-all duration-300 hover:shadow-emerald-300">
+                        <img src={p.image || '/placeholder.svg'} alt={p.title} className={`w-full ${items.length === 1 ? 'h-[420px]' : 'h-48'} object-cover rounded-2xl`} onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                        <div className="px-3 py-2">
+                          <div className="text-sm font-semibold text-emerald-800">{p.title}</div>
+                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-0.5">{p.ctaLabel} →</div>}
                         </div>
                       </div>
-                    </a>
-                  )) : (
-                    <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow">
-                      <div className="h-40 bg-gray-50 flex items-center justify-center text-muted-foreground">Ad / Promotion</div>
-                    </div>
-                  )}
+                    );
+                    return p.url ? (
+                      <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">{content}</a>
+                    ) : (
+                      <div key={p._id} className="block group">{content}</div>
+                    );
+                  })}
                 </div>
               );
-            })}
+            })()}
 
             {/* Social Media */}
             <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
