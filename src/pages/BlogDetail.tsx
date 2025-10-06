@@ -267,67 +267,59 @@ export default function BlogDetail() {
 
             {/* Alternating sections if provided; else fallback to plain content */}
             {Array.isArray((blog as any).sections) && (blog as any).sections.length > 0 ? (
-              <section className="space-y-8">
+              <section className="space-y-10">
                 {(blog as any).sections.map((sec: any, idx: number) => (
-                  <div key={idx} className={`grid grid-cols-1 md:grid-cols-2 gap-6 items-center`}>
-                    {sec.alignment === 'imageRight' ? (
-                      <>
-                        <div className="order-2 md:order-1">
-                          <div className="p-0">
-                            {sec.heading && (
-                              <div className="flex items-center gap-4 mb-3">
-                                <h2 className="text-2xl font-extrabold text-foreground whitespace-nowrap">{sec.heading}</h2>
-                                <div className="h-[2px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
-                              </div>
-                            )}
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                          </div>
-                        </div>
-                        <div className="order-1 md:order-2">
-                          {sec.image && (
-                            <img
-                              src={sec.image}
-                              alt="Section"
-                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                            />
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="order-2 md:order-2">
-                          <div className="p-0">
-                            {sec.heading && (
-                              <div className="flex items-center gap-4 mb-3">
-                                <h2 className="text-2xl font-extrabold text-foreground whitespace-nowrap">{sec.heading}</h2>
-                                <div className="h-[2px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
-                              </div>
-                            )}
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                          </div>
-                        </div>
-                        <div className="order-1 md:order-1">
-                          {sec.image && (
-                            <img
-                              src={sec.image}
-                              alt="Section"
-                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                            />
-                          )}
-                        </div>
-                      </>
+                  <div key={idx} className="space-y-4">
+                    {sec.heading && (
+                      <div className="flex items-center gap-4">
+                        <h2 className="text-2xl md:text-3xl font-extrabold text-foreground whitespace-nowrap">{sec.heading}</h2>
+                        <div className="h-[3px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
+                      </div>
                     )}
+                    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 items-center`}>
+                      {sec.alignment === 'imageRight' ? (
+                        <>
+                          <div className="order-2 md:order-1">
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          </div>
+                          <div className="order-1 md:order-2">
+                            {sec.image && (
+                              <img
+                                src={sec.image}
+                                alt="Section"
+                                className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                              />
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="order-2 md:order-2">
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
+                          </div>
+                          <div className="order-1 md:order-1">
+                            {sec.image && (
+                              <img
+                                src={sec.image}
+                                alt="Section"
+                                className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                              />
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 ))}
               </section>
             ) : (
-              <div className="prose prose-lg max-w-none">
-                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                  {blog.content}
-                </div>
+            <div className="prose prose-lg max-w-none">
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {blog.content}
               </div>
+            </div>
             )}
 
             {/* Author box */}
@@ -376,19 +368,22 @@ export default function BlogDetail() {
               </button>
             </div>
 
-            <Comments threadId={id!} />
+            <div className="mt-10 rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50/40 p-4">
+              <Comments threadId={id!} />
+            </div>
 
             {/* Related Posts */}
             <section className="mt-12">
-              <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <h2 className="text-2xl font-extrabold mb-6">Related Posts</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {bestPosts.slice(0, 4).map((p) => (
                   <Link to={`/blog/${p.id}`} key={`related-${p.id}`} className="block group">
-                    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                      <img src={p.image} alt={p.title} className="w-full h-32 object-cover" />
-                      <div className="p-4">
-                        <div className="text-xs text-muted-foreground mb-1">{p.category}</div>
-                        <h3 className="text-base font-semibold text-foreground group-hover:text-green-700 line-clamp-2">{p.title}</h3>
+                    <div className="bg-white rounded-2xl shadow-lg hover:shadow-emerald-200 transition-all duration-300 overflow-hidden flex flex-col h-full">
+                      <img src={p.image} alt={p.title} className="w-full h-44 object-cover" />
+                      <div className="p-5 flex flex-col flex-1">
+                        <div className="text-xs text-emerald-700 font-semibold mb-1">{p.category}</div>
+                        <h3 className="text-lg font-bold text-foreground group-hover:text-emerald-700 line-clamp-2 flex-1">{p.title}</h3>
+                        <span className="mt-3 inline-flex items-center text-emerald-700 font-semibold">Read More <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span></span>
                       </div>
                     </div>
                   </Link>
@@ -447,15 +442,15 @@ export default function BlogDetail() {
             </div>
 
             {/* Most Popular */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+            <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50 p-6 shadow">
               <h3 className="text-sm font-semibold mb-4">Most Popular</h3>
               <div className="space-y-4">
                 {bestPosts.slice(0,4).map((p) => (
                   <Link to={`/blog/${p.id}`} key={`popular-${p.id}`} className="flex gap-3 group">
-                    <img src={p.image} alt={p.title} className="w-16 h-16 object-cover rounded" />
+                    <img src={p.image} alt={p.title} className="w-20 h-20 object-cover rounded-xl" />
                     <div>
-                      <div className="text-xs text-muted-foreground">{p.category}</div>
-                      <div className="text-sm font-semibold text-foreground group-hover:text-green-700 line-clamp-2">{p.title}</div>
+                      <div className="text-xs text-emerald-700 font-semibold">{p.category}</div>
+                      <div className="text-sm font-bold text-foreground group-hover:text-emerald-700 line-clamp-2">{p.title}</div>
                     </div>
                   </Link>
                 ))}

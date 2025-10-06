@@ -15,16 +15,14 @@ router.get('/', async (req, res) => {
 							items {
 								sys { id }
 								title
-								image { url }
-								url
-								ctaLabel
-								placement
-								isActive
-								priority
-								startAt
-								endAt
-								openInNewTab
-								nofollow
+                    image { url }
+                    url
+                    ctaLabel
+                    placement
+                    isActive
+                    priority
+                    openInNewTab
+                    nofollow
 							}
 						}
 					}
@@ -42,19 +40,12 @@ router.get('/', async (req, res) => {
 				placement: it.placement || 'sidebarTop',
 				isActive: !!it.isActive,
 				priority: typeof it.priority === 'number' ? it.priority : 0,
-				startAt: it.startAt || null,
-				endAt: it.endAt || null,
 				openInNewTab: !!it.openInNewTab,
 				nofollow: !!it.nofollow,
 			}));
 
-			// Filter active + within schedule window
-			items = items.filter((p) => {
-				if (!p.isActive) return false;
-				const startOk = !p.startAt || new Date(p.startAt).getTime() <= now;
-				const endOk = !p.endAt || new Date(p.endAt).getTime() >= now;
-				return startOk && endOk;
-			});
+            // Filter active only (scheduling optional and not in schema now)
+            items = items.filter((p) => p.isActive);
 
 			// Optional placement filter
 			if (placement) {
