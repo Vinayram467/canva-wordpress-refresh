@@ -22,13 +22,26 @@ export default function BlogDetail() {
     const fetchBlog = async () => {
       try {
         setLoading(true);
-        const data = await blogApi.getById(id!);
-        setBlog(data);
-        setError(null);
+        if (id) {
+          const data = await blogApi.getById(id);
+          setBlog(data);
+          setError(null);
+          return;
+        }
+        if (slug) {
+          const list = await blogApi.getAll();
+          const match = Array.isArray(list) ? list.find((b: any) => toSlug(b.title) === slug) : null;
+          if (match) {
+            setBlog(match);
+            setError(null);
+            return;
+          }
+        }
+        throw new Error('Blog not found');
       } catch (err) {
         console.error('Error fetching blog:', err);
-        // Fallback 1: try sampleBlogs from homepage by numeric/string id
-        const local = sampleBlogs.find(b => b.id === id);
+        // Fallback 1: try sampleBlogs
+        const local = slug ? sampleBlogs.find(b => b && b.title && toSlug(b.title) === slug) : sampleBlogs.find(b => b.id === id);
         if (local) {
           const mapped: Blog = {
             _id: local.id,
@@ -48,7 +61,6 @@ export default function BlogDetail() {
           setBlog(mapped);
           setError(null);
         } else {
-          // Fallback 2: load bundled sample JSON if available
           try {
             const sample = await import('@/content/blogs/sample-blog.json');
             const mapped: Blog = {
@@ -78,10 +90,10 @@ export default function BlogDetail() {
       }
     };
 
-    if (id) {
+    if (id || slug) {
       fetchBlog();
     }
-  }, [id]);
+  }, [id, slug]);
   // slugify helper
   const toSlug = (text: string) =>
     (text || '')
