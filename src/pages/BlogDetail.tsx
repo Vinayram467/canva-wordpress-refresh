@@ -253,17 +253,15 @@ export default function BlogDetail() {
 
             { (blog as any).image || (blog as any).imageUrl ? (
               <div className="mb-6">
-                <div className="w-full h-[420px] rounded-2xl border border-gray-200 bg-white shadow-2xl flex items-center justify-center p-3">
-                  <img 
-                    src={(blog as any).image || (blog as any).imageUrl} 
-                    alt={blog.title}
-                    className="max-w-full max-h-full object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/placeholder.svg';
-                    }}
-                  />
-                </div>
+                <img 
+                  src={(blog as any).image || (blog as any).imageUrl} 
+                  alt={blog.title}
+                  className="w-full h-[420px] object-cover rounded-2xl shadow-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder.svg';
+                  }}
+                />
               </div>
             ) : null }
 
@@ -275,46 +273,48 @@ export default function BlogDetail() {
                     {sec.alignment === 'imageRight' ? (
                       <>
                         <div className="order-2 md:order-1">
-                          <div className="rounded-2xl border border-gray-200 bg-transparent p-0">
-                            {sec.heading && <h2 className="text-2xl font-semibold text-foreground mb-3">{sec.heading}</h2>}
-                            <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow">
-                              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                            </div>
+                          <div className="p-0">
+                            {sec.heading && (
+                              <div className="flex items-center gap-4 mb-3">
+                                <h2 className="text-2xl font-extrabold text-foreground whitespace-nowrap">{sec.heading}</h2>
+                                <div className="h-[2px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
+                              </div>
+                            )}
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
                           </div>
                         </div>
                         <div className="order-1 md:order-2">
                           {sec.image && (
-                            <div className="h-[360px] rounded-2xl border border-gray-200 bg-white shadow flex items-center justify-center p-3 hover:border-emerald-300 transition-colors overflow-hidden">
-                              <img
-                                src={sec.image}
-                                alt="Section"
-                                className="w-full h-full object-contain rounded-2xl"
-                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                              />
-                            </div>
+                            <img
+                              src={sec.image}
+                              alt="Section"
+                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                            />
                           )}
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="order-2 md:order-2">
-                          <div className="rounded-2xl border border-gray-200 bg-transparent p-0">
-                            {sec.heading && <h2 className="text-2xl font-semibold text-foreground mb-3">{sec.heading}</h2>}
-                            <div className="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow">
-                              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                            </div>
+                          <div className="p-0">
+                            {sec.heading && (
+                              <div className="flex items-center gap-4 mb-3">
+                                <h2 className="text-2xl font-extrabold text-foreground whitespace-nowrap">{sec.heading}</h2>
+                                <div className="h-[2px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
+                              </div>
+                            )}
+                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
                           </div>
                         </div>
                         <div className="order-1 md:order-1">
                           {sec.image && (
-                            <div className="h-[360px] rounded-2xl border border-gray-200 bg-white shadow flex items-center justify-center p-3 hover:border-emerald-300 transition-colors overflow-hidden">
-                              <img
-                                src={sec.image}
-                                alt="Section"
-                                className="w-full h-full object-contain rounded-2xl"
-                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                              />
-                            </div>
+                            <img
+                              src={sec.image}
+                              alt="Section"
+                              className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
+                              onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                            />
                           )}
                         </div>
                       </>
