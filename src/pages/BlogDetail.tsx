@@ -152,11 +152,13 @@ export default function BlogDetail() {
   }
 
   // Generate SEO data for the blog detail page
+  const prettySlug = toSlug(blog.title);
+  const canonicalUrl = `https://maiyahospital.in/blogs/${prettySlug}`;
   const seoData = {
     title: `${blog.title} | Maiya Hospital Health Blog, Jayanagar`,
     description: blog.excerpt || blog.content.substring(0, 160) + '...',
     keywords: `health blog bangalore, medical news, healthcare tips, ${blog.title.toLowerCase()}, maiya hospital blog, health information jayanagar`,
-    canonical: `https://maiyahospital.in/blog/${id}/${toSlug(blog.title)}`,
+    canonical: canonicalUrl,
     ogTitle: `${blog.title} | Maiya Hospital Health Blog, Jayanagar`,
     ogDescription: blog.excerpt || blog.content.substring(0, 160) + '...',
     ogImage: blog.image || 'https://maiyahospital.in/blog-default-og.jpg',
@@ -169,7 +171,7 @@ export default function BlogDetail() {
       image: blog.image || 'https://maiyahospital.in/blog-default-og.jpg',
       publishedDate: blog.createdAt,
       modifiedDate: blog.updatedAt || blog.createdAt,
-      url: `https://maiyahospital.in/blog/${id}`
+      url: canonicalUrl
     })],
     articlePublishedTime: blog.createdAt,
     articleModifiedTime: blog.updatedAt || blog.createdAt,
@@ -196,29 +198,29 @@ export default function BlogDetail() {
         {...seoData}
         structuredData={[
           getWebsiteSchema({ name: 'Maiya Hospital', url: 'https://maiyahospital.in', searchUrl: 'https://maiyahospital.in/search?q=' }),
-          getWebPageSchema({ name: blog.title, url: `https://maiyahospital.in/blog/${id}`, description: blog.excerpt || blog.content.substring(0, 160) }),
+          getWebPageSchema({ name: blog.title, url: canonicalUrl, description: blog.excerpt || blog.content.substring(0, 160) }),
           getPersonSchema(blog.author || 'Maiya Hospital'),
           getBreadcrumbSchema([
             { name: 'Home', url: 'https://maiyahospital.in/' },
             { name: 'Blogs', url: 'https://maiyahospital.in/blogs' },
-            { name: blog.title, url: `https://maiyahospital.in/blog/${id}` }
+            { name: blog.title, url: canonicalUrl }
           ]),
           ...(seoData.structuredData as any),
           getBlogPostingSchema({
             title: blog.title,
             description: blog.excerpt || blog.content.substring(0, 160),
             image: (blog as any).image || (blog as any).imageUrl,
-            url: `https://maiyahospital.in/blog/${id}`,
+            url: canonicalUrl,
             publishedDate: (blog as any).createdAt || (blog as any).publishedAt,
             modifiedDate: (blog as any).updatedAt || (blog as any).createdAt,
             author: blog.author || 'Maiya Hospital'
           }),
           getBestPostsSidebarSchema(bestPosts.map(p => ({
             title: p.title,
-            url: `https://maiyahospital.in/blog/${p.id}`,
+            url: `https://maiyahospital.in/blogs/${toSlug(p.title)}`,
             image: p.image
           }))),
-          getShareAction(`https://maiyahospital.in/blog/${id}`)
+          getShareAction(canonicalUrl)
         ]}
       />
       <Header />
@@ -319,9 +321,9 @@ export default function BlogDetail() {
             ) : (
               <div className="max-w-[85ch] md:max-w-none">
                 <div className="text-muted-foreground whitespace-pre-wrap">
-                {blog.content}
+                  {blog.content}
+                </div>
               </div>
-            </div>
             )}
 
             {/* Author box */}
