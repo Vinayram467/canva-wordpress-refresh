@@ -8,7 +8,7 @@ const images = [
   "/Black and Green Bold Gym Landscape Banner (20).png",
   "/Banner4.png",
   "/Banenr5.png",
-  "/Elegant Red Black Curtain Coming Soon Banner.png",
+  "/doctor-profiles/Banner10.jpeg",
 ];
 
 const AutoScrollBanner = () => {

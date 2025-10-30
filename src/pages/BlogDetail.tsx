@@ -287,6 +287,81 @@ export default function BlogDetail() {
               </div>
             ) : null }
 
+          </article>
+          {/* Sidebar */}
+          <aside className="lg:col-span-3 space-y-6">
+            {(() => {
+              const items = (promos || []).filter(p => !!p.image);
+              if (items.length === 0) return null;
+              return (
+                <div className="space-y-4">
+                  {items.map((p) => {
+                    const content = (
+                      <div className="rounded-2xl overflow-hidden border border-emerald-200 shadow transition-all duration-300 hover:shadow-emerald-300">
+                        <img src={p.image || '/placeholder.svg'} alt={p.title} className={`w-full ${items.length === 1 ? 'h-[420px]' : 'h-48'} object-cover rounded-2xl`} onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                        <div className="px-3 py-2">
+                          <div className="text-sm font-semibold text-emerald-800">{p.title}</div>
+                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-0.5">{p.ctaLabel} →</div>}
+                        </div>
+                      </div>
+                    );
+                    return p.url ? (
+                      <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">{content}</a>
+                    ) : (
+                      <div key={p._id} className="block group">{content}</div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+
+            {/* Social Media */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-4">Social Media</h3>
+              <div className="flex gap-3 text-white">
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#1877F2] flex items-center justify-center hover:opacity-90" aria-label="Facebook"><Facebook size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#1DA1F2] flex items-center justify-center hover:opacity-90" aria-label="Twitter"><Twitter size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#E1306C] flex items-center justify-center hover:opacity-90" aria-label="Instagram"><Instagram size={16} /></a>
+                <a href="#" className="w-9 h-9 rounded-lg bg-[#FF0000] flex items-center justify-center hover:opacity-90" aria-label="YouTube"><Youtube size={16} /></a>
+              </div>
+            </div>
+
+            {/* Most Popular */}
+            <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50 p-6 shadow">
+              <h3 className="text-sm font-semibold mb-4">Most Popular</h3>
+              <div className="space-y-4">
+                {bestPosts.slice(0,4).map((p) => (
+                  <Link to={`/blog/${p.id}`} key={`popular-${p.id}`} className="flex gap-3 group">
+                    <img src={p.image} alt={p.title} className="w-20 h-20 object-cover rounded-xl" />
+                    <div>
+                      <div className="text-xs text-emerald-700 font-semibold">{p.category}</div>
+                      <div className="text-sm font-bold text-foreground group-hover:text-emerald-700 line-clamp-2">{p.title}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Newsletter */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-3">Subscribe To Our Weekly Newsletter</h3>
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
+                <input type="email" placeholder="Your email" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-600" />
+                <button className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-semibold px-4 py-2 rounded-lg">Subscribe</button>
+              </form>
+            </div>
+
+            {/* Categories */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
+              <h3 className="text-sm font-semibold mb-3">Categories</h3>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">{blog.category || 'General'}</span>
+              </div>
+            </div>
+          </aside>
+
+          {/* Continue reading — expand to full width after sidebar */}
+          <section className="lg:col-span-12">
             {/* Alternating sections if provided; else fallback to plain content */}
             {Array.isArray((blog as any).sections) && (blog as any).sections.length > 0 ? (
               <section className="space-y-10">
@@ -423,78 +498,7 @@ export default function BlogDetail() {
                 </Link>
               </div>
             </footer>
-          </article>
-          {/* Sidebar */}
-          <aside className="lg:col-span-3 space-y-6">
-            {(() => {
-              const items = (promos || []).filter(p => !!p.image);
-              if (items.length === 0) return null;
-              return (
-                <div className="space-y-4">
-                  {items.map((p) => {
-                    const content = (
-                      <div className="rounded-2xl overflow-hidden border border-emerald-200 shadow transition-all duration-300 hover:shadow-emerald-300">
-                        <img src={p.image || '/placeholder.svg'} alt={p.title} className={`w-full ${items.length === 1 ? 'h-[420px]' : 'h-48'} object-cover rounded-2xl`} onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
-                        <div className="px-3 py-2">
-                          <div className="text-sm font-semibold text-emerald-800">{p.title}</div>
-                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-0.5">{p.ctaLabel} →</div>}
-                        </div>
-                      </div>
-                    );
-                    return p.url ? (
-                      <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">{content}</a>
-                    ) : (
-                      <div key={p._id} className="block group">{content}</div>
-                    );
-                  })}
-                </div>
-              );
-            })()}
-
-            {/* Social Media */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
-              <h3 className="text-sm font-semibold mb-4">Social Media</h3>
-              <div className="flex gap-3 text-white">
-                <a href="#" className="w-9 h-9 rounded-lg bg-[#1877F2] flex items-center justify-center hover:opacity-90" aria-label="Facebook"><Facebook size={16} /></a>
-                <a href="#" className="w-9 h-9 rounded-lg bg-[#1DA1F2] flex items-center justify-center hover:opacity-90" aria-label="Twitter"><Twitter size={16} /></a>
-                <a href="#" className="w-9 h-9 rounded-lg bg-[#E1306C] flex items-center justify-center hover:opacity-90" aria-label="Instagram"><Instagram size={16} /></a>
-                <a href="#" className="w-9 h-9 rounded-lg bg-[#FF0000] flex items-center justify-center hover:opacity-90" aria-label="YouTube"><Youtube size={16} /></a>
-              </div>
-            </div>
-
-            {/* Most Popular */}
-            <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-white to-emerald-50 p-6 shadow">
-              <h3 className="text-sm font-semibold mb-4">Most Popular</h3>
-              <div className="space-y-4">
-                {bestPosts.slice(0,4).map((p) => (
-                  <Link to={`/blog/${p.id}`} key={`popular-${p.id}`} className="flex gap-3 group">
-                    <img src={p.image} alt={p.title} className="w-20 h-20 object-cover rounded-xl" />
-                    <div>
-                      <div className="text-xs text-emerald-700 font-semibold">{p.category}</div>
-                      <div className="text-sm font-bold text-foreground group-hover:text-emerald-700 line-clamp-2">{p.title}</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
-              <h3 className="text-sm font-semibold mb-3">Subscribe To Our Weekly Newsletter</h3>
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-3">
-                <input type="email" placeholder="Your email" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-green-600" />
-                <button className="w-full bg-green-700 hover:bg-green-800 text-white text-sm font-semibold px-4 py-2 rounded-lg">Subscribe</button>
-              </form>
-            </div>
-
-            {/* Categories */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow">
-              <h3 className="text-sm font-semibold mb-3">Categories</h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">{blog.category || 'General'}</span>
-              </div>
-            </div>
-          </aside>
+          </section>
         </div>
       </div>
 
