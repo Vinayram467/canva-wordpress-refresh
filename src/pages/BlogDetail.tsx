@@ -358,27 +358,6 @@ export default function BlogDetail() {
               </div>
             )}
 
-            {/* Inline horizontal promo after article */}
-            {(() => {
-              const inlinePromo = (promos || []).find(p => p.placement === 'inlineAfterArticle') || (promos || [])[0];
-              if (!inlinePromo || !inlinePromo.image) return null;
-              const content = (
-                <div className="mt-8 rounded-2xl overflow-hidden border border-emerald-200 shadow hover:shadow-emerald-300 transition-all duration-300">
-                  <img
-                    src={inlinePromo.image || '/placeholder.svg'}
-                    alt={inlinePromo.title}
-                    className="w-full h-48 md:h-56 object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                  />
-                </div>
-              );
-              return inlinePromo.url ? (
-                <a href={inlinePromo.url} target={inlinePromo.openInNewTab ? '_blank' : undefined} rel={inlinePromo.nofollow ? 'nofollow noopener' : 'noopener'} className="block">
-                  {content}
-                </a>
-              ) : content;
-            })()}
-
             {/* Author box */}
             <section className="mt-10 border border-gray-200 rounded-2xl bg-white p-6 shadow">
               <div className="flex items-center gap-4">

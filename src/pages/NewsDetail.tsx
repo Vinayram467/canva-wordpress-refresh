@@ -108,27 +108,6 @@ export default function NewsDetail() {
               </div>
             </div>
 
-            {/* Inline horizontal promo after article */}
-            {(() => {
-              const inlinePromo = (promos || []).find(p => p.placement === 'inlineAfterArticle') || (promos || [])[0];
-              if (!inlinePromo || !inlinePromo.image) return null;
-              const content = (
-                <div className="mt-8 rounded-2xl overflow-hidden border border-emerald-200 shadow hover:shadow-emerald-300 transition-all duration-300">
-                  <img
-                    src={inlinePromo.image || '/placeholder.svg'}
-                    alt={inlinePromo.title}
-                    className="w-full h-48 md:h-56 object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                  />
-                </div>
-              );
-              return inlinePromo.url ? (
-                <a href={inlinePromo.url} target={inlinePromo.openInNewTab ? '_blank' : undefined} rel={inlinePromo.nofollow ? 'nofollow noopener' : 'noopener'} className="block">
-                  {content}
-                </a>
-              ) : content;
-            })()}
-
             {(item.attachments && item.attachments.length > 0) && (
               <section className="mt-10">
                 <h2 className="text-xl font-semibold mb-4">Gallery & Attachments</h2>
