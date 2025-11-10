@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getMedicalOrganizationSchema } from "@/utils/schema";
 import { getSEOData } from "@/utils/seoManager";
+import RevealOnScroll from "@/components/RevealOnScroll";
 
 export default function Index() {
   const seoData = getSEOData('home');
@@ -30,39 +31,40 @@ export default function Index() {
         <Header />
         <AutoScrollBanner />
         <div className="container mx-auto px-2">
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          <div className="my-8">
             <HeroSection />
           </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          <div className="my-8">
             <HealthUpdatesTicker />
           </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          <div className="my-8">
             <StatsSection />
           </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          <div className="my-8">
             <ServicesGrid />
           </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          {/* Scroll reveals from here onward */}
+          <RevealOnScroll direction="right" className="my-8">
             <AboutSection />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="left" className="my-8" delayMs={75}>
             <DoctorProfiles />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="up" className="my-8" delayMs={100}>
             <PatientTestimonials />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="right" className="my-8" delayMs={125}>
             <AppointmentBooking />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="left" className="my-8" delayMs={150}>
             <HealthInsights />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="up" className="my-8" delayMs={175}>
             <NewsEvents />
-          </div>
-          <div className="border border-gray-200 rounded-3xl shadow-lg my-8 bg-white/70">
+          </RevealOnScroll>
+          <RevealOnScroll direction="right" className="my-8" delayMs={200}>
             <ContactSection />
-          </div>
+          </RevealOnScroll>
         </div>
         <Footer />
       </div>
