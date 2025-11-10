@@ -80,7 +80,7 @@ export default function NewsDetail() {
           <div className="text-center text-muted-foreground">{error || 'Article not found'}</div>
         ) : (
           <div className="grid lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
-          <article className="lg:col-span-8 xl:col-span-9">
+          <article className="lg:col-span-7 xl:col-span-8">
             <nav className="py-4 text-sm text-muted-foreground flex items-center justify-between">
               <div className="flex flex-wrap gap-1">
                 <Link to="/" className="hover:text-foreground">Home</Link>
@@ -177,7 +177,7 @@ export default function NewsDetail() {
             </div>
           </article>
           {/* Sidebar promos */}
-          <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
+          <aside className="lg:col-span-5 xl:col-span-4 space-y-6 pr-2">
             {(() => {
               const items = (promos || []).filter(p => !!p.image);
               if (items.length === 0) return null;

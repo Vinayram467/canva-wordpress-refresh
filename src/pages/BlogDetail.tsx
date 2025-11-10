@@ -283,7 +283,7 @@ export default function BlogDetail() {
         </nav>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Article */}
-          <article className="lg:col-span-8 xl:col-span-9">
+          <article className="lg:col-span-7 xl:col-span-8">
             <header className="mb-6">
               <div className="flex items-center text-sm text-muted-foreground mb-3">
                 <span>{new Date((blog as any).createdAt || Date.now()).toLocaleDateString()}</span>
@@ -314,7 +314,7 @@ export default function BlogDetail() {
               </div>
             ) : null }
 
-            {/* Alternating sections if provided; else fallback to plain content */}
+            {/* Alternating sections with float images so text wraps beside images */}
             {Array.isArray((blog as any).sections) && (blog as any).sections.length > 0 ? (
               <section className="space-y-10">
                 {(blog as any).sections.map((sec: any, idx: number) => (
@@ -325,40 +325,27 @@ export default function BlogDetail() {
                         <div className="h-[3px] bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 flex-1 rounded-full" />
                       </div>
                     )}
-                    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 items-center`}>
-                      {sec.alignment === 'imageRight' ? (
-                        <>
-                          <div className="order-2 md:order-1">
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                          </div>
-                          <div className="order-1 md:order-2">
-                            {sec.image && (
-                              <img
-                                src={sec.image}
-                                alt="Section"
-                                className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                              />
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="order-2 md:order-2">
-                            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{sec.text}</p>
-                          </div>
-                          <div className="order-1 md:order-1">
-                            {sec.image && (
-                              <img
-                                src={sec.image}
-                                alt="Section"
-                                className="w-full h-[360px] object-cover rounded-2xl shadow-2xl"
-                                onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                              />
-                            )}
-                          </div>
-                        </>
+                    <div>
+                      {sec.image && sec.alignment === 'imageRight' && (
+                        <img
+                          src={sec.image}
+                          alt="Section"
+                          className="w-full md:w-[45%] md:float-right md:ml-6 md:mb-4 rounded-2xl shadow-2xl object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                        />
                       )}
+                      {sec.image && sec.alignment !== 'imageRight' && (
+                        <img
+                          src={sec.image}
+                          alt="Section"
+                          className="w-full md:w-[45%] md:float-left md:mr-6 md:mb-4 rounded-2xl shadow-2xl object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                        />
+                      )}
+                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {sec.text}
+                      </p>
+                      <div className="clear-both"></div>
                     </div>
                   </div>
                 ))}
@@ -474,7 +461,7 @@ export default function BlogDetail() {
 
           </article>
           {/* Sidebar */}
-          <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
+          <aside className="lg:col-span-5 xl:col-span-4 space-y-6 pr-2">
             {(() => {
               const items = (promos || []).filter(p => !!p.image);
               if (items.length === 0) return null;
