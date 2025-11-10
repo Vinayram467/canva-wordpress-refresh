@@ -283,7 +283,7 @@ export default function BlogDetail() {
         </nav>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Article */}
-          <article className="lg:col-span-9">
+          <article className="lg:col-span-8 xl:col-span-9">
             <header className="mb-6">
               <div className="flex items-center text-sm text-muted-foreground mb-3">
                 <span>{new Date((blog as any).createdAt || Date.now()).toLocaleDateString()}</span>
@@ -474,7 +474,7 @@ export default function BlogDetail() {
 
           </article>
           {/* Sidebar */}
-          <aside className="lg:col-span-3 space-y-6">
+          <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
             {(() => {
               const items = (promos || []).filter(p => !!p.image);
               if (items.length === 0) return null;

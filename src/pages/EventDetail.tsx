@@ -53,7 +53,7 @@ export default function EventDetail() {
       <SEOHead {...seoData} />
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
-        <article className="lg:col-span-9">
+        <article className="lg:col-span-8 xl:col-span-9">
           {/* Event Header */}
           <header className="mb-8">
             <div className="flex items-center text-sm text-muted-foreground mb-4">
@@ -168,7 +168,7 @@ export default function EventDetail() {
           </footer>
         </article>
         {/* Sidebar promos */}
-        <aside className="lg:col-span-3 space-y-6">
+        <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
           {(() => {
             const items = (promos || []).filter(p => !!p.image);
             if (items.length === 0) return null;
