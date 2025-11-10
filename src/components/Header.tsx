@@ -19,58 +19,9 @@ const Header = () => {
 
   return (
     <header className="relative z-50">
-      {/* Top info bar removed per request */}
 
-      {/* Decorative border above logo section */}
-      <div className="w-full h-px bg-gradient-to-r from-green-600/30 via-red-500/30 to-green-600/30"></div>
-
-      {/* Logo Section - compact height with gradient glow backdrop */}
-      <div className="relative py-4 md:py-6 overflow-visible">
-        {/* Enhanced background animations */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Subtle radial gradient glow background replacing solid square */}
-          <div className="absolute inset-0 opacity-80">
-            <div className="w-full h-full" style={{
-              backgroundImage: 'radial-gradient(1200px 600px at 20% 50%, rgba(16,185,129,0.10), rgba(34,211,238,0.08) 35%, rgba(59,130,246,0.06) 60%, transparent 75%)'
-            }}></div>
-          </div>
-          {/* Slow, subtle glow animation layers */}
-          <div className="absolute -top-16 -left-24 w-[28rem] h-[28rem] rounded-full blur-3xl pointer-events-none gradient-glow" style={{background: 'conic-gradient(from 180deg, rgba(16,185,129,0.12), rgba(34,211,238,0.12), rgba(59,130,246,0.12), rgba(16,185,129,0.12))'}}></div>
-          <div className="absolute -bottom-24 right-0 w-[32rem] h-[32rem] rounded-full blur-3xl pointer-events-none gradient-glow delay-1000" style={{background: 'conic-gradient(from 0deg, rgba(34,211,238,0.10), rgba(59,130,246,0.10), rgba(16,185,129,0.10), rgba(34,211,238,0.10))'}}></div>
-        </div>
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-4 animate-fade-in-up relative z-10">
-          {/* Floating logo with subtle pulse/fade glow */}
-          <div className="relative group w-48 h-48 md:w-56 md:h-56 cursor-pointer">
-            <div className="absolute inset-0 w-full h-full rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-700 glow-pulse" style={{zIndex: 1}}></div>
-            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500" style={{zIndex: 2}}>
-              <img 
-                src="/lovable-uploads/Maiya_-_LOGOS_page-0004-removebg-preview.png" 
-                alt="Maiya Hospital Logo" 
-                className="w-full h-full object-contain drop-shadow-2xl animate-float-subtle"
-              />
-            </div>
-          </div>
-          {/* Animated text content */}
-          <div className="flex flex-col items-center gap-1 min-w-0 text-center">
-            <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold leading-tight tracking-tight relative whitespace-normal">
-              <span className="bg-gradient-to-r from-green-600 via-red-500 to-green-600 bg-clip-text text-transparent animate-gradient-text relative inline-block drop-shadow-[0_2px_16px_rgba(80,200,255,0.18)]">
-                Maiya Multi Speciality Hospital
-                {/* Floating dots decoration */}
-                <span className="absolute -top-2 -right-2 w-2 h-2 bg-green-600 rounded-full animate-ping-slow"></span>
-                <span className="absolute -bottom-2 -left-2 w-2 h-2 bg-red-500 rounded-full animate-ping-slow delay-300"></span>
-              </span>
-              {/* Decorative accent underline */}
-              <span className="block mt-2 h-1 w-24 bg-gradient-to-r from-green-600 via-red-500 to-green-600 rounded-full opacity-60 animate-fade-in-up mx-auto"></span>
-            </h1>
-            <p className="text-foreground text-sm md:text-base mt-1 animate-fade-in-up font-medium drop-shadow-[0_1px_8px_rgba(80,200,255,0.10)]" style={{ animationDelay: '400ms' }}>
-              Excellence in Healthcare
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CloudNine Style Navigation */}
-      <nav className="relative z-20 bg-white/90 backdrop-blur-md border-b border-gray-200/50 shadow-lg">
+      {/* Primary navigation fixed at the very top */}
+      <nav className="sticky top-0 z-50 mx-2 md:mx-4 mt-2 rounded-3xl bg-white/50 backdrop-blur-md border border-white/30 shadow-lg transition-all duration-300 hover:bg-white/60 hover:backdrop-blur-xl hover:shadow-2xl hover:border-white/40">
         <div className="container mx-auto px-4">
           <div className="flex items-center h-32">
             {/* Logo Section - Left - 90px logo size */}
