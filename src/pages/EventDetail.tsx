@@ -1,11 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { sampleEvents } from '@/lib/utils';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { getMedicalOrganizationSchema } from '@/utils/schema';
+import { promosApi, type PromoWidget } from '@/services/api';
 
 export default function EventDetail() {
   const { id } = useParams();
   const event = sampleEvents.find(e => e.id === id);
+  const [promos, setPromos] = useState<PromoWidget[]>([]);
+
+  useEffect(() => {
+    promosApi.getAll().then((p) => setPromos(Array.isArray(p) ? p : [])).catch(() => setPromos([]));
+  }, []);
 
   if (!event) {
     return (
@@ -45,7 +52,8 @@ export default function EventDetail() {
     <div className="min-h-screen bg-gradient-to-br from-[hsl(210,100%,98%)] via-[hsl(230,100%,97%)] to-[hsl(250,100%,98%)] py-16">
       <SEOHead {...seoData} />
       <div className="container mx-auto px-4">
-        <article className="max-w-4xl mx-auto">
+        <div className="grid lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
+        <article className="lg:col-span-9">
           {/* Event Header */}
           <header className="mb-8">
             <div className="flex items-center text-sm text-muted-foreground mb-4">
@@ -118,6 +126,27 @@ export default function EventDetail() {
             </div>
           </div>
 
+          {/* Inline horizontal promo after article */}
+          {(() => {
+            const inlinePromo = (promos || []).find(p => p.placement === 'inlineAfterArticle') || (promos || [])[0];
+            if (!inlinePromo || !inlinePromo.image) return null;
+            const content = (
+              <div className="mt-8 rounded-2xl overflow-hidden border border-emerald-200 shadow hover:shadow-emerald-300 transition-all duration-300">
+                <img
+                  src={inlinePromo.image || '/placeholder.svg'}
+                  alt={inlinePromo.title}
+                  className="w-full h-48 md:h-56 object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                />
+              </div>
+            );
+            return inlinePromo.url ? (
+              <a href={inlinePromo.url} target={inlinePromo.openInNewTab ? '_blank' : undefined} rel={inlinePromo.nofollow ? 'nofollow noopener' : 'noopener'} className="block">
+                {content}
+              </a>
+            ) : content;
+          })()}
+
           {/* Event Footer */}
           <footer className="mt-12 pt-8 border-t border-gray-200">
             <div className="flex items-center justify-between">
@@ -138,6 +167,34 @@ export default function EventDetail() {
             </div>
           </footer>
         </article>
+        {/* Sidebar promos */}
+        <aside className="lg:col-span-3 space-y-6">
+          {(() => {
+            const items = (promos || []).filter(p => !!p.image);
+            if (items.length === 0) return null;
+            return (
+              <div className="space-y-4">
+                {items.map((p) => {
+                  const content = (
+                    <div className="rounded-2xl overflow-hidden border border-emerald-200 shadow transition-all duration-300 hover:shadow-emerald-300">
+                      <img src={p.image || '/placeholder.svg'} alt={p.title} className="w-full h-[420px] object-cover rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                      <div className="px-3 py-2">
+                        <div className="text-sm font-semibold text-emerald-800">{p.title}</div>
+                        {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-0.5">{p.ctaLabel} →</div>}
+                      </div>
+                    </div>
+                  );
+                  return p.url ? (
+                    <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">{content}</a>
+                  ) : (
+                    <div key={p._id} className="block group">{content}</div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+        </aside>
+        </div>
       </div>
     </div>
   );

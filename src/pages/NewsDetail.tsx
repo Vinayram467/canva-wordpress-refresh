@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { newsApi, type NewsItem } from '@/services/api';
+import { newsApi, type NewsItem, promosApi, type PromoWidget } from '@/services/api';
 
 export default function NewsDetail() {
   const { id, slug } = useParams();
@@ -11,14 +11,19 @@ export default function NewsDetail() {
   const [item, setItem] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [promos, setPromos] = useState<PromoWidget[]>([]);
 
   useEffect(() => {
     const load = async () => {
       try {
         setLoading(true);
         if (!id) return;
-        const data = await newsApi.getById(id);
+        const [data, promoData] = await Promise.all([
+          newsApi.getById(id),
+          promosApi.getAll().catch(() => [] as any)
+        ]);
         setItem(data);
+        setPromos(Array.isArray(promoData) ? promoData : []);
         setError(null);
       } catch (e: any) {
         setError('Failed to load article');
@@ -74,7 +79,8 @@ export default function NewsDetail() {
         ) : error || !item ? (
           <div className="text-center text-muted-foreground">{error || 'Article not found'}</div>
         ) : (
-          <article className="max-w-4xl mx-auto">
+          <div className="grid lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
+          <article className="lg:col-span-9">
             <nav className="py-4 text-sm text-muted-foreground flex items-center justify-between">
               <div className="flex flex-wrap gap-1">
                 <Link to="/" className="hover:text-foreground">Home</Link>
@@ -101,6 +107,27 @@ export default function NewsDetail() {
                 {item.content}
               </div>
             </div>
+
+            {/* Inline horizontal promo after article */}
+            {(() => {
+              const inlinePromo = (promos || []).find(p => p.placement === 'inlineAfterArticle') || (promos || [])[0];
+              if (!inlinePromo || !inlinePromo.image) return null;
+              const content = (
+                <div className="mt-8 rounded-2xl overflow-hidden border border-emerald-200 shadow hover:shadow-emerald-300 transition-all duration-300">
+                  <img
+                    src={inlinePromo.image || '/placeholder.svg'}
+                    alt={inlinePromo.title}
+                    className="w-full h-48 md:h-56 object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                  />
+                </div>
+              );
+              return inlinePromo.url ? (
+                <a href={inlinePromo.url} target={inlinePromo.openInNewTab ? '_blank' : undefined} rel={inlinePromo.nofollow ? 'nofollow noopener' : 'noopener'} className="block">
+                  {content}
+                </a>
+              ) : content;
+            })()}
 
             {(item.attachments && item.attachments.length > 0) && (
               <section className="mt-10">
@@ -149,6 +176,34 @@ export default function NewsDetail() {
               <Link to="/" className="inline-flex items-center text-blue-700 hover:text-blue-800 font-semibold">← Back to Home</Link>
             </div>
           </article>
+          {/* Sidebar promos */}
+          <aside className="lg:col-span-3 space-y-6">
+            {(() => {
+              const items = (promos || []).filter(p => !!p.image);
+              if (items.length === 0) return null;
+              return (
+                <div className="space-y-4">
+                  {items.map((p) => {
+                    const content = (
+                      <div className="rounded-2xl overflow-hidden border border-emerald-200 shadow transition-all duration-300 hover:shadow-emerald-300">
+                        <img src={p.image || '/placeholder.svg'} alt={p.title} className="w-full h-[420px] object-cover rounded-2xl" onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }} />
+                        <div className="px-3 py-2">
+                          <div className="text-sm font-semibold text-emerald-800">{p.title}</div>
+                          {p.ctaLabel && <div className="text-xs text-emerald-700 font-semibold mt-0.5">{p.ctaLabel} →</div>}
+                        </div>
+                      </div>
+                    );
+                    return p.url ? (
+                      <a key={p._id} href={p.url} target={p.openInNewTab ? '_blank' : undefined} rel={p.nofollow ? 'nofollow noopener' : 'noopener'} className="block group">{content}</a>
+                    ) : (
+                      <div key={p._id} className="block group">{content}</div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+          </aside>
+          </div>
         )}
       </div>
       <Footer />

@@ -70,3 +70,4 @@ const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
 export default RevealOnScroll;
 
 
+

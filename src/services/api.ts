@@ -56,7 +56,7 @@ export interface PromoWidget {
 	image?: string | null;
 	url: string;
 	ctaLabel?: string;
-	placement?: 'sidebarTop' | 'sidebarMiddle' | 'sidebarBottom';
+	placement?: 'sidebarTop' | 'sidebarMiddle' | 'sidebarBottom' | 'inlineAfterArticle';
 	isActive?: boolean;
 	priority?: number;
 	startAt?: string | null;
