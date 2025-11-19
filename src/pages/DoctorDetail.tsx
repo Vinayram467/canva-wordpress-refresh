@@ -22,19 +22,19 @@ const DoctorDetail = () => {
     return <NotFound />;
   }
 
-  // Generate SEO data for the doctor using provided SEO fields with fallbacks
+  // Generate SEO data for the doctor - ensure meta description reflects CSV timings/visiting days
   const baseTitle = `${doctor.name} - Best ${doctor.specialty} in Jayanagar | Maiya Hospital`;
-  const baseDesc = `${doctor.name} is a leading ${doctor.specialty} specialist at Maiya Hospital, Jayanagar, with ${doctor.experience} of experience. Book consultation for ${doctor.specialty.toLowerCase()} treatment in Jayanagar, Bangalore.`;
+  const csvStyleDesc = `Meet ${doctor.name}, a ${doctor.specialty} specialist with ${doctor.experience}. Available ${doctor.visitingDays} from ${doctor.timings} at Maiya Hospital.`;
   const seoData = {
     title: doctor.seoTitle || baseTitle,
-    description: doctor.metaDescription || baseDesc,
+    description: csvStyleDesc,
     keywords: `${doctor.name}, ${doctor.specialty} jayanagar, ${doctor.specialty.toLowerCase()} doctor bangalore, best ${doctor.specialty.toLowerCase()} jayanagar, ${doctor.specialty.toLowerCase()} specialist bangalore`,
     canonical: `https://maiyahospital.in/doctor/${doctor.slug}`,
     ogTitle: doctor.seoTitle || baseTitle,
-    ogDescription: doctor.metaDescription || baseDesc,
+    ogDescription: csvStyleDesc,
     ogImage: `https://maiyahospital.in${doctor.image}`,
     twitterTitle: doctor.seoTitle || baseTitle,
-    twitterDescription: doctor.metaDescription || baseDesc,
+    twitterDescription: csvStyleDesc,
     twitterImage: `https://maiyahospital.in${doctor.image}`,
     structuredData: getPhysicianSchema(doctor)
   };
