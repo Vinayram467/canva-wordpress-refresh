@@ -3,25 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Star, Award, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-// Import the doctors data
-const doctorsData = [
-  { id: "7", name: "Dr. B G Mahesh", specialty: "Radiology", degrees: "MBBS, MD", experience: "4 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-B.G-MAHESH.png" },
-  { id: "13", name: "Dr. Chandrashekar H S", specialty: "Orthopaedics", degrees: "MBBS, MS", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹600", image: "/doctor-profiles/DR- CHANDRASHEKAR -H S.jpg" },
-  { id: "2", name: "Dr. Akshay Dhanda", specialty: "Orthopedics", degrees: "MBBS, MD", experience: "12 Years", visitingDays: "Mon–Fri", timings: "8AM – 4PM", consultationFee: "₹650", image: "/doctor-profiles/dr-Askahy-dhanda.jpg" },
-  { id: "14", name: "Dr. Krishnappa R", specialty: "Surgical Oncology", degrees: "MBBS, MD", experience: "25 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/DR-KRISHNAPPA- R.jpg" },
-  { id: "10", name: "Dr. G L Maiya", specialty: "General Surgery", degrees: "MBBS, MS", experience: "35 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹1000", image: "/doctor-profiles/DR-G L-MAIYA.png" },
-  { id: "3", name: "Dr. Hrishikesh Vemula", specialty: "Cardiology", degrees: "MBBS, MD, DM", experience: "20 Years", visitingDays: "Mon–Sat", timings: "5PM – 7PM", consultationFee: "₹800", image: "/doctor-profiles/DR-HRISHIKESH- VEMULA.jpg" },
-  { id: "1", name: "Dr. Abhey Vasudev", specialty: "Orthopaedics", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹700", image: "/doctor-profiles/dr-abhey-vasudev.jpg" },
-  { id: "5", name: "Dr. Sujay Rao", specialty: "Neurology", degrees: "MBBS, MS, MCH", experience: "35 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹1200", image: "/doctor-profiles/DR-SUJAY- RAO.png" },
-  { id: "9", name: "Dr. Ishwarya Bhandari", specialty: "Obstetrics & Gynaecology", degrees: "MBBS, MS", experience: "10 Years", visitingDays: "Mon–Sat", timings: "6PM – 8PM", consultationFee: "₹500", image: "/doctor-profiles/DR-ISHWARYA- BHANDARI.jpg" },
-  { id: "6", name: "Dr. N T Babu", specialty: "Ophthalmology", degrees: "MBBS, DOMS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "10AM – 12PM", consultationFee: "₹600", image: "/doctor-profiles/DR-N T-BABU.jpg" },
-  { id: "12", name: "Dr. Chinmay Nagesh", specialty: "Vascular Surgery", degrees: "MBBS, MS", experience: "15 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-CHINMAY- NAGESH.jpeg" },
-  { id: "8", name: "Dr. Murali P", specialty: "Medical Oncology", degrees: "MBBS, MD", experience: "15 Years", visitingDays: "Mon–Sat", timings: "2PM – 8PM", consultationFee: "₹600", image: "/doctor-profiles/DR-MURALI-P.jpeg" },
-  { id: "15", name: "Dr. Lakshmi V Pandit", specialty: "Psychiatry", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "10AM – 6PM", consultationFee: "₹700", image: "/doctor-profiles/DR-LAKSHMI-V-PANDIT.jpg" },
-  { id: "4", name: "Dr. Ananth Krishna", specialty: "Surgical Gastroenterology", degrees: "MBBS, MD, DM", experience: "30 Years", visitingDays: "Mon–Sat", timings: "2PM – 4PM", consultationFee: "₹800", image: "/doctor-profiles/DR-ANANTH-KRISHNA.jpeg" },
-  { id: "11", name: "Dr. Geetha B V", specialty: "General Medicine", degrees: "MBBS, MD", experience: "20 Years", visitingDays: "Mon–Sat", timings: "9AM – 5PM", consultationFee: "₹600", image: "/doctor-profiles/DR-GEETHA-B V.png" }
-];
+import allDoctors from "@/content/doctors";
 
 const DoctorProfiles = () => {
   return (
@@ -54,26 +36,36 @@ const DoctorProfiles = () => {
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {doctorsData.slice(0, 4).map((doctor, index) => (
+          {allDoctors.slice(0, 4).map((doctor, index) => {
+            const gradients = [
+              "from-green-600 to-blue-500",
+              "from-blue-600 to-purple-500",
+              "from-purple-600 to-pink-500",
+              "from-emerald-600 to-cyan-500",
+            ];
+            const g = gradients[index % gradients.length];
+            return (
             <Card 
               key={doctor.id} 
-              className="group glass hover:bg-white/80 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-3 animate-fade-in cursor-pointer relative"
+              className={`group glass hover:bg-white/80 hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:scale-105 hover:-translate-y-3 animate-fade-in cursor-pointer relative border border-white/60`}
               style={{ animationDelay: `${index * 150}ms` }}
             >
+              {/* Hover gradient glow */}
+              <div className={`pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${g} mix-blend-overlay`} />
               {/* Experience badge */}
               <div className="absolute top-4 right-4 z-10 glass rounded-full px-3 py-1 flex items-center space-x-1 transform group-hover:scale-110 transition-all duration-300">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
                 <span className="text-green-700 text-xs font-bold">{doctor.experience}</span>
                 </div>
               {/* Doctor image container */}
-              <div className="aspect-square w-full relative overflow-hidden bg-gradient-to-br from-blue-100 to-green-100">
+              <div className="aspect-square w-full relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-100 to-green-100">
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-100/40 to-transparent z-[1]"></div>
-                <div className="absolute inset-0 bg-blue-100/0 group-hover:bg-blue-100/20 transition-all duration-300 z-[2]"></div>
+                <div className={`absolute inset-0 bg-blue-100/0 group-hover:bg-gradient-to-br group-hover:${g} group-hover:opacity-30 transition-all duration-300 z-[2]`}></div>
                 {/* Doctor image */}
                 <img 
                   src={doctor.image}
                   alt={doctor.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500 will-change-transform"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
                     target.style.display = 'none';
@@ -114,15 +106,15 @@ const DoctorProfiles = () => {
                   <span className="text-foreground text-sm">consultation</span>
                 </div>
                 <div className="mt-6 flex justify-center">
-                  <Link to={`/doctor/${doctor.id}`}>
-                    <Button variant="outline" className="glass text-green-700 hover:bg-white/80 rounded-xl">
+                  <Link to={`/doctor/${doctor.slug}`}>
+                    <Button variant="outline" className="glass text-green-700 hover:bg-white/80 rounded-xl transition-colors duration-300">
                       View Profile
                     </Button>
                   </Link>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )})}
         </div>
         <div className="text-center mt-12">
           <Link to="/doctors">
