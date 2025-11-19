@@ -99,18 +99,7 @@ const Doctors = () => {
               <Card key={doctor.id} className="glass shadow-2xl border border-white/80 hover:shadow-3xl transition-all duration-300 hover:scale-105">
                 <CardContent className="p-6">
                   <div className="text-center mb-4">
-                    <div className="relative mb-4 inline-block w-full">
-                      <div className="overflow-hidden rounded-xl w-full h-56 shadow-lg border-4 border-white">
-                        <img 
-                          src={doctor.image} 
-                          alt={doctor.name}
-                          className="w-full h-full object-cover object-top transition-transform duration-300 ease-out hover:scale-[1.03]"
-                        />
-                      </div>
-                      <div className="absolute -bottom-2 right-4 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      </div>
-                    </div>
+                    <DoctorFaceImage src={doctor.image} alt={doctor.name} slug={doctor.slug} />
                     <h3 className="text-xl font-semibold text-foreground mb-2">{doctor.name}</h3>
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 mb-3">
                       {doctor.specialty}
@@ -212,3 +201,64 @@ const Doctors = () => {
 };
 
 export default Doctors;
+
+// Lightweight helper to keep doctor faces visible across diverse images
+function DoctorFaceImage({ src, alt, slug }: { src: string; alt: string; slug?: string }) {
+  const focusOverrides: Record<string, string> = {
+    "dr-shantharaj-a-paediatrics": "center 0%",
+    "dr-sudhamathy-kannan-obstetrics-&-gynaecology": "center 0%",
+    "dr-sudha-gujar-anaesthesia": "center 0%",
+    "dr-mahendra-jain-urology": "center 0%",
+    "dr-raghuveer-karanth-general-medicine": "center 0%",
+    "dr-usha-nandini-dentistry": "center 0%",
+    "dr-manohar-r-orthopaedics": "center 0%",
+    "dr-yashaswi-yashaswi-e.n.t": "center 0%",
+    "dr-rahna-ameen-physiotherapy": "center 0%",
+    "dr-ananth-m.a-surgical-gastroenterology": "center 0%",
+    "dr-p.s.-prabhakaran-surgical-oncology": "center 0%",
+    "dr-pavan-prasad-surgical-oncology": "center 0%",
+    "dr-sushma-n-obstetrics-&-gynaecology": "center 0%",
+    "dr-sudhakar-s-radiology": "center 0%",
+    "dr-g-l-maiya-general-surgery": "center 0%",
+  };
+  const [objectPosition, setObjectPosition] = useState<string>(
+    (slug && focusOverrides[slug]) ? focusOverrides[slug] : "center 28%"
+  );
+
+  return (
+    <div className="relative mb-4 inline-block">
+      {/* Circular mask to visually remove image background around the face */}
+      <div className="overflow-hidden rounded-full w-28 h-28 md:w-32 md:h-32 shadow-lg border-4 border-white bg-white">
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+          style={{ objectPosition }}
+          onLoad={(e) => {
+            if (slug && focusOverrides[slug]) return;
+            const img = e.currentTarget as HTMLImageElement;
+            const ratio = img.naturalWidth / img.naturalHeight;
+            // Simple heuristic:
+            // - Landscape images: push focus slightly lower as heads are often higher
+            // - Portrait images: keep focus a bit higher to show forehead/eyes
+            if (!isFinite(ratio)) return;
+            if (ratio >= 1.15) {
+              // Wide images: head sits higher; show a bit lower crop
+              setObjectPosition("center 35%");
+            } else if (ratio <= 0.9) {
+              // Tall images: keep eyes near upper third
+              setObjectPosition("center 32%");
+            } else {
+              setObjectPosition("center 33%");
+            }
+          }}
+        />
+      </div>
+      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+        <div className="w-2 h-2 bg-white rounded-full"></div>
+      </div>
+    </div>
+  );
+}
