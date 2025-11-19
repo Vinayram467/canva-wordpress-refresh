@@ -99,13 +99,15 @@ const Doctors = () => {
               <Card key={doctor.id} className="glass shadow-2xl border border-white/80 hover:shadow-3xl transition-all duration-300 hover:scale-105">
                 <CardContent className="p-6">
                   <div className="text-center mb-4">
-                    <div className="relative inline-block mb-4">
-                      <img 
-                        src={doctor.image} 
-                        alt={doctor.name}
-                        className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-                      />
-                      <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                    <div className="relative mb-4 inline-block w-full">
+                      <div className="overflow-hidden rounded-xl w-full h-56 shadow-lg border-4 border-white">
+                        <img 
+                          src={doctor.image} 
+                          alt={doctor.name}
+                          className="w-full h-full object-cover object-top transition-transform duration-300 ease-out hover:scale-[1.03]"
+                        />
+                      </div>
+                      <div className="absolute -bottom-2 right-4 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                         <div className="w-2 h-2 bg-white rounded-full"></div>
                       </div>
                     </div>

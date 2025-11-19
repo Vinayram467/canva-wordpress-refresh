@@ -21,7 +21,7 @@ const specialtiesData = [
     name: "General Surgery",
     description: "Comprehensive surgical procedures and treatments",
     icon: Shield,
-    doctors: ["Dr. G L Maiya"],
+    doctors: ["Dr. G L Maiya", "Dr. Ganesh Shenoy", "Dr. Niranjan P", "Dr. Nagaraja K"],
     services: ["General Surgery", "Emergency Surgery", "Surgical Procedures", "Post-operative Care"],
     color: "from-blue-500 to-blue-600"
   },
@@ -30,7 +30,7 @@ const specialtiesData = [
     name: "General Medicine",
     description: "Primary healthcare services for adults and comprehensive medical care",
     icon: Stethoscope,
-    doctors: ["Dr. Geetha B V"],
+    doctors: ["Dr. Geetha B V", "Dr. Raghuveer Karanth", "Dr. Faraz Khan"],
     services: ["General Consultation", "Health Checkup", "Disease Management", "Preventive Care"],
     color: "from-green-500 to-green-600"
   },
@@ -39,7 +39,7 @@ const specialtiesData = [
     name: "Obstetrics & Gynaecology",
     description: "Comprehensive women's health care and obstetric services",
     icon: Baby,
-    doctors: ["Dr. Ishwarya Bhandari"],
+    doctors: ["Dr. Sudhamathy Kannan", "Dr. Sushma B N", "Dr. Ishwarya B", "Dr. Sharmila Chennappa"],
     services: ["Pregnancy Care", "Delivery", "Gynecological Surgery", "Women's Health"],
     color: "from-pink-500 to-pink-600"
   },
@@ -48,7 +48,7 @@ const specialtiesData = [
     name: "Orthopaedics",
     description: "Comprehensive bone and joint care with advanced surgical techniques",
     icon: Bone,
-    doctors: ["Dr. Chandrashekar HS", "Dr. Abhey Vasudev", "Dr. Akshay Dhanda"],
+    doctors: ["Dr. Chandra Shekar H S", "Dr. Abhey Vasudev", "Dr. Akshay Dhanda", "Dr. Manohar Rao H R"],
     services: ["Joint Replacement", "Fracture Treatment", "Sports Injury", "Arthroscopy"],
     color: "from-purple-500 to-purple-600"
   },
@@ -57,7 +57,7 @@ const specialtiesData = [
     name: "Urology",
     description: "Specialized care for urinary system and male reproductive health",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Mahendra Jain"],
     services: ["Kidney Treatment", "Prostate Care", "Urological Surgery", "Stone Treatment"],
     color: "from-indigo-500 to-indigo-600"
   },
@@ -66,7 +66,7 @@ const specialtiesData = [
     name: "Cardiology",
     description: "Expert heart care with advanced cardiac treatments and procedures",
     icon: Heart,
-    doctors: ["Dr. Hrishikesh Vemula"],
+    doctors: ["Dr. Hrishikesh Vemula", "Dr. Lakshmikanth P"],
     services: ["ECG", "Echo", "Stress Test", "Cardiac Surgery"],
     color: "from-red-500 to-red-600"
   },
@@ -75,7 +75,7 @@ const specialtiesData = [
     name: "E.N.T",
     description: "Specialized care for ear, nose, and throat conditions",
     icon: Users,
-    doctors: [],
+    doctors: ["Dr. Yashaswi", "Dr. Chethan Pai"],
     services: ["Ear Surgery", "Sinus Treatment", "Voice Disorders", "Hearing Tests"],
     color: "from-teal-500 to-teal-600"
   },
@@ -84,7 +84,7 @@ const specialtiesData = [
     name: "Plastic Surgery",
     description: "Advanced cosmetic and reconstructive surgical procedures",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Rakesh K"],
     services: ["Cosmetic Surgery", "Reconstructive Surgery", "Burns Treatment", "Aesthetic Procedures"],
     color: "from-rose-500 to-rose-600"
   },
@@ -93,7 +93,7 @@ const specialtiesData = [
     name: "Radiology",
     description: "Advanced diagnostic imaging and radiological services",
     icon: Shield,
-    doctors: ["Dr. B G Mahesh"],
+    doctors: ["Dr. B G Mahesh", "Dr. Sudhakar S", "Dr. Revanth"],
     services: ["X-Ray", "CT Scan", "MRI", "Ultrasound"],
     color: "from-cyan-500 to-cyan-600"
   },
@@ -102,7 +102,7 @@ const specialtiesData = [
     name: "Pulmonology",
     description: "Specialized care for respiratory and lung conditions",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Raghu B P"],
     services: ["Lung Function Tests", "Bronchoscopy", "Sleep Studies", "Respiratory Care"],
     color: "from-emerald-500 to-emerald-600"
   },
@@ -120,7 +120,7 @@ const specialtiesData = [
     name: "Neurology",
     description: "Specialized care for neurological disorders and brain conditions",
     icon: Brain,
-    doctors: ["Dr. Sujay Rao"],
+    doctors: ["Dr. Ramesh Patel"],
     services: ["Brain Surgery", "Stroke Treatment", "Neurological Tests", "Rehabilitation"],
     color: "from-violet-500 to-violet-600"
   },
@@ -129,7 +129,7 @@ const specialtiesData = [
     name: "Cardiology",
     description: "Expert heart care with advanced cardiac treatments and procedures",
     icon: Heart,
-    doctors: [],
+    doctors: ["Dr. Hrishikesh Vemula", "Dr. Lakshmikanth P"],
     services: ["ECG", "Echo", "Stress Test", "Cardiac Surgery"],
     color: "from-red-600 to-red-700"
   },
@@ -147,7 +147,7 @@ const specialtiesData = [
     name: "Dentistry",
     description: "Comprehensive dental care and oral health services",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Usha Nandini"],
     services: ["Dental Surgery", "Root Canal", "Dental Implants", "Oral Hygiene"],
     color: "from-slate-500 to-slate-600"
   },
@@ -156,7 +156,7 @@ const specialtiesData = [
     name: "Paediatrics",
     description: "Comprehensive healthcare for children from birth to adolescence",
     icon: Baby,
-    doctors: [],
+    doctors: ["Dr. Shantharaj A", "Dr. Arpitha B Poojary"],
     services: ["Child Care", "Vaccination", "Growth Monitoring", "Pediatric Surgery"],
     color: "from-indigo-500 to-indigo-600"
   },
@@ -165,7 +165,7 @@ const specialtiesData = [
     name: "Physiotherapy",
     description: "Physical therapy and rehabilitation services",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Rahna Ameen"],
     services: ["Physical Therapy", "Rehabilitation", "Sports Injury", "Pain Management"],
     color: "from-lime-500 to-lime-600"
   },
@@ -183,7 +183,7 @@ const specialtiesData = [
     name: "Anaesthesia",
     description: "Expert anaesthesia services for surgical procedures",
     icon: Shield,
-    doctors: [],
+    doctors: ["Dr. Sudha Gujar", "Dr. Sagar S"],
     services: ["General Anaesthesia", "Regional Anaesthesia", "Pain Management", "Critical Care"],
     color: "from-slate-600 to-slate-700"
   },
@@ -192,7 +192,7 @@ const specialtiesData = [
     name: "Surgical Gastroenterology",
     description: "Advanced surgical treatment for digestive system disorders",
     icon: Shield,
-    doctors: ["Dr. Ananth Krishna"],
+    doctors: ["Dr. Ananth Krishna M.A", "Dr. Preethan Nagappa"],
     services: ["Gastrointestinal Surgery", "Laparoscopic Surgery", "Digestive Disorders", "Surgical Treatment"],
     color: "from-amber-500 to-amber-600"
   },
@@ -210,7 +210,7 @@ const specialtiesData = [
     name: "Vascular Surgery",
     description: "Specialized surgical treatment for blood vessel disorders",
     icon: Shield,
-    doctors: ["Dr. Chinmay Nagesh"],
+    doctors: ["Dr. Chinmay Nagesh", "Dr. Sravan C P"],
     services: ["Vascular Surgery", "Blood Vessel Treatment", "Circulatory Disorders", "Surgical Procedures"],
     color: "from-blue-600 to-blue-700"
   },
@@ -219,9 +219,18 @@ const specialtiesData = [
     name: "Surgical Oncology",
     description: "Advanced surgical treatment for cancer and tumor removal",
     icon: Shield,
-    doctors: ["Dr. Krishnappa R"],
+    doctors: ["Dr. Krishnappa R", "Dr. P. S. Prabhakaran", "Dr. Pavan Prasad"],
     services: ["Cancer Surgery", "Tumor Removal", "Oncological Surgery", "Surgical Treatment"],
     color: "from-purple-600 to-purple-700"
+  },
+  {
+    id: "24",
+    name: "Neurosurgery",
+    description: "Advanced surgical care for brain, spine, and nervous system",
+    icon: Brain,
+    doctors: ["Dr. Sujay Rao"],
+    services: ["Brain Surgery", "Spine Surgery", "Neurotrauma Care", "Neuro-oncology"],
+    color: "from-violet-600 to-violet-700"
   }
 ];
 

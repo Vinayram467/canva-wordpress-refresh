@@ -78,14 +78,16 @@ const DoctorDetail = () => {
             <Card className="glass shadow-2xl border border-white/80">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-3 gap-8 items-center">
-                  {/* Doctor Image - Updated to display full image */}
+                  {/* Doctor Image - Full image with rounded corners and hover glassmorphism */}
                   <div className="text-center">
                     <div className="relative inline-block">
-                      <img 
-                        src={doctor.image} 
-                        alt={doctor.name}
-                        className="w-64 h-80 rounded-lg object-cover border-4 border-white shadow-lg"
-                      />
+                      <div className="rounded-xl border-4 border-white shadow-2xl overflow-hidden bg-white/30 backdrop-blur-sm transition-all duration-300 hover:bg-white/40 hover:backdrop-blur-md">
+                        <img 
+                          src={doctor.image} 
+                          alt={doctor.name}
+                          className="w-64 h-80 object-contain"
+                        />
+                      </div>
                       <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
                         <div className="w-3 h-3 bg-white rounded-full"></div>
                       </div>
