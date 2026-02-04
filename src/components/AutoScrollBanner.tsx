@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
-  "/Black and Green Bold Gym Landscape Banner (19).png",
-  "/Banner1.png",
-  "/Banner2.png",
   "/Black and Green Bold Gym Landscape Banner (20).png",
+  "/Black and Green Bold Gym Landscape Banner (19).png",
+  "/Banner2.png",
+  "/Banner1.png",
   "/Banner4.png",
   "/Banenr5.png",
 ];
